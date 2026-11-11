@@ -1,0 +1,1263 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   ARCHIVE THEME — dark monochrome, no rounded corners,
+   typography-first, vx-underground-inspired restraint.
+   ============================================================ */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-mono);
+  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-geist-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  /* ZERO radius — archive aesthetic forbids rounded corners */
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+}
+
+:root {
+  --radius: 0px;
+  /* Permanent dark theme — no light mode */
+  --background: oklch(0.07 0 0);
+  --foreground: oklch(0.92 0 0);
+  --card: oklch(0.10 0 0);
+  --card-foreground: oklch(0.92 0 0);
+  --popover: oklch(0.09 0 0);
+  --popover-foreground: oklch(0.92 0 0);
+  --primary: oklch(0.92 0 0);
+  --primary-foreground: oklch(0.07 0 0);
+  --secondary: oklch(0.14 0 0);
+  --secondary-foreground: oklch(0.92 0 0);
+  --muted: oklch(0.12 0 0);
+  --muted-foreground: oklch(0.55 0 0);
+  --accent: oklch(0.16 0 0);
+  --accent-foreground: oklch(0.92 0 0);
+  --destructive: oklch(0.65 0.18 25);
+  --border: oklch(1 0 0 / 8%);
+  --input: oklch(1 0 0 / 10%);
+  --ring: oklch(0.55 0 0);
+  --chart-1: oklch(0.85 0 0);
+  --chart-2: oklch(0.65 0 0);
+  --chart-3: oklch(0.45 0 0);
+  --chart-4: oklch(0.35 0 0);
+  --chart-5: oklch(0.25 0 0);
+  --sidebar: oklch(0.06 0 0);
+  --sidebar-foreground: oklch(0.92 0 0);
+  --sidebar-primary: oklch(0.92 0 0);
+  --sidebar-primary-foreground: oklch(0.07 0 0);
+  --sidebar-accent: oklch(0.14 0 0);
+  --sidebar-accent-foreground: oklch(0.92 0 0);
+  --sidebar-border: oklch(1 0 0 / 8%);
+  --sidebar-ring: oklch(0.55 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    /* Kill all rounded corners enforced by shadcn defaults */
+    border-radius: 0 !important;
+  }
+  html {
+    color-scheme: dark;
+    /* Stop iOS Safari from inflating small text when rotating */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background-color: var(--background);
+    /* Android: disables Chrome mobile "font boosting" of small text */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv03";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* Android: remove the gray tap-flash rectangle Chrome paints on every
+   tap. Native taps should look like the hover styling, not a blob. */
+a, button, input, textarea, select, label, summary, [role='button'] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ============================================================
+   BACKGROUND GHOST — fixed full-viewport VIDEO (pushing a boulder
+   uphill in the pouring rain), muted/looping, heavily faded and
+   blurred so it reads as a faint moving texture behind the UI.
+   `contain` keeps the whole frame visible (nothing cropped).
+   pointer-events: none — never intercepts input.
+   ============================================================ */
+.bg-video {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.5;
+  filter: blur(2.5px) saturate(0.9);
+  pointer-events: none;
+}
+
+/* Phones are portrait: `contain` would show the square video as a
+   narrow band in the middle of the tall screen. `cover` fills the
+   screen — the fade + blur make the crop invisible. */
+@media (max-width: 700px) {
+  .bg-video {
+    object-fit: cover;
+  }
+}
+
+/* ============================================================
+   SCROLLBAR — thin, monochrome, archive-style
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: oklch(0.22 0 0);
+  border: 2px solid var(--background);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.35 0 0);
+}
+::-webkit-scrollbar-corner {
+  background: var(--background);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0.22 0 0) var(--background);
+}
+
+/* ============================================================
+   TEXT SELECTION
+   ============================================================ */
+::selection {
+  background: oklch(0.92 0 0);
+  color: oklch(0.07 0 0);
+}
+::-moz-selection {
+  background: oklch(0.92 0 0);
+  color: oklch(0.07 0 0);
+}
+
+/* ============================================================
+   FOCUS — keyboard friendly, subtle but visible
+   ============================================================ */
+:focus-visible {
+  outline: 1px solid oklch(0.92 0 0);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   LOADING SCREEN — "UNSEALING" sequence (v2)
+   Cinematic, terminal, CRT, binary rain, electric-shock glitch.
+   Dark monochrome; crimson appears only during glitch jolts and
+   as a whisper in two binary-rain columns.
+   ============================================================ */
+
+@keyframes loader-exit {
+  0%   { opacity: 1; filter: blur(0); transform: scale(1); }
+  100% { opacity: 0; filter: blur(6px); transform: scale(1.012); }
+}
+
+@keyframes ldx-rise {
+  0%   { opacity: 0; transform: translateY(7px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ldx-breathe {
+  0%, 100% { opacity: 0.94; }
+  50%      { opacity: 1; }
+}
+
+/* Blueprint grid with radial falloff toward the edges */
+.ldx-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.32;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at center, black 30%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 60% at center, black 30%, transparent 100%);
+}
+
+/* Binary rain — faint falling 1/0 columns echoing the marionette
+   strings in the logo artwork. Two columns carry a crimson tint. */
+.ldx-rain {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ldx-rain-col {
+  position: absolute;
+  top: -18%;
+  width: 1ch;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 10px;
+  line-height: 1.9;
+  letter-spacing: 0.1em;
+  word-break: break-all;
+  color: rgba(255, 255, 255, 0.05);
+  animation: ldx-fall linear infinite;
+  will-change: transform;
+}
+.ldx-rain-col--red {
+  color: rgba(255, 45, 70, 0.075);
+}
+@keyframes ldx-fall {
+  0%   { transform: translate3d(0, -12%, 0); }
+  100% { transform: translate3d(0, 125vh, 0); }
+}
+
+/* CRT refresh lines — texture over the whole frame */
+.ldx-crt {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.028) 0px,
+    rgba(255, 255, 255, 0.028) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.55;
+}
+
+/* Outer frame — corner brackets that draw in diagonally */
+.ldx-corner {
+  position: absolute;
+  z-index: 20;
+  width: 15px;
+  height: 15px;
+  animation: ldx-bracket-in 600ms cubic-bezier(0.16, 1, 0.3, 1) 250ms both;
+}
+.ldx-corner--tl { top: 22px; left: 22px; border-top: 1px solid rgba(255,255,255,0.5); border-left: 1px solid rgba(255,255,255,0.5); transform-origin: top left; }
+.ldx-corner--tr { top: 22px; right: 22px; border-top: 1px solid rgba(255,255,255,0.5); border-right: 1px solid rgba(255,255,255,0.5); transform-origin: top right; }
+.ldx-corner--bl { bottom: 22px; left: 22px; border-bottom: 1px solid rgba(255,255,255,0.5); border-left: 1px solid rgba(255,255,255,0.5); transform-origin: bottom left; }
+.ldx-corner--br { bottom: 22px; right: 22px; border-bottom: 1px solid rgba(255,255,255,0.5); border-right: 1px solid rgba(255,255,255,0.5); transform-origin: bottom right; }
+@keyframes ldx-bracket-in {
+  0%   { opacity: 0; transform: scale(0.3); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Frame labels — archival metadata in the corners */
+.ldx-frame-label {
+  position: absolute;
+  z-index: 20;
+  pointer-events: none;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  color: rgba(255, 255, 255, 0.34);
+  animation: loader-fade-in 600ms ease-out 700ms both;
+}
+.ldx-frame-label--tl { top: 26px; left: 48px; }
+.ldx-frame-label--tr { top: 26px; right: 48px; }
+
+/* Square reticle brackets around the logo — the archive aesthetic
+   forbids rounded corners, so the reticle is square by design. */
+.ldx-logo-frame {
+  position: relative;
+  padding: 14px 26px;
+}
+.ldx-reticle {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  animation: ldx-bracket-in 500ms cubic-bezier(0.16, 1, 0.3, 1) 650ms both;
+}
+.ldx-reticle--tl { top: 0; left: 0; border-top: 1px solid rgba(255,255,255,0.4); border-left: 1px solid rgba(255,255,255,0.4); transform-origin: top left; }
+.ldx-reticle--tr { top: 0; right: 0; border-top: 1px solid rgba(255,255,255,0.4); border-right: 1px solid rgba(255,255,255,0.4); transform-origin: top right; }
+.ldx-reticle--bl { bottom: 0; left: 0; border-bottom: 1px solid rgba(255,255,255,0.4); border-left: 1px solid rgba(255,255,255,0.4); transform-origin: bottom left; }
+.ldx-reticle--br { bottom: 0; right: 0; border-bottom: 1px solid rgba(255,255,255,0.4); border-right: 1px solid rgba(255,255,255,0.4); transform-origin: bottom right; }
+
+/* Stage hairline — expands behind the logo */
+.ldx-stage-line {
+  position: absolute;
+  top: 50%;
+  left: -30%;
+  right: -30%;
+  height: 1px;
+  z-index: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.13) 22%, rgba(255,255,255,0.13) 78%, transparent);
+  transform: scaleX(0);
+  transform-origin: center;
+  animation: ldx-stage-line 1000ms cubic-bezier(0.16, 1, 0.3, 1) 500ms forwards;
+}
+@keyframes ldx-stage-line {
+  to { transform: scaleX(1); }
+}
+
+/* Progress track ticks — one tick every 10% */
+.ldx-ticks {
+  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.25) 1px, transparent 1px);
+  background-size: 10% 100%;
+  background-repeat: repeat-x;
+}
+
+/* One-shot flash when the bar commits to 100% */
+.ldx-bar-done {
+  animation: ldx-bar-flash 240ms steps(2) 1;
+}
+@keyframes ldx-bar-flash {
+  0%   { filter: brightness(2.4); }
+  100% { filter: brightness(1); }
+}
+
+/* Reduced motion — keep the choreography, drop the noise */
+@media (prefers-reduced-motion: reduce) {
+  .ldx-rain-col,
+  .loader-scanline,
+  .ldx-crt {
+    animation: none !important;
+  }
+  .loader-glitch-target {
+    animation: loader-logo-in 600ms cubic-bezier(0.16, 1, 0.3, 1) both !important;
+  }
+  .ldx-name > div {
+    animation: ldx-rise 400ms ease-out 300ms both !important;
+  }
+}
+
+/* Blinking cursor */
+.loader-cursor {
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  background: oklch(0.92 0 0);
+  margin-left: 0.3em;
+  vertical-align: -0.15em;
+  animation: loader-blink 1s steps(2) infinite;
+}
+@keyframes loader-blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+/* ============================================================
+   NEW LOADING SCREEN — based on user-provided component.
+   Logo color is PRESERVED (no brightness/invert filter).
+   ============================================================ */
+
+.loader-shell {
+  background: #000;
+  will-change: opacity, transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Scanline sweep — a single horizontal band that drifts vertically */
+.loader-scanline {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 48%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.04) 52%,
+    transparent 100%
+  );
+  background-size: 100% 220px;
+  background-repeat: no-repeat;
+  background-position: 50% -220px;
+  animation: loader-scanline-sweep 6s linear infinite;
+  mix-blend-mode: screen;
+  opacity: 0.7;
+}
+
+@keyframes loader-scanline-sweep {
+  0%   { background-position: 50% -220px; }
+  100% { background-position: 50% calc(100% + 220px); }
+}
+
+@keyframes loader-fade-in {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes loader-fade-out {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes loader-logo-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.94) translateZ(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+  }
+}
+
+/* Electric-shock glitch on the logo cluster.
+   Between 75% and 91% of each 5s cycle (= 3.75s to 4.55s after mount),
+   the logo shakes rapidly and FLASHES PURE WHITE on each jolt — like
+   electricity or current hitting it. brightness(40) clamps every
+   channel to white, so the entire logo silhouette becomes white for
+   ~200ms, then snaps back to its original colors. The logo's true
+   colors are preserved at all other times. */
+@keyframes loader-glitch {
+  0%, 73%, 100% {
+    transform: translate(0, 0);
+    filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.05));
+  }
+  /* === ELECTRIC SHOCK BURST: 75% → 91% (3.75s → 4.55s) === */
+  /* Jolt 1 — hard left + 200ms white flash */
+  75% {
+    transform: translate(-6px, 2px);
+    filter:
+      brightness(40)
+      drop-shadow(5px 0 0 rgba(255, 0, 80, 0.85))
+      drop-shadow(-5px 0 0 rgba(0, 255, 255, 0.85));
+  }
+  79% {
+    transform: translate(0, 0);
+    filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.05));
+  }
+  /* Jolt 2 — hard right + 200ms white flash */
+  81% {
+    transform: translate(6px, -2px);
+    filter:
+      brightness(40)
+      drop-shadow(-5px 0 0 rgba(255, 0, 80, 0.85))
+      drop-shadow(5px 0 0 rgba(0, 255, 255, 0.85));
+  }
+  85% {
+    transform: translate(0, 0);
+    filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.05));
+  }
+  /* Jolt 3 — left + 200ms white flash (slightly smaller) */
+  87% {
+    transform: translate(-4px, 1px);
+    filter:
+      brightness(40)
+      drop-shadow(4px 0 0 rgba(255, 0, 80, 0.75))
+      drop-shadow(-4px 0 0 rgba(0, 255, 255, 0.75));
+  }
+  91% {
+    transform: translate(0, 0);
+    filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.05));
+  }
+}
+
+/* ============================================================
+   APP SHELL — typography-first archive layout
+   ============================================================ */
+
+.archive-shell {
+  min-height: 100vh;
+  /* dvh tracks the mobile URL bar so short pages don't leave a gap */
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  /* Transparent so the fixed ghost video behind the app shows through */
+  background: transparent;
+}
+
+.archive-header {
+  border-bottom: 1px solid var(--border);
+  /* Translucent — the ghost artwork smears softly under the blur backdrop */
+  background: oklch(0.07 0 0 / 0.82);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  -webkit-backdrop-filter: blur(8px); /* iOS Safari */
+  backdrop-filter: blur(8px);
+}
+
+.archive-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 1.25rem;
+  gap: 1rem;
+}
+
+.archive-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--foreground);
+}
+.archive-brand-mark {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  /* ORIGINAL LOGO COLORS PRESERVED — no brightness(0) invert(1) filter. */
+  opacity: 1;
+}
+.archive-brand-text {
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  line-height: 1.1;
+}
+.archive-brand-text small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  color: var(--muted-foreground);
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+/* Phones: the long brand name and the search button must share one
+   row — shrink the type, clamp overflow, drop the desktop-only kbd. */
+@media (max-width: 700px) {
+  .archive-header-inner {
+    padding: 0 0.75rem;
+    gap: 0.5rem;
+  }
+  .archive-brand {
+    gap: 0.5rem;
+    min-width: 0;
+  }
+  .archive-brand-text {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .archive-brand-text small {
+    font-size: 8px;
+    letter-spacing: 0.22em;
+  }
+  .search-trigger kbd { display: none; }
+}
+
+.archive-body {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  flex: 1;
+  min-height: 0;
+}
+
+@media (max-width: 900px) {
+  .archive-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+.archive-sidebar {
+  border-right: 1px solid var(--border);
+  padding: 1.5rem 0.75rem;
+  position: sticky;
+  top: 56px;
+  align-self: start;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  /* Translucent — lets the ghost artwork faintly bleed through */
+  background: oklch(0.06 0 0 / 0.86);
+}
+@media (max-width: 900px) {
+  .archive-sidebar {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0.6rem;
+  }
+}
+
+.archive-sidebar-section {
+  margin-bottom: 1.5rem;
+}
+.archive-sidebar-heading {
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  padding: 0 0.75rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+.archive-sidebar-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 0.75rem;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--muted-foreground);
+  text-decoration: none;
+  border-left: 1px solid transparent;
+  transition: color 120ms, background 120ms, border-color 120ms;
+  cursor: pointer;
+  background: transparent;
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+}
+/* Hover styles are desktop-only: on touch devices (Android/iOS) a tap
+   triggers :hover and it STICKS after the tap — so every interactive
+   hover is guarded by (hover: hover). */
+@media (hover: hover) {
+  .archive-sidebar-link:hover {
+    color: var(--foreground);
+    background: var(--accent);
+  }
+}
+.archive-sidebar-link--active {
+  color: var(--foreground);
+  border-left-color: var(--foreground);
+  background: var(--accent);
+}
+
+/* Touch: bigger tap targets once the sidebar stacks on top (mobile).
+   Lives AFTER the base rule so it wins the cascade. */
+@media (max-width: 900px) {
+  .archive-sidebar-link {
+    padding: 0.7rem 0.75rem;
+  }
+  .archive-sidebar-section {
+    margin-bottom: 1rem;
+  }
+}
+
+/* ============================================================
+   GOLD LINKS — the Links menu item: metallic gold gradient swept
+   through the letters (background-clip: text), with a soft glow.
+   The sweep ping-pongs 0% → 100% → 0% so the loop is seamless.
+   ============================================================ */
+.archive-sidebar-link--gold > span:first-child {
+  position: relative; /* anchor for the sparkle layer */
+  background: linear-gradient(
+    100deg,
+    #8a6a1f 0%,
+    #c9a227 22%,
+    #ffd700 38%,
+    #fff8d0 50%,
+    #ffd700 62%,
+    #c9a227 78%,
+    #8a6a1f 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gold-glitter 2.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.4));
+}
+
+@keyframes gold-glitter {
+  0%   { background-position: 0% 0; }
+  50%  { background-position: 100% 0; }
+  100% { background-position: 0% 0; }
+}
+
+/* ============================================================
+   GOLD SPARKLES — tiny 4-point star particles that pop, spin and
+   fade around the gold "Links" text. Each particle pops during the
+   first ~35% of a shared 2.4s cycle (synced with the gold sweep)
+   at a staggered delay, so something is always twinkling.
+   ============================================================ */
+.nav-sparkles {
+  position: absolute;
+  /* Bleeds slightly past the text so stars land above/below it too */
+  inset: -4px -5px;
+  pointer-events: none;
+}
+.nav-sparkles i {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  /* 4-point sparkle star */
+  clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
+  background: #fff8d0;
+  opacity: 0;
+  filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.9));
+  animation: nav-sparkle 2.4s ease-in-out infinite;
+}
+.nav-sparkles i:nth-child(even) { background: #ffd700; }
+/* Staggered placements + delays: each star pops at a different
+   moment and spot, sizes alternate small/large. */
+.nav-sparkles i:nth-child(1) { left: 4%;  top: 20%;  width: 5px; height: 5px; animation-delay: 0s;    }
+.nav-sparkles i:nth-child(2) { left: 28%; top: 78%;  width: 3px; height: 3px; animation-delay: 0.5s;  }
+.nav-sparkles i:nth-child(3) { left: 50%; top: -8%;  width: 4px; height: 4px; animation-delay: 1s;    }
+.nav-sparkles i:nth-child(4) { left: 72%; top: 84%;  width: 5px; height: 5px; animation-delay: 1.45s; }
+.nav-sparkles i:nth-child(5) { left: 94%; top: 12%;  width: 3px; height: 3px; animation-delay: 1.9s;  }
+
+/* Pop: invisible → burst open with a spin → shrink away → rest */
+@keyframes nav-sparkle {
+  0%, 10%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+  18%           { opacity: 1; transform: scale(1) rotate(45deg); }
+  32%           { opacity: 0; transform: scale(0.2) rotate(90deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .archive-sidebar-link--gold > span:first-child {
+    animation: none;
+  }
+  .nav-sparkles {
+    display: none;
+  }
+}
+.archive-sidebar-count {
+  font-size: 10px;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}
+
+.archive-main {
+  padding: 2.5rem 2.5rem 4rem;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+@media (max-width: 700px) {
+  .archive-main { padding: 1.5rem 1rem 3rem; }
+}
+
+.archive-container {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.archive-footer {
+  border-top: 1px solid var(--border);
+  padding: 1.5rem 1.25rem;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+.archive-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-bottom: 0.75rem;
+}
+.archive-title {
+  font-size: clamp(28px, 4vw, 44px);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+.archive-subtitle {
+  font-size: 14px;
+  color: var(--muted-foreground);
+  line-height: 1.6;
+  max-width: 64ch;
+  margin-bottom: 2.5rem;
+}
+.archive-section-title {
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ============================================================
+   ENTRY LIST — archive rows
+   ============================================================ */
+.entry-row {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 1.25rem;
+  align-items: baseline;
+  padding: 1rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: background 120ms;
+  background: transparent;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+}
+@media (hover: hover) {
+  .entry-row:hover {
+    background: var(--accent);
+  }
+}
+.entry-row-stage {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}
+.entry-row-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--foreground);
+  line-height: 1.35;
+  margin-bottom: 0.25rem;
+}
+.entry-row-meta {
+  font-size: 11px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.04em;
+}
+.entry-row-vt {
+  font-size: 11px;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  text-align: right;
+}
+.entry-row-vt-clean { color: oklch(0.85 0 0); }
+
+@media (max-width: 600px) {
+  .entry-row {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+  .entry-row-vt { text-align: left; }
+}
+
+/* ============================================================
+   DETAIL / ARTICLE — markdown rendered
+   ============================================================ */
+.article-head {
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.article-stage {
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-bottom: 0.75rem;
+}
+.article-title {
+  font-size: clamp(26px, 3.4vw, 38px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+.article-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+  font-size: 11px;
+}
+.article-meta-cell {
+  border-left: 1px solid var(--border);
+  padding-left: 0.75rem;
+}
+.article-meta-cell-label {
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-bottom: 0.3rem;
+}
+.article-meta-cell-value {
+  font-size: 12px;
+  color: var(--foreground);
+  letter-spacing: 0.02em;
+}
+
+.article-prose {
+  font-size: 14px;
+  line-height: 1.7;
+  color: oklch(0.86 0 0);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+}
+.article-prose h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 2.5rem 0 1rem;
+  letter-spacing: -0.01em;
+  font-family: var(--font-geist-sans), sans-serif;
+  color: var(--foreground);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+}
+.article-prose h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 2.25rem 0 0.9rem;
+  letter-spacing: 0.01em;
+  font-family: var(--font-geist-sans), sans-serif;
+  color: var(--foreground);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+}
+.article-prose h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 2rem 0 0.75rem;
+  letter-spacing: 0.02em;
+  font-family: var(--font-geist-sans), sans-serif;
+  color: var(--foreground);
+  text-transform: uppercase;
+}
+.article-prose h4 {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 1.5rem 0 0.6rem;
+  color: var(--foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.article-prose p {
+  margin: 0 0 1.1rem;
+  color: oklch(0.86 0 0);
+}
+.article-prose a {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+@media (hover: hover) {
+  .article-prose a:hover { text-decoration-thickness: 2px; }
+}
+.article-prose ul, .article-prose ol {
+  margin: 0 0 1.1rem;
+  padding-left: 1.5rem;
+}
+.article-prose li { margin: 0.35rem 0; }
+.article-prose code {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  background: var(--accent);
+  padding: 0.1rem 0.4rem;
+  font-size: 0.92em;
+  border: 1px solid var(--border);
+}
+.article-prose pre {
+  background: oklch(0.04 0 0) !important;
+  border: 1px solid var(--border);
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  margin: 0 0 1.5rem;
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+.article-prose pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+}
+.article-prose blockquote {
+  border-left: 2px solid var(--muted-foreground);
+  padding-left: 1rem;
+  margin: 0 0 1.25rem;
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+.article-prose table {
+  /* Scroll sideways instead of being clipped by archive-main's
+     overflow-x: hidden on narrow screens */
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 1.5rem;
+  font-size: 12.5px;
+}
+.article-prose th,
+.article-prose td {
+  border: 1px solid var(--border);
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+.article-prose th {
+  background: var(--accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+.article-prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+.article-prose img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  margin: 1rem 0;
+}
+
+/* ============================================================
+   SEARCH COMMAND PANEL
+   ============================================================ */
+.search-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted-foreground);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 120ms, border-color 120ms;
+}
+@media (hover: hover) {
+  .search-trigger:hover {
+    color: var(--foreground);
+    border-color: var(--muted-foreground);
+  }
+}
+.search-trigger kbd {
+  font-family: inherit;
+  font-size: 10px;
+  padding: 1px 5px;
+  border: 1px solid var(--border);
+  background: var(--accent);
+  color: var(--foreground);
+  letter-spacing: 0.04em;
+}
+
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.7);
+  -webkit-backdrop-filter: blur(4px); /* iOS Safari */
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12vh;
+}
+.search-panel {
+  width: min(640px, 92vw);
+  background: var(--popover);
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+}
+.search-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 1.25rem;
+  color: var(--foreground);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  letter-spacing: 0.02em;
+}
+.search-input::placeholder { color: var(--muted-foreground); }
+
+/* Phones: 16px input font stops iOS Safari zoom-jumping on focus,
+   and result rows get finger-sized height */
+@media (max-width: 700px) {
+  .search-input { font-size: 16px; }
+  .search-result { padding: 0.85rem 1.25rem; }
+}
+.search-results {
+  max-height: 50vh;
+  overflow-y: auto;
+}
+.search-result {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.65rem 1.25rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground);
+  cursor: pointer;
+  font-family: inherit;
+}
+/* Keyboard-selected row stays highlighted everywhere; :hover is
+   desktop-only so touch taps don't stick the highlight */
+.search-result--active {
+  background: var(--accent);
+}
+@media (hover: hover) {
+  .search-result:hover {
+    background: var(--accent);
+  }
+}
+.search-result-stage {
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+}
+.search-result-title {
+  font-size: 13px;
+  margin: 2px 0;
+}
+.search-result-snippet {
+  font-size: 11px;
+  color: var(--muted-foreground);
+  line-height: 1.4;
+}
+.search-empty {
+  padding: 1.5rem 1.25rem;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   TAG / CATEGORY PAGES
+   ============================================================ */
+.tag-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.5rem;
+}
+.tag-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--foreground);
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 120ms, border-color 120ms;
+}
+@media (hover: hover) {
+  .tag-pill:hover {
+    background: var(--accent);
+    border-color: var(--muted-foreground);
+  }
+}
+.tag-pill-count {
+  font-size: 10px;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 700px) {
+  .tag-pill { padding: 0.65rem 0.75rem; }
+  .back-link { padding: 0.5rem 0.75rem 0.5rem 0; }
+}
+
+/* Empty state */
+.empty-state {
+  padding: 4rem 1rem;
+  text-align: center;
+  color: var(--muted-foreground);
+}
+.empty-state-mark {
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.empty-state-text {
+  font-size: 13px;
+}
+
+/* Back link */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+  margin-bottom: 2rem;
+  transition: color 120ms;
+}
+@media (hover: hover) {
+  .back-link:hover { color: var(--foreground); }
+}
+
+/* (No body scroll lock here — the new loader manages body.overflow via
+   inline style in src/components/loader.tsx, restoring it the moment the
+   loader becomes invisible at t=5s.) */
