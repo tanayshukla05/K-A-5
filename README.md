@@ -43,7 +43,8 @@ syntax-highlighter bundle.
 ├── public/
 │   ├── logo.png             # Used by loader + header
 │   ├── favicon.png
-│   └── bg-boulder.mp4       # Fixed background video (rain-boulder loop)
+│   ├── bg-boulder.mp4       # Fixed background video (rain-boulder loop)
+│   └── home-click.mp3       # Sound played when the HOME menu is clicked
 ├── src/
 │   ├── app/
 │   │   ├── layout.tsx       # Root layout, metadata, fonts, background video

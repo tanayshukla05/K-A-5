@@ -30,6 +30,23 @@ type NavItem = {
   gold?: boolean
 }
 
+// --- HOME menu click sound -------------------------------------------------
+// Lazy singleton: created on the first click (a real user gesture, so iOS
+// Safari and Android Chrome both allow playback) and restarted from the top
+// on every further click. Playback rejection (e.g. missing user activation)
+// is swallowed — the click must never break navigation.
+let homeSound: HTMLAudioElement | null = null
+
+function playHomeSound() {
+  if (typeof window === 'undefined') return
+  if (!homeSound) {
+    homeSound = new Audio('/home-click.mp3')
+    homeSound.preload = 'auto'
+  }
+  homeSound.currentTime = 0
+  void homeSound.play().catch(() => {})
+}
+
 export function ArchiveShell() {
   const { route, navigate } = useRouter()
   const [searchOpen, setSearchOpen] = useState(false)
@@ -157,7 +174,13 @@ export function ArchiveShell() {
                 key={item.label}
                 item={item}
                 active={isActive(item.route)}
-                onClick={() => navigate(item.route)}
+                onClick={() => {
+                  // Sound fires synchronously inside the click handler
+                  // (before any navigation work) so mobile browsers keep
+                  // the user-activation chain intact.
+                  if (item.route.name === 'home') playHomeSound()
+                  navigate(item.route)
+                }}
               />
             ))}
           </NavSection>
