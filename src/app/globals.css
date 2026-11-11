@@ -122,7 +122,9 @@ a, button, input, textarea, select, label, summary, [role='button'] {
    BACKGROUND GHOST — fixed full-viewport VIDEO (pushing a boulder
    uphill in the pouring rain), muted/looping, heavily faded and
    blurred so it reads as a faint moving texture behind the UI.
-   `contain` keeps the whole frame visible (nothing cropped).
+   `contain` keeps the whole frame visible (nothing cropped) on
+   desktop AND phones — the full frame is wanted on every screen;
+   on a portrait phone the black background reads as letterbox.
    pointer-events: none — never intercepts input.
    ============================================================ */
 .bg-video {
@@ -135,15 +137,6 @@ a, button, input, textarea, select, label, summary, [role='button'] {
   opacity: 0.5;
   filter: blur(2.5px) saturate(0.9);
   pointer-events: none;
-}
-
-/* Phones are portrait: `contain` would show the square video as a
-   narrow band in the middle of the tall screen. `cover` fills the
-   screen — the fade + blur make the crop invisible. */
-@media (max-width: 700px) {
-  .bg-video {
-    object-fit: cover;
-  }
 }
 
 /* ============================================================
@@ -570,6 +563,8 @@ a, button, input, textarea, select, label, summary, [role='button'] {
     min-width: 0;
   }
   .archive-brand-text {
+    display: block;
+    min-width: 0;
     font-size: 10px;
     letter-spacing: 0.1em;
     white-space: nowrap;
@@ -987,6 +982,8 @@ a, button, input, textarea, select, label, summary, [role='button'] {
   text-decoration: underline;
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
+  /* Same wrap rule as inline code — bare URLs must never get clipped */
+  overflow-wrap: anywhere;
 }
 @media (hover: hover) {
   .article-prose a:hover { text-decoration-thickness: 2px; }
@@ -1002,6 +999,10 @@ a, button, input, textarea, select, label, summary, [role='button'] {
   padding: 0.1rem 0.4rem;
   font-size: 0.92em;
   border: 1px solid var(--border);
+  /* Long tokens (VirusTotal URLs, hashes, identifiers) must wrap on
+     phones instead of being clipped by archive-main's overflow-x hidden.
+     No effect inside <pre> (white-space: pre disables wrapping). */
+  overflow-wrap: anywhere;
 }
 .article-prose pre {
   background: oklch(0.04 0 0) !important;
