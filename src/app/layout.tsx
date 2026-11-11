@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { BackgroundVideo } from "@/components/bg-video";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -68,21 +69,12 @@ export default function RootLayout({
       >
         {/*
           BACKGROUND GHOST — looping rain-boulder video behind the whole
-          app. muted + playsInline so browsers allow autoplay; fixed and
-          z-index -1 via .bg-video in globals.css.
+          app. Mounted through BackgroundVideo so phones get real muted /
+          playsinline attributes + poster + play() fallback (see the
+          component header for why — mobile autoplay silently fails
+          otherwise). Fixed and z-index -1 via .bg-video in globals.css.
         */}
-        <video
-          className="bg-video"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          aria-hidden="true"
-          tabIndex={-1}
-        >
-          <source src="/bg-boulder.mp4" type="video/mp4" />
-        </video>
+        <BackgroundVideo />
         {children}
       </body>
     </html>
