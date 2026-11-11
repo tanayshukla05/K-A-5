@@ -30,13 +30,6 @@ export function HomePage() {
       <h1 className="archive-title">
         Pandit Tanay Shukla<br />Ji Maharaj
       </h1>
-      <p className="archive-subtitle">
-        JISKI{' '}
-        <span style={{ color: '#ff0050' }}>BUR</span>
-        {' '}HOTI HAI USKO{' '}
-        <span style={{ color: '#ff0050' }}>BURA</span>
-        {' '}LAGTA HAI
-      </p>
     </div>
   )
 }
