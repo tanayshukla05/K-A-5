@@ -974,6 +974,11 @@ body[data-route="about"] .bg-video-fallback {
   margin-bottom: 1rem;
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
+/* ORANGE TITLE WORD — "SHUKLA" on the About page: the one warm accent
+   in an otherwise monochrome headline. */
+.archive-title .title-orange {
+  color: #ff8c00;
+}
 .archive-subtitle {
   font-size: 14px;
   color: var(--muted-foreground);

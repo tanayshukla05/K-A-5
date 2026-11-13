@@ -69,7 +69,7 @@ export function AboutPage({ navigate }: { navigate: NavFn }) {
         ← Back
       </button>
       <div className="archive-eyebrow">ABOUT</div>
-      <h1 className="archive-title">About SHUKLA ?</h1>
+      <h1 className="archive-title">About <span className="title-orange">SHUKLA</span> ?</h1>
 
       <div style={{ marginTop: '2rem' }}>
         <a
