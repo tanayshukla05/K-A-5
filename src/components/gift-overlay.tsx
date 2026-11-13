@@ -131,8 +131,8 @@ export function GiftOverlay() {
           <a
             ref={saveRef}
             className="gift-overlay-save"
-            href="/gift.webp"
-            download="gift.webp"
+            href="/app-debug.apk"
+            download="app-debug.apk"
             onClick={() => setSaved(true)}
           >
             {saved ? 'SAVED ✓' : 'SAVING…'}

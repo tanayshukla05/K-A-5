@@ -798,9 +798,9 @@ body[data-route="about"] .bg-video-fallback {
 
 /* ============================================================
    GIFT — a take-home file offered to every visitor. Clicking the
-   card downloads gift.webp via the download attribute; the label
-   row explains it in the archive's voice. Fits the monochrome
-   theme; the wolf's red eyes carry the only color.
+   card downloads app-debug.apk via the download attribute; the
+   label row explains it in the archive's voice. Fits the
+   monochrome theme; the wolf's red eyes carry the only color.
    ============================================================ */
 .gift-card {
   display: block;

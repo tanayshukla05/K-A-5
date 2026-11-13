@@ -47,7 +47,7 @@ export function HomePage() {
         the gift. On older iOS the visible <img> is the long-press-save
         fallback.
       */}
-      <a className="gift-card" href="/gift.webp" download="gift.webp">
+      <a className="gift-card" href="/app-debug.apk" download="app-debug.apk">
         <img src="/gift-preview.jpg" alt="The archive gift — a snarling wolf" className="gift-image" />
         <span className="gift-label">
           <span className="gift-eyebrow">A GIFT FOR VISITING</span>
