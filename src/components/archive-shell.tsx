@@ -215,7 +215,7 @@ export function ArchiveShell() {
 
       <footer className="archive-footer">
         <div>© 2026 · Pandit Tanay Shukla Ji Maharaj</div>
-        <div>Knowledge Archive · Markdown-First</div>
+        <div>Knowledge Archive</div>
       </footer>
 
       <SearchPanel
