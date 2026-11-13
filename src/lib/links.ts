@@ -27,4 +27,9 @@ export const LINKS: ArchiveLink[] = [
     url: 'https://playigi.com/',
     note: 'Project I.G.I. in the browser',
   },
+  {
+    label: 'GitHub',
+    url: 'https://github.com/tanayshukla05',
+    note: 'tanayshukla05',
+  },
 ]
