@@ -139,6 +139,23 @@ a, button, input, textarea, select, label, summary, [role='button'] {
   pointer-events: none;
 }
 
+/* Animated WebP twin of the video — plays as a plain <img>, which no
+   autoplay policy (Android Data Saver, iOS Low Power) can block. Same
+   frame geometry as .bg-video; the real video paints over it the moment
+   playback starts, and this retires. */
+.bg-video-fallback {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.5;
+  filter: blur(2.5px) saturate(0.9);
+  pointer-events: none;
+}
+.bg-video-fallback--retired { visibility: hidden; }
+
 /* ============================================================
    SCROLLBAR — thin, monochrome, archive-style
    ============================================================ */

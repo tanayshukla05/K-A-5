@@ -13,12 +13,22 @@
  * attributes before first paint, then nudges play() a few times as
  * belt-and-braces (data-saver / low-power phones can stall the first
  * attempt while the page is still loading).
+ *
+ * MOTION GUARANTEE: Android Data Saver / battery saver (and iOS Low Power
+ * Mode) refuse to autoplay AND refuse to preload a 7.9 MB video on mobile
+ * data — every play() retry fails and the poster would sit still. So an
+ * animated WebP loop (.bg-video-fallback, ~2.5 s cut from the same scene)
+ * always renders UNDER the video: it plays as a plain image, which no
+ * autoplay policy can block. The real video stacks on top the moment
+ * playback actually starts ('playing' event) and the fallback steps
+ * aside; if the phone never allows playback, the ghost still moves.
  */
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export function BackgroundVideo() {
   const ref = useRef<HTMLVideoElement>(null)
+  const [videoLive, setVideoLive] = useState(false)
 
   useEffect(() => {
     const v = ref.current
@@ -32,8 +42,9 @@ export function BackgroundVideo() {
 
     const tryPlay = () => {
       void v.play().catch(() => {
-        // Blocked (data saver, low-power mode) — the poster keeps the
-        // frame visible; a later retry or the user's next tap recovers.
+        // Blocked (data saver, low-power mode) — the animated fallback
+        // keeps the frame moving; a later retry or the user's next tap
+        // recovers.
       })
     }
     tryPlay()
@@ -41,25 +52,44 @@ export function BackgroundVideo() {
     // One late retry for phones that blocked the first attempt.
     const retry = window.setTimeout(tryPlay, 1500)
 
+    // The moment real frames are actually drawing, retire the fallback.
+    const onPlaying = () => setVideoLive(true)
+    v.addEventListener('playing', onPlaying)
+
     return () => {
       window.clearTimeout(retry)
       v.removeEventListener('loadeddata', tryPlay)
+      v.removeEventListener('playing', onPlaying)
     }
   }, [])
 
   return (
-    <video
-      ref={ref}
-      className="bg-video"
-      autoPlay
-      muted
-      loop
-      playsInline
-      preload="auto"
-      poster="/bg-poster.jpg"
-      aria-hidden="true"
-      tabIndex={-1}
-      src="/bg-boulder.mp4"
-    />
+    <>
+      {/*
+        MOTION GUARANTEE — animated WebP cut from the same scene. Renders
+        below the video (both z-index -1; DOM order stacks video on top)
+        and steps aside once the real video is playing.
+      */}
+      <img
+        src="/bg-poster.webp"
+        alt=""
+        aria-hidden="true"
+        tabIndex={-1}
+        className={`bg-video-fallback${videoLive ? ' bg-video-fallback--retired' : ''}`}
+      />
+      <video
+        ref={ref}
+        className="bg-video"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        poster="/bg-poster.jpg"
+        aria-hidden="true"
+        tabIndex={-1}
+        src="/bg-boulder.mp4"
+      />
+    </>
   )
 }
