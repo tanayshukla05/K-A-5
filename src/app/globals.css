@@ -822,6 +822,99 @@ a, button, input, textarea, select, label, summary, [role='button'] {
   .gift-label { padding: 0.85rem 1rem; }
 }
 
+/* ============================================================
+   GIFT OVERLAY — the auto-greeting: opens by itself right after
+   the rhyme loader finishes, once per browsing session. z-index
+   90: above the header (40), below search (100) and the loader
+   (100) so it never covers either.
+
+   Deliberately NO entrance animation on the container/card: an
+   animation parked at `from { opacity: 0 }` (background tab with
+   a suspended timeline) would keep the greeting invisible. The
+   gift must appear the moment it opens, in every environment —
+   the hard cut suits the terminal voice. The webp crossfade is
+   the only transition, and it degrades to the static frame.
+   ============================================================ */
+.gift-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: oklch(0.02 0 0 / 0.85);
+  -webkit-backdrop-filter: blur(6px); /* iOS Safari */
+  backdrop-filter: blur(6px);
+}
+.gift-overlay-card {
+  width: min(86vw, 400px);
+  border: 1px solid var(--border);
+  background: oklch(0.07 0 0 / 0.97);
+}
+.gift-overlay-frame { position: relative; }
+.gift-overlay-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: saturate(0.92);
+}
+/* The animation crossfades in over the static first frame — the
+   greeting paints instantly while the 2 MB WebP decodes behind it. */
+.gift-overlay-animated {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 240ms;
+}
+.gift-overlay-animated--live { opacity: 1; }
+.gift-overlay-label {
+  display: block;
+  padding: 0.85rem 1rem 0.5rem;
+  border-top: 1px solid var(--border);
+}
+.gift-overlay-title {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.gift-overlay-actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.6rem;
+  padding: 0.5rem 1rem 1rem;
+}
+.gift-overlay-save {
+  display: block;
+  border: 1px solid var(--muted-foreground);
+  padding: 0.75rem 1rem;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--foreground);
+  text-decoration: none;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.gift-overlay-close {
+  border: 1px solid var(--border);
+  background: transparent;
+  padding: 0.75rem 0.9rem;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  font-family: inherit;
+  cursor: pointer;
+}
+@media (hover: hover) {
+  .gift-overlay-save:hover { color: #ff0050; border-color: #ff0050; }
+  .gift-overlay-close:hover { color: var(--foreground); border-color: var(--muted-foreground); }
+}
+
 .archive-footer {
   border-top: 1px solid var(--border);
   padding: 1.5rem 1.25rem;

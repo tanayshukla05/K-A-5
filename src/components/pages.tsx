@@ -16,6 +16,7 @@ import type { ArchiveEntry } from '@/lib/types'
 import type { Route } from '@/lib/router'
 import { isCtfEntry } from '@/lib/entry-group'
 import { LINKS } from '@/lib/links'
+import { GiftOverlay } from '@/components/gift-overlay'
 
 type NavFn = (route: Route) => void
 
@@ -26,6 +27,12 @@ type NavFn = (route: Route) => void
 export function HomePage() {
   return (
     <div className="archive-container">
+      {/*
+        THE GREETING — opens by itself after the loader, once per
+        session. The static card below stays as the permanent
+        touchpoint for visitors who closed the greeting.
+      */}
+      <GiftOverlay />
       <div className="archive-eyebrow">KNOWLEDGE ARCHIVE / EST. 2026</div>
       <h1 className="archive-title">
         Pandit Tanay Shukla<br />Ji Maharaj
