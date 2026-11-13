@@ -12,9 +12,10 @@
 import {
   useAllEntries, useEntryBySlug, useAllTags, useAllCategories,
 } from '@/components/content-provider'
+import { useState } from 'react'
 import type { ArchiveEntry } from '@/lib/types'
 import type { Route } from '@/lib/router'
-import { isCtfEntry } from '@/lib/entry-group'
+import { isCtfEntry, ctfSourceOf, type CtfSource } from '@/lib/entry-group'
 import { LINKS } from '@/lib/links'
 import { GiftOverlay } from '@/components/gift-overlay'
 
@@ -260,10 +261,20 @@ function EntryRow({ entry, onClick }: { entry: ArchiveEntry; onClick: () => void
 /* ============================================================
    CTF WALKTHROUGHS
    ============================================================ */
+// The two walkthrough origins, in menu order. An entry lands on a tab
+// through its Module Name metadata row — see ctfSourceOf in
+// entry-group.ts ("Pwn.College — …" vs "HackTheBox — …").
+const CTF_TABS: Array<{ id: CtfSource; label: string }> = [
+  { id: 'pwn-college', label: 'pwn.college' },
+  { id: 'hackthebox', label: 'HackTheBox' },
+]
+
 export function CtfPage({ navigate }: { navigate: NavFn }) {
-  // The CTF Walkthroughs section lists the pwn.college binary-exploitation
-  // series only (Stage 01–17); learning-path stages live in the Archive.
-  const entries = useAllEntries().filter(e => isCtfEntry(e))
+  const all = useAllEntries().filter(e => isCtfEntry(e))
+  const [source, setSource] = useState<CtfSource>('pwn-college')
+  const entries = all.filter(e => ctfSourceOf(e) === source)
+  const counts: Record<CtfSource, number> = { 'pwn-college': 0, hackthebox: 0 }
+  for (const e of all) counts[ctfSourceOf(e)]++
   return (
     <div className="archive-container">
       <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
@@ -276,8 +287,23 @@ export function CtfPage({ navigate }: { navigate: NavFn }) {
         analysis exercises. Each entry documents the full chain — from initial
         reconnaissance to final payload.
       </p>
+      <div className="ctf-tabs" role="tablist" aria-label="Walkthrough source">
+        {CTF_TABS.map(t => (
+          <button
+            key={t.id}
+            type="button"
+            role="tab"
+            aria-selected={source === t.id}
+            className={`ctf-tab${source === t.id ? ' ctf-tab--active' : ''}`}
+            onClick={() => setSource(t.id)}
+          >
+            <span>{t.label}</span>
+            <span className="ctf-tab-count">{String(counts[t.id]).padStart(2, '0')}</span>
+          </button>
+        ))}
+      </div>
       {entries.length === 0 ? (
-        <EmptyState message="No walkthroughs published yet" />
+        <EmptyState message={`No ${CTF_TABS.find(t => t.id === source)?.label} walkthroughs published yet`} />
       ) : (
         <div>
           {entries.map(e => (

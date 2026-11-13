@@ -1395,6 +1395,51 @@ body[data-route="about"] .bg-video-fallback {
   font-variant-numeric: tabular-nums;
 }
 
+/* ============================================================
+   CTF SOURCE TABS — the pwn.college / HackTheBox switcher on the
+   CTF Walkthroughs menu. Monochrome segmented control; the active
+   tab inverts (terminal style). Tabs wrap on narrow screens.
+   ============================================================ */
+.ctf-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.25rem 0 1.5rem;
+}
+.ctf-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.95rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 120ms, border-color 120ms, color 120ms;
+}
+@media (hover: hover) {
+  .ctf-tab:hover {
+    background: var(--accent);
+    border-color: var(--muted-foreground);
+  }
+}
+.ctf-tab--active {
+  background: var(--foreground);
+  border-color: var(--foreground);
+  color: var(--background);
+}
+.ctf-tab--active:hover { background: var(--foreground); }
+.ctf-tab-count {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}
+.ctf-tab--active .ctf-tab-count { color: inherit; opacity: 0.65; }
+
 @media (max-width: 700px) {
   .tag-pill { padding: 0.65rem 0.75rem; }
   .back-link { padding: 0.5rem 0.75rem 0.5rem 0; }
