@@ -157,6 +157,16 @@ a, button, input, textarea, select, label, summary, [role='button'] {
 .bg-video-fallback--retired { visibility: hidden; }
 
 /* ============================================================
+   ABOUT — sharp background. The shell mirrors the active route
+   onto <body data-route>; ONLY the About menu asks for the ghost
+   un-blurred. Same faintness, same geometry — just crisp.
+   ============================================================ */
+body[data-route="about"] .bg-video,
+body[data-route="about"] .bg-video-fallback {
+  filter: saturate(0.9);
+}
+
+/* ============================================================
    SCROLLBAR — thin, monochrome, archive-style
    ============================================================ */
 ::-webkit-scrollbar {

@@ -75,6 +75,14 @@ export function ArchiveShell() {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
+  // SHARP MODE FOR ABOUT — the About menu wants the background crisp.
+  // The shell mirrors the active route name onto <body data-route>, and
+  // globals.css keys on that to lift the blur only for "about" (both the
+  // video and its GIF fallback). Every other page keeps the soft texture.
+  useEffect(() => {
+    document.body.dataset.route = route.name
+  }, [route.name])
+
   const entries = useAllEntries()
   const tagCount = useAllTags().length
   const catCount = useAllCategories().length
