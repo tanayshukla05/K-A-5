@@ -125,7 +125,7 @@ export function GiftOverlay() {
         </div>
         <div className="gift-overlay-label">
           <span className="gift-eyebrow">A GIFT FOR VISITING</span>
-          <span className="gift-overlay-title">THE ARCHIVE OFFERS YOU A WOLF</span>
+          <span className="gift-overlay-title">THE ARCHIVE OFFERS YOU A BULL</span>
         </div>
         <div className="gift-overlay-actions">
           <a
