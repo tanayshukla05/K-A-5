@@ -1440,6 +1440,91 @@ body[data-route="about"] .bg-video-fallback {
 }
 .ctf-tab--active .ctf-tab-count { color: inherit; opacity: 0.65; }
 
+/* ============================================================
+   SHELL SECRETS — the Win+R cheatsheet on the Cheat Sheets menu.
+   A monochrome sheet with a hero command, numbered steps, and
+   click-to-copy chips so visitors can paste straight into Run.
+   ============================================================ */
+.shell-secrets {
+  margin-top: 1.25rem;
+  border: 1px solid var(--border);
+}
+.shell-secret-steps {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--muted);
+}
+.shell-step {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 12px;
+  color: var(--muted-foreground);
+  letter-spacing: 0.02em;
+}
+.shell-step-key {
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+.shell-step b { color: var(--foreground); font-weight: 600; }
+.shell-secret-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+.shell-secret-cmd {
+  font-size: clamp(15px, 2.4vw, 19px);
+  letter-spacing: 0.02em;
+  color: var(--foreground);
+  word-break: break-all;
+}
+.shell-secret-cmd--small { font-size: 13px; }
+.shell-secret-desc {
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.shell-secret-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+.shell-secret-row:last-of-type { border-bottom: none; }
+.shell-secret-foot {
+  padding: 0.75rem 1.25rem;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--muted-foreground);
+  border-top: 1px solid var(--border);
+}
+.copy-chip {
+  flex-shrink: 0;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: background 120ms, border-color 120ms, color 120ms;
+}
+.copy-chip:hover { background: var(--accent); border-color: var(--muted-foreground); }
+.copy-chip--done {
+  background: var(--foreground);
+  border-color: var(--foreground);
+  color: var(--background);
+}
+@media (max-width: 700px) {
+  .shell-secret-row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+}
+
 @media (max-width: 700px) {
   .tag-pill { padding: 0.65rem 0.75rem; }
   .back-link { padding: 0.5rem 0.75rem 0.5rem 0; }

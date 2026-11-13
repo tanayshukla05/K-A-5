@@ -342,9 +342,64 @@ export function ResearchPage({ navigate }: { navigate: NavFn }) {
 /* ============================================================
    CHEAT SHEETS — intentionally empty section
    ============================================================ */
+/* ============================================================
+   CHEAT SHEETS — reference material. First sheet: Windows shell
+   secrets. The Run dialog (Win+R) is the fastest terminal on any
+   PC; these one-click-copy commands teach visitors to drive it.
+   ============================================================ */
+
+const SHELL_SECRETS: Array<{ cmd: string; desc: string }> = [
+  { cmd: 'shell:MyComputerFolder', desc: 'This PC — every drive and device in one window' },
+  { cmd: 'shell:RecycleBinFolder', desc: 'The Recycle Bin' },
+  { cmd: 'shell:AppsFolder', desc: 'Every installed app — launch any of them by name' },
+  { cmd: 'shell:Startup', desc: 'Programs that run the moment you log in' },
+  { cmd: 'shell:Recent', desc: 'Everything you opened lately' },
+  { cmd: 'shell:Downloads', desc: 'Your Downloads folder' },
+  { cmd: 'shell:Temp', desc: 'Temp junk — safe to clear out' },
+  { cmd: 'shell:Fonts', desc: 'Every font installed on the machine' },
+  { cmd: 'shell:ProgramFiles', desc: 'Program Files' },
+  { cmd: 'shell:Windows', desc: 'The Windows directory itself' },
+]
+
+function CopyChip({ text }: { text: string }) {
+  const [state, setState] = useState<'idle' | 'done'>('idle')
+  async function copy() {
+    let ok = false
+    try {
+      await navigator.clipboard.writeText(text)
+      ok = true
+    } catch {
+      // Fallback for browsers that refuse the async clipboard API
+      try {
+        const ta = document.createElement('textarea')
+        ta.value = text
+        ta.style.position = 'fixed'
+        ta.style.opacity = '0'
+        document.body.appendChild(ta)
+        ta.select()
+        document.execCommand('copy')
+        document.body.removeChild(ta)
+        ok = true
+      } catch {
+        ok = false
+      }
+    }
+    if (!ok) window.prompt('Copy this command:', text)
+    setState('done')
+    setTimeout(() => setState('idle'), 1600)
+  }
+  return (
+    <button
+      type="button"
+      className={`copy-chip${state === 'done' ? ' copy-chip--done' : ''}`}
+      onClick={copy}
+    >
+      {state === 'done' ? 'COPIED' : 'COPY'}
+    </button>
+  )
+}
+
 export function CheatsheetsPage({ navigate }: { navigate: NavFn }) {
-  // No cheat sheets have been published yet — empty state until real
-  // reference material exists.
   return (
     <div className="archive-container">
       <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
@@ -353,10 +408,37 @@ export function CheatsheetsPage({ navigate }: { navigate: NavFn }) {
       <div className="archive-eyebrow">CHEAT SHEETS</div>
       <h1 className="archive-title">Cheat Sheets</h1>
       <p className="archive-subtitle">
-        Reference material — YARA rule templates, syscall tables, byte
-        signatures, and quick-lookup tables for analysis workflows.
+        Reference material — quick-lookup tables for analysis workflows.
+        First sheet: the Windows Run dialog, the fastest terminal on any
+        PC. No install, no admin rights, pure muscle memory.
       </p>
-      <EmptyState message="No cheat sheets published yet" />
+
+      <div className="archive-eyebrow">SHEET 01 — WINDOWS SHELL SECRETS</div>
+      <div className="shell-secrets">
+        <div className="shell-secret-steps">
+          <div className="shell-step"><span className="shell-step-key">01</span><span>PRESS <b>Win + R</b> — the Run dialog opens</span></div>
+          <div className="shell-step"><span className="shell-step-key">02</span><span>PASTE a command — one click on <b>COPY</b> puts it on your clipboard</span></div>
+          <div className="shell-step"><span className="shell-step-key">03</span><span>HIT <b>Enter</b> — the folder opens. No menus, no hunting.</span></div>
+        </div>
+        <div className="shell-secret-hero">
+          <div className="shell-secret-cmd">explorer shell:MyComputerFolder</div>
+          <div className="shell-secret-desc">
+            The gateway command: opens This PC — every drive, every device,
+            one window. The archive starts where the file manager does.
+          </div>
+          <CopyChip text="explorer shell:MyComputerFolder" />
+        </div>
+        {SHELL_SECRETS.map(s => (
+          <div key={s.cmd} className="shell-secret-row">
+            <div>
+              <div className="shell-secret-cmd shell-secret-cmd--small">{s.cmd}</div>
+              <div className="shell-secret-desc">{s.desc}</div>
+            </div>
+            <CopyChip text={s.cmd} />
+          </div>
+        ))}
+        <div className="shell-secret-foot">WINDOWS ONLY — RUN NEEDS A KEYBOARD. ON A PHONE, THE LESSON IS STILL FREE.</div>
+      </div>
     </div>
   )
 }
