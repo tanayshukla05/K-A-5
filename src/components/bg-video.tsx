@@ -17,17 +17,19 @@
  * MOTION GUARANTEE: Android Data Saver / battery saver (and iOS Low Power
  * Mode) refuse to autoplay AND refuse to preload a 7.9 MB video on mobile
  * data — every play() retry fails and the poster would sit still. So an
- * animated WebP loop (.bg-video-fallback, ~2.5 s cut from the same scene)
- * always renders UNDER the video: it plays as a plain image, which no
- * autoplay policy can block. The real video stacks on top the moment
- * playback actually starts ('playing' event) and the fallback steps
- * aside; if the phone never allows playback, the ghost still moves.
+ * animated GIF loop (.bg-video-fallback, ~2.6 s cut from the same scene)
+ * always renders UNDER the video: GIFs animate as plain images on EVERY
+ * browser ever shipped — no autoplay policy, codec gap, or webview quirk
+ * can stop one. The real video stacks on top the moment playback
+ * actually starts ('playing' event) and the fallback steps aside; if the
+ * phone never allows playback, the ghost still moves.
  */
 
 import { useEffect, useRef, useState } from 'react'
 
 export function BackgroundVideo() {
   const ref = useRef<HTMLVideoElement>(null)
+  const fallbackRef = useRef<HTMLImageElement>(null)
   const [videoLive, setVideoLive] = useState(false)
 
   useEffect(() => {
@@ -66,12 +68,14 @@ export function BackgroundVideo() {
   return (
     <>
       {/*
-        MOTION GUARANTEE — animated WebP cut from the same scene. Renders
-        below the video (both z-index -1; DOM order stacks video on top)
-        and steps aside once the real video is playing.
+        MOTION GUARANTEE — animated GIF cut from the same scene. Plays as
+        a plain <img> on every browser ever made (no autoplay policy
+        applies); renders below the video (both z-index -1; DOM order
+        stacks video on top) and steps aside once the real video plays.
       */}
       <img
-        src="/bg-poster.webp"
+        ref={fallbackRef}
+        src="/bg-poster.gif"
         alt=""
         aria-hidden="true"
         tabIndex={-1}

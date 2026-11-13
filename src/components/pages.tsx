@@ -33,7 +33,7 @@ export function HomePage() {
         touchpoint for visitors who closed the greeting.
       */}
       <GiftOverlay />
-      <div className="archive-eyebrow">KNOWLEDGE ARCHIVE / EST. 2026</div>
+      <div className="archive-eyebrow">7TH WARD</div>
       <h1 className="archive-title">
         Pandit Tanay Shukla<br />Ji Maharaj
       </h1>
