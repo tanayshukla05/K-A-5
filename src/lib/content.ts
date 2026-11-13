@@ -48,10 +48,17 @@ function renderMarkdown(md: string): { html: string; sections: Array<{ heading: 
   let codeLang = ''
   let codeBuf: string[] = []
 
+  // Escapes everything that could break out of an HTML text node or an
+  // attribute value: & < > " '. Quotes matter because this renderer
+  // emits double-quoted attributes (href, data-lang) — an unescaped "
+  // in markdown would let a payload inject attributes (see the
+  // security-review PoC: onmouseover executed from a link URL).
   const esc = (s: string) => s
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
 
   const inline = (s: string) => {
     let t = esc(s)
@@ -63,8 +70,16 @@ function renderMarkdown(md: string): { html: string; sections: Array<{ heading: 
     // italic
     t = t.replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>')
     t = t.replace(/(^|[^_])_([^_]+)_/g, '$1<em>$2</em>')
-    // links
-    t = t.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" rel="noopener noreferrer">$1</a>')
+    // links — scheme allowlist. Only http(s), mailto and same-site
+    // relative targets may become <a href>; anything else (javascript:,
+    // data:, vbscript:, …) stays plain text and can never execute.
+    t = t.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_m, text: string, url: string) => {
+      const u = url.trim()
+      if (/^(https?:\/\/|mailto:|\/|#|\.\/|\.\.\/)/i.test(u)) {
+        return `<a href="${u}" rel="noopener noreferrer">${text}</a>`
+      }
+      return `${text} (${u})`
+    })
     return t
   }
 
@@ -186,7 +201,15 @@ function renderMarkdown(md: string): { html: string; sections: Array<{ heading: 
     const para = inline(buf.join(' '))
     out.push(`<p>${para}</p>`)
     if (!excerpt && para.length > 40 && !para.startsWith('Field') && !para.startsWith('Module Name')) {
-      excerpt = para.replace(/<[^>]+>/g, '')
+      excerpt = para
+        .replace(/<[^>]+>/g, '')
+        // para is HTML-escaped; excerpts are plain text (search, RSS), so
+        // decode the entities back to characters.
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
     }
   }
 
