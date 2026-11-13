@@ -214,7 +214,7 @@ export function ArchiveShell() {
       </div>
 
       <footer className="archive-footer">
-        <div>© 2026 · Pandit Tanay Shukla Ji Maharaj</div>
+        <div>© 2003 · Pandit Tanay Shukla Ji Maharaj</div>
         <div>Knowledge Archive</div>
       </footer>
 
