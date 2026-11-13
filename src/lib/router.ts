@@ -22,11 +22,21 @@ export function parseHash(hash: string): Route {
     const h = hash.replace(/^#/, '').replace(/^\//, '')
     const parts = h.split('/').filter(Boolean)
 
+    // decodeURIComponent throws URIError on malformed sequences — a link
+    // like "#/tags/%" would crash the whole client tree on first load.
+    const safeDecode = (s: string): string => {
+        try {
+            return decodeURIComponent(s)
+        } catch {
+            return s
+        }
+    }
+
     if (parts.length === 0) return { name: 'home' }
     if (parts[0] === 'about') return { name: 'about' }
     if (parts[0] === 'archive') return { name: 'archive' }
     if (parts[0] === 'stage' && parts[1])
-        return { name: 'stage', slug: decodeURIComponent(parts[1]) }
+        return { name: 'stage', slug: safeDecode(parts[1]) }
     if (parts[0] === 'ctf' || parts[0] === 'walkthroughs')
         return { name: 'ctf' }
     if (parts[0] === 'research')
@@ -38,13 +48,13 @@ export function parseHash(hash: string): Route {
     if (parts[0] === 'links')
         return { name: 'links' }
     if (parts[0] === 'tags' && parts[1])
-        return { name: 'tag', tag: decodeURIComponent(parts[1]) }
+        return { name: 'tag', tag: safeDecode(parts[1]) }
     if (parts[0] === 'tags')
         return { name: 'tags' }
     if (parts[0] === 'categories' && parts[1])
         return {
             name: 'category',
-            category: decodeURIComponent(parts[1]),
+            category: safeDecode(parts[1]),
         }
     if (parts[0] === 'categories')
         return { name: 'categories' }
