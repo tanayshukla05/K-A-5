@@ -30,6 +30,22 @@ export function HomePage() {
       <h1 className="archive-title">
         Pandit Tanay Shukla<br />Ji Maharaj
       </h1>
+      {/*
+        THE GIFT — every visitor is offered a take-home file. The `download`
+        attribute makes the browser save it directly on click (browsers block
+        any download that fires without a user gesture, so this is the
+        consent-respecting way). The small preview keeps the page light —
+        the full 2 MB animation only transfers when someone actually claims
+        the gift. On older iOS the visible <img> is the long-press-save
+        fallback.
+      */}
+      <a className="gift-card" href="/gift.webp" download="gift.webp">
+        <img src="/gift-preview.jpg" alt="The archive gift — a snarling wolf" className="gift-image" />
+        <span className="gift-label">
+          <span className="gift-eyebrow">A GIFT FOR VISITING</span>
+          <span className="gift-cta">CLICK TO TAKE IT WITH YOU</span>
+        </span>
+      </a>
     </div>
   )
 }

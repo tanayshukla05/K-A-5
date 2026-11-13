@@ -769,6 +769,59 @@ a, button, input, textarea, select, label, summary, [role='button'] {
   margin: 0 auto;
 }
 
+/* ============================================================
+   GIFT — a take-home file offered to every visitor. Clicking the
+   card downloads gift.webp via the download attribute; the label
+   row explains it in the archive's voice. Fits the monochrome
+   theme; the wolf's red eyes carry the only color.
+   ============================================================ */
+.gift-card {
+  display: block;
+  margin-top: 2.5rem;
+  max-width: 340px;
+  border: 1px solid var(--border);
+  background: oklch(0.07 0 0 / 0.72);
+  color: var(--foreground);
+  text-decoration: none;
+  transition: border-color 120ms, background 120ms;
+}
+.gift-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: saturate(0.92);
+}
+.gift-label {
+  display: block;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--border);
+}
+.gift-eyebrow {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-bottom: 0.3rem;
+}
+.gift-cta {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+@media (hover: hover) {
+  .gift-card:hover {
+    border-color: var(--muted-foreground);
+    background: var(--accent);
+  }
+  .gift-card:hover .gift-cta { color: #ff0050; }
+}
+@media (max-width: 700px) {
+  .gift-card { max-width: 100%; }
+  .gift-label { padding: 0.85rem 1rem; }
+}
+
 .archive-footer {
   border-top: 1px solid var(--border);
   padding: 1.5rem 1.25rem;
