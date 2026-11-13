@@ -1,28 +1,33 @@
 'use client'
 
 /**
- * GiftOverlay — the archive greets every visitor with the gift by itself.
+ * GiftOverlay — the archive greets every visitor with the gift by itself
+ * and SAVES it by itself. The site owner's explicit call: no tap should
+ * be required at all.
  *
- * Opens right after the rhyme loader finishes (never on top of it — the
- * loader unmounts `.loader-shell`, this component polls for that), shows
- * the animated wolf full-screen, no click needed to SEE it. The one tap
- * browsers still require is the actual file save: downloads fired without
- * a user gesture are blocked by every browser and get sites flagged by
- * Safe Browsing, so SAVE stays a deliberate tap.
+ * Flow: opens right after the rhyme loader finishes (never on top of it —
+ * the loader unmounts `.loader-shell`, this component polls for that),
+ * shows the animated wolf full-screen, then ~0.9 s in fires the
+ * `download` link programmatically so the file lands in Downloads with
+ * zero interaction. One programmatic download per session is within
+ * Chrome/Firefox's rules; the session flag both prevents re-greeting and
+ * keeps the browser from ever seeing a "multiple downloads" pattern.
  *
- * Once per browsing session (sessionStorage) — navigating Home again in
- * the same session does not re-greet; a fresh session does. Storage
- * blocked (private-mode edge cases) → it simply greets every time.
+ * Browser reality (why the button stays anyway):
+ *  - Chrome / Firefox desktop: the auto-save lands. ✓
+ *  - iOS Safari: gesture-strict — it may open the file in a viewer or do
+ *    nothing without a tap. The SAVE button remains as the one-tap
+ *    fallback there, and the on-screen image itself is long-press-save.
+ *  - Some setups (strict Safe Browsing states, enterprise policies) may
+ *    flag or hold the automatic download; the owner has accepted this.
  *
  * The card paints instantly with the 16 KB static first frame while the
  * 2 MB animated WebP streams in behind it, then crossfades to the
  * animation. Visitors with prefers-reduced-motion get the static frame
- * only. iOS <13 ignores the download attribute and opens the file
- * instead — the full-size image on screen is itself the fallback there
- * (long-press → save).
+ * only.
  */
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const GIFT_SEEN_KEY = 'ka-gift-seen'
 
@@ -31,6 +36,7 @@ export function GiftOverlay() {
   const [staticOnly, setStaticOnly] = useState(false)
   const [animated, setAnimated] = useState(false)
   const [saved, setSaved] = useState(false)
+  const saveRef = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
     let seen = false
@@ -58,6 +64,22 @@ export function GiftOverlay() {
     }, 300)
     return () => window.clearInterval(poll)
   }, [])
+
+  // Zero-tap save: once the greeting is up, fire the download link
+  // programmatically (~0.9 s in — after the visitor has actually seen the
+  // gift appear). Browsers that honor programmatic downloads (Chrome,
+  // Firefox) save the file with no interaction; gesture-strict browsers
+  // (iOS Safari) ignore it and the button below stays as the fallback.
+  // Fires once per session — the same flag that gates the greeting keeps
+  // this from ever looking like a repeat-download pattern to the browser.
+  useEffect(() => {
+    if (!open) return
+    const auto = window.setTimeout(() => {
+      saveRef.current?.click()
+      setSaved(true)
+    }, 900)
+    return () => window.clearTimeout(auto)
+  }, [open])
 
   // Esc closes + scroll stays locked behind the greeting.
   useEffect(() => {
@@ -107,12 +129,13 @@ export function GiftOverlay() {
         </div>
         <div className="gift-overlay-actions">
           <a
+            ref={saveRef}
             className="gift-overlay-save"
             href="/gift.webp"
             download="gift.webp"
             onClick={() => setSaved(true)}
           >
-            {saved ? 'SAVED ✓' : 'SAVE THE GIFT'}
+            {saved ? 'SAVED ✓' : 'SAVING…'}
           </a>
           <button type="button" className="gift-overlay-close" onClick={() => setOpen(false)}>
             CLOSE
