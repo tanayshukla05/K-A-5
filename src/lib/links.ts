@@ -22,4 +22,9 @@ export const LINKS: ArchiveLink[] = [
     url: 'https://www.linkedin.com/in/tanay-shukla-23198a334/',
     note: 'Pandit Tanay Shukla Ji Maharaj',
   },
+  {
+    label: 'Play IGI',
+    url: 'https://playigi.com/',
+    note: 'Project I.G.I. in the browser',
+  },
 ]
