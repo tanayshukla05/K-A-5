@@ -16,7 +16,7 @@ import { useState } from 'react'
 import type { ArchiveEntry } from '@/lib/types'
 import type { Route } from '@/lib/router'
 import { isCtfEntry, ctfSourceOf, type CtfSource } from '@/lib/entry-group'
-import { LINKS } from '@/lib/links'
+import { LINKS, type ArchiveLink } from '@/lib/links'
 import { GiftOverlay } from '@/components/gift-overlay'
 
 type NavFn = (route: Route) => void
@@ -467,8 +467,31 @@ export function FilesPage({ navigate }: { navigate: NavFn }) {
 }
 
 /* ============================================================
-   LINKS — external links directory
+   LINKS — the directory as a collection of artifacts. Every row
+   is a distinct material with its own typography, texture,
+   sparkle and hover behaviour (see .artifact--* in globals.css).
    ============================================================ */
+function ArtifactLink({ link, index }: { link: ArchiveLink; index: number }) {
+  const num = String(index + 1).padStart(2, '0')
+  const variant = link.variant ?? 'seal'
+  return (
+    <a
+      className={`artifact artifact--${variant}`}
+      href={link.url}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <span className="artifact-num" aria-hidden="true">{num}</span>
+      <span className="artifact-body">
+        <span className="artifact-label">{link.label}</span>
+        {link.note && <span className="artifact-note">{link.note}</span>}
+        <span className="artifact-url">{link.url.replace(/^https?:\/\//, '')}</span>
+      </span>
+      <span className="artifact-go" aria-hidden="true">↗</span>
+    </a>
+  )
+}
+
 export function LinksPage({ navigate }: { navigate: NavFn }) {
   const links = LINKS
   return (
@@ -479,29 +502,15 @@ export function LinksPage({ navigate }: { navigate: NavFn }) {
       <div className="archive-eyebrow">DIRECTORY / LINKS</div>
       <h1 className="archive-title">Links</h1>
       <p className="archive-subtitle">
-        Every external link in one directory. Each row opens in a new tab.
+        Every external link in one directory — each row is its own artifact:
+        a different material, a different behaviour. All open in a new tab.
       </p>
       {links.length === 0 ? (
         <EmptyState message="No links added yet" />
       ) : (
         <div>
           {links.map((l, i) => (
-            <a
-              key={l.url}
-              className="entry-row"
-              href={l.url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div className="entry-row-stage">LINK {String(i + 1).padStart(2, '0')}</div>
-              <div>
-                <div className="entry-row-title">{l.label}</div>
-                <div className="entry-row-meta">
-                  {l.note ? `${l.note} · ` : ''}{l.url}
-                </div>
-              </div>
-              <div className="entry-row-vt">↗</div>
-            </a>
+            <ArtifactLink key={l.url} link={l} index={i} />
           ))}
         </div>
       )}
