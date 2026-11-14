@@ -19,6 +19,7 @@ export type ArchiveLink = {
     | 'gothic' | 'goodboy' | 'acid' | 'typewriter' | 'holo' | 'arcade'
     | 'wreck' | 'glitch' | 'friendly' | 'prism'
     | 'neural' | 'grimoire' | 'bbs' | 'detonate' | 'apex' | 'modules'
+    | 'signal'
 }
 
 export const LINKS: ArchiveLink[] = [
@@ -141,5 +142,11 @@ export const LINKS: ArchiveLink[] = [
     url: 'https://github.com/paranoidninja/Brute-Ratel-C4-Community-Kit',
     note: 'Community extensions for Brute Ratel C4',
     variant: 'modules',
+  },
+  {
+    label: 'Shannon AI',
+    url: 'https://shannon-ai.com',
+    note: 'Frontier red-team lab for LLM safety',
+    variant: 'signal',
   },
 ]

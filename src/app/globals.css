@@ -2835,6 +2835,62 @@ body[data-route="about"] .bg-video-fallback {
   50% { opacity: 1; }
 }
 
+/* --- SIGNAL · Shannon AI — information theory: noise recedes, signal
+   clears. Named for Claude Shannon; dot-matrix type = bits. --- */
+.artifact--signal {
+  background: radial-gradient(120% 150% at 50% 115%, oklch(0.16 0.045 285) 0%, oklch(0.09 0.025 280) 65%);
+  border: 1px solid oklch(0.36 0.08 285 / 0.8);
+  transition: border-color 260ms ease, box-shadow 260ms ease;
+}
+.artifact--signal .artifact-label {
+  font-family: 'Doto', 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: 0.14em;
+  color: oklch(0.78 0.13 285);
+  text-shadow: 0 0 10px oklch(0.55 0.15 290 / 0.45);
+}
+.artifact--signal .artifact-num { color: oklch(0.50 0.07 285); }
+.artifact--signal .artifact-note, .artifact--signal .artifact-url { color: oklch(0.60 0.05 285); }
+.artifact--signal .artifact-go { color: oklch(0.50 0.07 285); }
+.artifact--signal::before {
+  content: '';
+  position: absolute;
+  left: 1.3rem;
+  right: 1.3rem;
+  top: 62%;
+  height: 2px;
+  background:
+    linear-gradient(90deg, oklch(0.62 0.10 285 / 0.30), oklch(0.62 0.10 285 / 0.30)) 0 0 / 100% 100% no-repeat,
+    linear-gradient(90deg, transparent 0%, oklch(0.97 0.04 290) 50%, transparent 100%) -130px 0 / 130px 100% no-repeat;
+  animation: signal-pulse 4.4s linear infinite;
+  pointer-events: none;
+}
+.artifact--signal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(oklch(0.72 0.10 285 / 0.14) 1px, transparent 1.4px);
+  background-size: 7px 7px;
+  transition: opacity 420ms ease;
+  pointer-events: none;
+}
+.artifact--signal:hover {
+  border-color: oklch(0.62 0.13 285 / 0.95);
+  box-shadow: 0 0 24px oklch(0.55 0.15 285 / 0.22);
+}
+.artifact--signal:hover .artifact-label {
+  color: oklch(0.86 0.14 285);
+  letter-spacing: 0.18em;
+  text-shadow: 0 0 16px oklch(0.60 0.16 290 / 0.7);
+}
+.artifact--signal:hover::before { animation-duration: 1.8s; }
+.artifact--signal:hover::after { opacity: 0.22; }
+@keyframes signal-pulse {
+  0% { background-position: 0 0, -130px 0; }
+  100% { background-position: 0 0, calc(100% + 130px) 0; }
+}
+
 /* Mobile: third set tighter type, same identities */
 @media (max-width: 700px) {
   .artifact--neural .artifact-label { font-size: 13px; }
@@ -2843,6 +2899,7 @@ body[data-route="about"] .bg-video-fallback {
   .artifact--detonate .artifact-label { font-size: 16px; }
   .artifact--apex .artifact-label { font-size: 15px; }
   .artifact--modules .artifact-label { font-size: 12px; }
+  .artifact--signal .artifact-label { font-size: 16px; }
 }
 
 @media (max-width: 700px) {
