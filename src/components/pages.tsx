@@ -412,7 +412,7 @@ export function ResearchEntryPage({ slug, navigate }: { slug: string; navigate: 
         ← Back to Research Notes
       </button>
 
-      <article>
+      <article className={`research-entry research-entry--${entry.series}`}>
         <header className="article-head research-head">
           <div className={`research-series-chip research-series-chip--${entry.series}`}>
             {entry.series === 'mal-dev' ? 'MAL-DEV' : 'EXPLOIT-DEV'} · {entry.dateLabel}
