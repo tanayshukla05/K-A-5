@@ -1870,9 +1870,612 @@ body[data-route="about"] .bg-video-fallback {
 @media (prefers-reduced-motion: reduce) {
   .artifact::before,
   .artifact::after,
+  .artifact .artifact-label,
   .artifact--terminal .artifact-label::after {
     animation: none !important;
   }
+}
+
+/* ============================================================
+   ARTIFACT SET 02 — ten more materials for the expanded directory.
+   Same rules: one identity per row, CSS-only motion, GPU-cheap.
+   ============================================================ */
+@font-face {
+  font-family: 'Pirata One';
+  src: url('/fonts/pirata-one-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Silkscreen';
+  src: url('/fonts/silkscreen-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Audiowide';
+  src: url('/fonts/audiowide-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Special Elite';
+  src: url('/fonts/special-elite-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Michroma';
+  src: url('/fonts/michroma-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('/fonts/press-start-2p-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Bungee';
+  src: url('/fonts/bungee-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Rubik Glitch';
+  src: url('/fonts/rubik-glitch-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Fredoka';
+  src: url('/fonts/fredoka-latin.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Syncopate';
+  src: url('/fonts/syncopate-latin.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- GOTHIC · MaleficentVM — violet sigil, fog breathing --- */
+.artifact--gothic {
+  background: linear-gradient(180deg, oklch(0.14 0.04 310) 0%, oklch(0.10 0.03 310) 100%);
+  border: 1px solid oklch(0.42 0.10 310 / 0.7);
+  transition: border-color 250ms ease, box-shadow 250ms ease;
+}
+.artifact--gothic .artifact-label {
+  font-family: 'Pirata One', Georgia, serif;
+  font-size: 24px;
+  letter-spacing: 0.06em;
+  color: oklch(0.80 0.10 310);
+  text-shadow: 0 0 10px oklch(0.55 0.16 310 / 0.5), 0 2px 2px oklch(0 0 0 / 0.8);
+}
+.artifact--gothic .artifact-num { color: oklch(0.55 0.10 310); }
+.artifact--gothic .artifact-note, .artifact--gothic .artifact-url { color: oklch(0.62 0.06 310); }
+.artifact--gothic .artifact-go { color: oklch(0.55 0.10 310); }
+.artifact--gothic::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(90% 130% at 50% 120%, oklch(0.45 0.14 310 / 0.28), transparent 65%);
+  animation: gothic-fog 6s ease-in-out infinite;
+  pointer-events: none;
+}
+.artifact--gothic::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  background: radial-gradient(70% 100% at 50% 50%, oklch(0.70 0.18 310 / 0.12), transparent 70%);
+  pointer-events: none;
+}
+.artifact--gothic:hover {
+  border-color: oklch(0.62 0.16 310 / 0.95);
+  box-shadow: 0 0 26px oklch(0.50 0.18 310 / 0.25);
+}
+.artifact--gothic:hover .artifact-label {
+  color: oklch(0.88 0.12 310);
+  text-shadow: 0 0 14px oklch(0.60 0.20 310 / 0.75), 0 2px 2px oklch(0 0 0 / 0.8);
+}
+.artifact--gothic:hover::after { opacity: 1; }
+@keyframes gothic-fog {
+  0%, 100% { opacity: 0.6; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-4px); }
+}
+
+/* --- GOODBOY · goodboy-framework — pixel gold, wagging sparkles --- */
+.artifact--goodboy {
+  background:
+    repeating-linear-gradient(0deg, oklch(0.13 0.02 90) 0 4px, transparent 4px 8px),
+    repeating-linear-gradient(90deg, oklch(0.13 0.02 90) 0 4px, transparent 4px 8px),
+    oklch(0.11 0.02 90);
+  border: 1px solid oklch(0.45 0.09 90 / 0.65);
+  transition: border-color 200ms ease;
+}
+.artifact--goodboy .artifact-label {
+  font-family: 'Silkscreen', monospace;
+  font-size: 18px;
+  letter-spacing: 0.05em;
+  color: oklch(0.82 0.12 90);
+  text-shadow: 2px 2px 0 oklch(0 0 0 / 0.9);
+}
+.artifact--goodboy .artifact-num { color: oklch(0.60 0.08 90); }
+.artifact--goodboy .artifact-note, .artifact--goodboy .artifact-url { color: oklch(0.66 0.07 95); }
+.artifact--goodboy .artifact-go { color: oklch(0.60 0.08 90); }
+.artifact--goodboy::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(2px 2px at 20% 30%, oklch(0.90 0.14 95 / 0.9) 50%, transparent 51%),
+    radial-gradient(2px 2px at 70% 60%, oklch(0.90 0.14 95 / 0.8) 50%, transparent 51%),
+    radial-gradient(2px 2px at 45% 75%, oklch(0.88 0.12 85 / 0.8) 50%, transparent 51%),
+    radial-gradient(2px 2px at 85% 20%, oklch(0.90 0.14 95 / 0.7) 50%, transparent 51%);
+  animation: pixel-spark 2.4s steps(4) infinite;
+  pointer-events: none;
+}
+.artifact--goodboy::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background:
+    radial-gradient(2px 2px at 30% 50%, oklch(0.95 0.15 95 / 0.95) 50%, transparent 51%),
+    radial-gradient(2px 2px at 60% 40%, oklch(0.95 0.15 95 / 0.9) 50%, transparent 51%),
+    radial-gradient(2px 2px at 80% 65%, oklch(0.92 0.13 85 / 0.9) 50%, transparent 51%),
+    radial-gradient(2px 2px at 50% 78%, oklch(0.95 0.15 95 / 0.85) 50%, transparent 51%);
+  pointer-events: none;
+}
+.artifact--goodboy:hover { border-color: oklch(0.70 0.13 95 / 0.9); }
+.artifact--goodboy:hover .artifact-label { color: oklch(0.92 0.14 95); letter-spacing: 0.08em; }
+.artifact--goodboy:hover::after { opacity: 1; animation: pixel-spark 0.8s steps(2) infinite; }
+@keyframes pixel-spark {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.95; }
+}
+
+/* --- ACID · RABIDS — toxic green, electrode crackle --- */
+.artifact--acid {
+  background: oklch(0.10 0.03 140);
+  border: 1px solid oklch(0.50 0.15 145 / 0.6);
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+.artifact--acid .artifact-label {
+  font-family: 'Audiowide', 'Segoe UI', sans-serif;
+  font-size: 17px;
+  letter-spacing: 0.1em;
+  color: oklch(0.84 0.20 145);
+  text-shadow: 0 0 8px oklch(0.65 0.20 145 / 0.6);
+}
+.artifact--acid .artifact-num { color: oklch(0.55 0.12 145); }
+.artifact--acid .artifact-note, .artifact--acid .artifact-url { color: oklch(0.62 0.10 145); }
+.artifact--acid .artifact-go { color: oklch(0.55 0.12 145); }
+.artifact--acid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1.5px 10px at 25% 40%, oklch(0.85 0.20 145 / 0.8) 50%, transparent 51%),
+    radial-gradient(1.5px 10px at 65% 70%, oklch(0.85 0.20 145 / 0.7) 50%, transparent 51%),
+    radial-gradient(1.5px 10px at 85% 25%, oklch(0.85 0.20 145 / 0.6) 50%, transparent 51%);
+  animation: acid-crackle 1.2s steps(2) infinite;
+  pointer-events: none;
+}
+.artifact--acid::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 260ms ease;
+  background: linear-gradient(100deg, transparent 35%, oklch(0.85 0.22 145 / 0.14) 50%, transparent 65%);
+  pointer-events: none;
+}
+.artifact--acid:hover {
+  border-color: oklch(0.75 0.20 145 / 0.95);
+  box-shadow: 0 0 22px oklch(0.60 0.20 145 / 0.25);
+}
+.artifact--acid:hover .artifact-label { letter-spacing: 0.14em; color: oklch(0.90 0.22 145); }
+.artifact--acid:hover::after { opacity: 1; }
+@keyframes acid-crackle {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+/* --- TYPEWRITER · maldev.nl — field-note paper, ink underline --- */
+.artifact--typewriter {
+  background: linear-gradient(180deg, oklch(0.16 0.015 85) 0%, oklch(0.13 0.012 85) 100%);
+  border: 1px solid oklch(0.40 0.04 85 / 0.6);
+  box-shadow: inset 0 0 30px oklch(0 0 0 / 0.35);
+  transition: border-color 250ms ease;
+}
+.artifact--typewriter .artifact-label {
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 18px;
+  letter-spacing: 0.03em;
+  color: oklch(0.80 0.06 90);
+  text-shadow: 0 1px 0 oklch(0 0 0 / 0.6);
+}
+.artifact--typewriter .artifact-num { color: oklch(0.55 0.04 85); }
+.artifact--typewriter .artifact-note, .artifact--typewriter .artifact-url { color: oklch(0.62 0.035 85); }
+.artifact--typewriter .artifact-go { color: oklch(0.55 0.04 85); }
+.artifact--typewriter::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent 0 18px, oklch(1 0 0 / 0.035) 18px 19px);
+  pointer-events: none;
+}
+.artifact--typewriter::after {
+  content: '';
+  position: absolute;
+  left: 1.3rem;
+  right: 1.3rem;
+  bottom: 0.75rem;
+  height: 2px;
+  background: oklch(0.65 0.14 35 / 0.85);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 320ms cubic-bezier(0.2, 0.8, 0.3, 1);
+  pointer-events: none;
+}
+.artifact--typewriter:hover { border-color: oklch(0.55 0.06 85 / 0.9); }
+.artifact--typewriter:hover .artifact-label {
+  color: oklch(0.88 0.07 90);
+  transform: rotate(-0.3deg);
+}
+.artifact--typewriter:hover::after { transform: scaleX(1); }
+
+/* --- HOLO · ZYGRAX — iridescent glass, drifting spectrum text --- */
+.artifact--holo {
+  background: linear-gradient(180deg, oklch(0.10 0.03 220) 0%, oklch(0.12 0.04 200) 100%);
+  border: 1px solid oklch(0.40 0.08 200 / 0.7);
+  transition: border-color 250ms ease, box-shadow 250ms ease;
+}
+.artifact--holo .artifact-label {
+  font-family: 'Michroma', 'Segoe UI', sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.18em;
+  background: linear-gradient(100deg, oklch(0.80 0.12 195) 0%, oklch(0.82 0.12 300) 30%, oklch(0.80 0.12 195) 60%, oklch(0.80 0.12 195) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: holo-drift 5s linear infinite;
+}
+.artifact--holo .artifact-num { color: oklch(0.55 0.08 210); }
+.artifact--holo .artifact-note, .artifact--holo .artifact-url { color: oklch(0.62 0.06 210); }
+.artifact--holo .artifact-go { color: oklch(0.55 0.08 210); }
+.artifact--holo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 30%;
+  background: linear-gradient(90deg, transparent, oklch(0.85 0.08 200 / 0.08), transparent);
+  transform: translateX(-130%) skewX(-20deg);
+  animation: holo-sheen 6.5s ease-in-out infinite;
+  pointer-events: none;
+}
+.artifact--holo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  background: linear-gradient(115deg, transparent 25%, oklch(0.80 0.10 300 / 0.12) 40%, oklch(0.85 0.10 195 / 0.16) 50%, oklch(0.80 0.10 160 / 0.12) 60%, transparent 75%);
+  pointer-events: none;
+}
+.artifact--holo:hover {
+  border-color: oklch(0.65 0.11 200 / 0.95);
+  box-shadow: 0 0 24px oklch(0.55 0.10 200 / 0.22);
+}
+.artifact--holo:hover .artifact-label { animation-duration: 2s; }
+.artifact--holo:hover::after { opacity: 1; }
+@keyframes holo-drift {
+  0% { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes holo-sheen {
+  0%, 55% { transform: translateX(-130%) skewX(-20deg); }
+  90%, 100% { transform: translateX(130%) skewX(-20deg); }
+}
+
+/* --- ARCADE · PWNEXE (napstar) — coin-op red, CRT scanlines --- */
+.artifact--arcade {
+  background: oklch(0.10 0.03 28);
+  border: 1px solid oklch(0.45 0.14 28 / 0.65);
+  box-shadow: inset 0 0 22px oklch(0.35 0.15 28 / 0.12);
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+.artifact--arcade .artifact-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: oklch(0.82 0.17 28);
+  text-shadow: 2px 2px 0 oklch(0 0 0 / 0.9), 0 0 10px oklch(0.65 0.19 28 / 0.5);
+}
+.artifact--arcade .artifact-num { color: oklch(0.55 0.10 28); }
+.artifact--arcade .artifact-note, .artifact--arcade .artifact-url { color: oklch(0.62 0.09 28); }
+.artifact--arcade .artifact-go { color: oklch(0.55 0.10 28); }
+.artifact--arcade::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, oklch(0 0 0 / 0.20) 0 1px, transparent 1px 3px);
+  animation: arcade-flicker 2.8s steps(3) infinite;
+  pointer-events: none;
+}
+.artifact--arcade::after {
+  content: '';
+  position: absolute;
+  left: 1.3rem;
+  right: 1.3rem;
+  bottom: 0.8rem;
+  height: 3px;
+  background: repeating-linear-gradient(90deg, oklch(0.82 0.17 28) 0 8px, transparent 8px 14px);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 300ms ease;
+  pointer-events: none;
+}
+.artifact--arcade:hover {
+  border-color: oklch(0.70 0.16 28 / 0.95);
+  box-shadow: inset 0 0 22px oklch(0.35 0.15 28 / 0.18), 0 0 20px oklch(0.60 0.18 28 / 0.25);
+}
+.artifact--arcade:hover .artifact-label { animation: arcade-blink 0.6s steps(2) infinite; }
+.artifact--arcade:hover::after { transform: scaleX(1); }
+@keyframes arcade-flicker {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+@keyframes arcade-blink {
+  0%, 49.9% { opacity: 1; }
+  50%, 100% { opacity: 0.35; }
+}
+
+/* --- WRECK · PWNEXE (vsa77) — magenta hazard tape, impact flash --- */
+.artifact--wreck {
+  background: linear-gradient(135deg, oklch(0.13 0.05 330) 0%, oklch(0.10 0.03 330) 100%);
+  border: 1px solid oklch(0.45 0.14 330 / 0.7);
+  transition: border-color 200ms ease, transform 180ms ease;
+}
+.artifact--wreck .artifact-label {
+  font-family: 'Bungee', 'Arial Black', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.05em;
+  color: oklch(0.84 0.15 330);
+  text-shadow: 3px 3px 0 oklch(0 0 0 / 0.8);
+}
+.artifact--wreck .artifact-num { color: oklch(0.55 0.10 330); }
+.artifact--wreck .artifact-note, .artifact--wreck .artifact-url { color: oklch(0.62 0.08 330); }
+.artifact--wreck .artifact-go { color: oklch(0.55 0.10 330); }
+.artifact--wreck::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(45deg, oklch(0.60 0.15 330 / 0.10) 0 6px, transparent 6px 16px);
+  animation: wreck-stripes 5s linear infinite;
+  pointer-events: none;
+}
+.artifact--wreck::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: linear-gradient(115deg, transparent 40%, oklch(1 0 0 / 0.22) 50%, transparent 60%);
+  pointer-events: none;
+}
+.artifact--wreck:hover {
+  border-color: oklch(0.68 0.15 330 / 0.95);
+  transform: skewX(-2deg) scale(1.01);
+}
+.artifact--wreck:hover .artifact-label { color: oklch(0.90 0.16 330); letter-spacing: 0.08em; }
+.artifact--wreck:hover::after { opacity: 1; animation: wreck-flash 0.5s ease 1; }
+@keyframes wreck-stripes {
+  0% { background-position: 0 0; }
+  100% { background-position: 22.6px 0; }
+}
+@keyframes wreck-flash {
+  0% { opacity: 0; }
+  40% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* --- GLITCH · pupy — corrupted signal, hot-pink jitter --- */
+.artifact--glitch {
+  background: oklch(0.10 0.04 355);
+  border: 1px solid oklch(0.45 0.15 358 / 0.65);
+  transition: border-color 200ms ease;
+}
+.artifact--glitch .artifact-label {
+  font-family: 'Rubik Glitch', 'Segoe UI', sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.04em;
+  color: oklch(0.85 0.14 8);
+  text-shadow: 0 0 10px oklch(0.60 0.18 8 / 0.55);
+  animation: glitch-jitter 3.4s steps(3) infinite;
+}
+.artifact--glitch .artifact-num { color: oklch(0.55 0.12 358); }
+.artifact--glitch .artifact-note, .artifact--glitch .artifact-url { color: oklch(0.62 0.09 358); }
+.artifact--glitch .artifact-go { color: oklch(0.55 0.12 358); }
+.artifact--glitch::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(oklch(0.75 0.16 8 / 0.5), oklch(0.75 0.16 8 / 0.5)) 30% 0 / 2px 100% no-repeat,
+    linear-gradient(oklch(0.75 0.16 8 / 0.4), oklch(0.75 0.16 8 / 0.4)) 72% 0 / 1px 100% no-repeat;
+  animation: glitch-slices 2.6s steps(3) infinite;
+  pointer-events: none;
+}
+.artifact--glitch::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background:
+    linear-gradient(oklch(0.60 0.18 190 / 0.5), oklch(0.60 0.18 190 / 0.5)) 45% 0 / 1px 100% no-repeat,
+    linear-gradient(oklch(0.60 0.18 190 / 0.4), oklch(0.60 0.18 190 / 0.4)) 58% 0 / 2px 100% no-repeat;
+  pointer-events: none;
+}
+.artifact--glitch:hover { border-color: oklch(0.70 0.16 8 / 0.95); }
+.artifact--glitch:hover .artifact-label { animation: glitch-burst 0.4s steps(2) 2; text-shadow: 2px 0 oklch(0.70 0.18 190 / 0.9), -2px 0 oklch(0.85 0.14 8 / 0.9); }
+.artifact--glitch:hover::after { opacity: 1; animation: glitch-slices 0.9s steps(2) infinite; }
+@keyframes glitch-jitter {
+  0%, 92%, 100% { transform: none; }
+  94% { transform: translateX(-1px) skewX(2deg); }
+  97% { transform: translateX(1px); }
+}
+@keyframes glitch-burst {
+  0% { transform: none; }
+  33% { transform: translateX(-2px) skewX(-3deg); }
+  66% { transform: translateX(2px) skewX(2deg); }
+  100% { transform: none; }
+}
+@keyframes glitch-slices {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.9; }
+}
+
+/* --- FRIENDLY · Boot.dev — soft sky, floating orbs, bounce --- */
+.artifact--friendly {
+  background: linear-gradient(180deg, oklch(0.14 0.03 240) 0%, oklch(0.11 0.025 240) 100%);
+  border: 1px solid oklch(0.45 0.09 240 / 0.65);
+  transition: border-color 220ms ease;
+}
+.artifact--friendly .artifact-label {
+  font-family: 'Fredoka', 'Segoe UI', sans-serif;
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: 0.02em;
+  color: oklch(0.85 0.09 235);
+  transition: transform 260ms cubic-bezier(0.3, 1.6, 0.4, 1.2), color 220ms ease;
+}
+.artifact--friendly .artifact-num { color: oklch(0.55 0.08 240); }
+.artifact--friendly .artifact-note, .artifact--friendly .artifact-url { color: oklch(0.63 0.06 240); }
+.artifact--friendly .artifact-go { color: oklch(0.55 0.08 240); }
+.artifact--friendly::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(5px 5px at 15% 65%, oklch(0.75 0.10 235 / 0.5) 50%, transparent 51%),
+    radial-gradient(3px 3px at 40% 30%, oklch(0.80 0.10 225 / 0.5) 50%, transparent 51%),
+    radial-gradient(4px 4px at 78% 55%, oklch(0.75 0.10 250 / 0.45) 50%, transparent 51%);
+  animation: friendly-float 5s ease-in-out infinite;
+  pointer-events: none;
+}
+.artifact--friendly::after {
+  content: '';
+  position: absolute;
+  left: 1.3rem;
+  right: 1.3rem;
+  bottom: 0.75rem;
+  height: 2px;
+  background: oklch(0.80 0.10 235 / 0.8);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 340ms cubic-bezier(0.3, 1.6, 0.4, 1);
+  pointer-events: none;
+}
+.artifact--friendly:hover { border-color: oklch(0.68 0.11 235 / 0.95); }
+.artifact--friendly:hover .artifact-label {
+  color: oklch(0.92 0.11 235);
+  transform: translateY(-2px);
+}
+.artifact--friendly:hover::after { transform: scaleX(1); }
+@keyframes friendly-float {
+  0%, 100% { opacity: 0.5; transform: translateY(2px); }
+  50% { opacity: 0.95; transform: translateY(-3px); }
+}
+
+/* --- PRISM · TNKR.AI — white aurora, rainbow text, starfield --- */
+.artifact--prism {
+  background: oklch(0.09 0.02 285);
+  border: 1px solid oklch(0.42 0.06 290 / 0.7);
+  transition: border-color 250ms ease, box-shadow 250ms ease;
+}
+.artifact--prism .artifact-label {
+  font-family: 'Syncopate', 'Segoe UI', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.28em;
+  background: linear-gradient(90deg, oklch(0.82 0.12 0) 0%, oklch(0.82 0.12 140) 30%, oklch(0.82 0.12 260) 60%, oklch(0.82 0.12 0) 100%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: prism-slide 7s linear infinite;
+}
+.artifact--prism .artifact-num { color: oklch(0.58 0.05 290); }
+.artifact--prism .artifact-note, .artifact--prism .artifact-url { color: oklch(0.64 0.04 290); }
+.artifact--prism .artifact-go { color: oklch(0.58 0.05 290); }
+.artifact--prism::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(45% 90% at 15% 20%, oklch(0.55 0.14 20 / 0.14), transparent 70%),
+    radial-gradient(45% 90% at 60% 80%, oklch(0.55 0.14 150 / 0.13), transparent 70%),
+    radial-gradient(45% 90% at 90% 25%, oklch(0.55 0.14 270 / 0.14), transparent 70%);
+  animation: prism-aurora 8s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.artifact--prism::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 250ms ease;
+  background:
+    radial-gradient(1.5px 1.5px at 22% 35%, oklch(1 0 0 / 0.95) 50%, transparent 51%),
+    radial-gradient(1px 1px at 55% 60%, oklch(1 0 0 / 0.9) 50%, transparent 51%),
+    radial-gradient(2px 2px at 75% 30%, oklch(1 0 0 / 0.85) 50%, transparent 51%),
+    radial-gradient(1px 1px at 40% 75%, oklch(1 0 0 / 0.9) 50%, transparent 51%);
+  pointer-events: none;
+}
+.artifact--prism:hover {
+  border-color: oklch(0.68 0.08 290 / 0.95);
+  box-shadow: 0 0 26px oklch(0.55 0.10 290 / 0.2);
+}
+.artifact--prism:hover .artifact-label { animation-duration: 2.5s; }
+.artifact--prism:hover::after { opacity: 1; animation: pixel-spark 1.6s steps(2) infinite; }
+@keyframes prism-slide {
+  0% { background-position: 0% 0; }
+  100% { background-position: 300% 0; }
+}
+@keyframes prism-aurora {
+  0% { opacity: 0.55; }
+  100% { opacity: 1; }
+}
+
+/* Mobile: second set needs tighter type too */
+@media (max-width: 700px) {
+  .artifact--gothic .artifact-label { font-size: 20px; }
+  .artifact--goodboy .artifact-label { font-size: 15px; }
+  .artifact--acid .artifact-label { font-size: 14px; }
+  .artifact--typewriter .artifact-label { font-size: 16px; }
+  .artifact--holo .artifact-label { font-size: 12px; }
+  .artifact--arcade .artifact-label { font-size: 10px; }
+  .artifact--wreck .artifact-label { font-size: 15px; }
+  .artifact--glitch .artifact-label { font-size: 17px; }
+  .artifact--friendly .artifact-label { font-size: 16px; }
+  .artifact--prism .artifact-label { font-size: 11px; }
 }
 
 @media (max-width: 700px) {
