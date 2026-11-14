@@ -3215,81 +3215,97 @@ body[data-route="about"] .bg-video-fallback {
 }
 
 /* ============================================================
-   MAL-DEV READER THEME — containment-lab dossier. Where the
-   Exploit-Dev codex is warm ink and parchment, Mal-Dev is a
-   quarantine lab: cold slate with CRT scanlines, a scan sweep
-   crossing the header plate, a hazard-stripe strip, stencil
-   (Saira Stencil One) headline, "LOG 01 //" incident markers,
-   Chakra Petch section labels, VT323 terminal readouts in cold
-   cyan, dashed evidence borders and hazard-stripe dividers.
-   Scoped under .research-entry--mal-dev — the codex above is
-   not touched. Zero border-radius throughout (archive rule).
+   MAL-DEV READER THEME — MALWARE.EXE. Built from mal-dev.png:
+   pure black window plate with white Win95 chrome, blood-red
+   pixel type (Press Start 2P) with a hard block shadow, violet
+   flame glow, red hex-dump terminal boxes as code cabinets
+   (VT323), and section labels boxed like the image's corner
+   hex readouts. Scoped under .research-entry--mal-dev — the
+   Exploit-Dev codex above is untouched. Zero border-radius
+   throughout (archive rule).
    ============================================================ */
 
-@keyframes maldev-scan {
-  0%   { transform: translateY(-120%); opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 1; }
-  100% { transform: translateY(120%); opacity: 0; }
+.research-entry--mal-dev {
+  --mal-red: oklch(0.54 0.19 27);
+  --mal-red-dim: oklch(0.44 0.16 27);
+  --mal-red-dark: oklch(0.30 0.13 27);
+  --mal-violet: oklch(0.70 0.16 310);
+  --mal-violet-dim: oklch(0.55 0.13 310);
+  --mal-chrome: oklch(0.97 0 0);
 }
 
-/* --- Header plate: cold slate + scanlines + scan sweep --- */
+/* Flame flicker for the violet glow */
+@keyframes maldev-flicker {
+  0%, 100% { opacity: 0.85; }
+  18% { opacity: 1; }
+  36% { opacity: 0.72; }
+  52% { opacity: 0.95; }
+  74% { opacity: 0.78; }
+}
+
+/* --- Header: the MALWARE.EXE window — black, white chrome --- */
 .research-entry--mal-dev .research-head {
   background:
-    repeating-linear-gradient(0deg, oklch(0 0 0 / 0.20) 0 1px, transparent 1px 3px),
-    radial-gradient(70% 120% at 85% 0%, oklch(0.28 0.06 200 / 0.35) 0%, transparent 65%),
-    oklch(0.095 0.020 220);
-  border-bottom: 1px solid oklch(0.42 0.07 200 / 0.55);
-  box-shadow: inset 0 0 44px oklch(0 0 0 / 0.5), inset 0 1px 0 oklch(1 0 0 / 0.04);
+    radial-gradient(55% 70% at 22% 30%, oklch(0.40 0.15 27 / 0.13) 0%, transparent 62%),
+    radial-gradient(85% 65% at 50% 112%, oklch(0.50 0.16 310 / 0.16) 0%, transparent 60%),
+    oklch(0 0 0);
+  border: 2px solid oklch(0.97 0 0 / 0.85);
+  box-shadow: 5px 5px 0 oklch(0 0 0 / 0.85), inset 0 0 46px oklch(0 0 0 / 0.6);
 }
 .research-entry--mal-dev .research-head::before {
-  background: linear-gradient(180deg,
-    transparent 0%,
-    oklch(0.70 0.11 200 / 0.12) 45%,
-    oklch(0.70 0.11 200 / 0.20) 50%,
-    oklch(0.70 0.11 200 / 0.12) 55%,
-    transparent 100%);
-  animation: maldev-scan 7s linear infinite;
+  background:
+    radial-gradient(85% 65% at 50% 108%, oklch(0.55 0.17 310 / 0.22) 0%, transparent 58%),
+    radial-gradient(55% 70% at 20% 30%, oklch(0.50 0.19 27 / 0.12) 0%, transparent 60%);
+  animation: maldev-flicker 5.5s ease-in-out infinite;
 }
-/* hazard-stripe strip along the plate top */
+/* Window controls, top-right: [_] [□] [✕] */
 .research-entry--mal-dev .research-head::after {
-  content: '';
+  content: '_  □  ✕';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 5px;
-  background: repeating-linear-gradient(-55deg,
-    oklch(0.62 0.11 200 / 0.80) 0 12px,
-    oklch(0.10 0.02 220 / 0.90) 12px 24px);
-  opacity: 0.5;
+  top: 1.1rem;
+  right: 1.2rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.45em;
+  color: oklch(0.97 0 0 / 0.85);
   pointer-events: none;
 }
 
-/* --- Stencil headline (weight 400 — the face ships one weight) --- */
-.research-entry--mal-dev .research-title {
-  font-family: 'Saira Stencil One', 'Arial Black', sans-serif !important;
-  font-weight: 400 !important;
-  text-transform: uppercase;
-  letter-spacing: 0.05em !important;
-  color: oklch(0.93 0.02 200) !important;
-  text-shadow: 0 0 22px oklch(0.60 0.12 200 / 0.30), 0 2px 0 oklch(0 0 0 / 0.8);
-}
-.research-entry--mal-dev .research-meta { color: oklch(0.62 0.03 210); }
-.research-entry--mal-dev .research-source-chip {
-  color: oklch(0.76 0.09 200);
-  border-color: oklch(0.42 0.07 200 / 0.65);
-}
-.research-entry--mal-dev .research-source-chip:hover {
-  color: oklch(0.86 0.11 200);
-  border-color: oklch(0.62 0.11 200 / 0.95);
-  box-shadow: 0 0 18px oklch(0.58 0.11 200 / 0.20);
+/* --- Series chip: the window title bar tab --- */
+.research-entry--mal-dev .research-series-chip--mal-dev {
+  color: var(--mal-red);
+  background: oklch(0 0 0);
+  border-color: oklch(0.97 0 0 / 0.8);
+  text-shadow: none;
 }
 
-/* --- Body: cold gray-teal, no drop cap (that is the codex move) --- */
-.research-entry--mal-dev .research-prose { color: oklch(0.79 0.012 210); }
-.research-entry--mal-dev .research-prose p { color: oklch(0.79 0.012 210); }
-.research-entry--mal-dev .research-prose strong { color: oklch(0.90 0.015 200); }
+/* --- Title: blood-red pixel caps with a hard block shadow --- */
+.research-entry--mal-dev .research-title {
+  font-family: 'Press Start 2P', 'Courier New', monospace !important;
+  font-weight: 400 !important;
+  font-size: clamp(17px, 2.3vw, 25px) !important;
+  line-height: 1.65;
+  text-transform: uppercase;
+  letter-spacing: 0.02em !important;
+  color: var(--mal-red) !important;
+  text-shadow: 3px 3px 0 var(--mal-red-dark);
+  overflow-wrap: anywhere;
+}
+.research-entry--mal-dev .research-meta { color: oklch(0.70 0.008 0); }
+.research-entry--mal-dev .research-source-chip {
+  color: var(--mal-red);
+  border-color: oklch(0.97 0 0 / 0.55);
+}
+.research-entry--mal-dev .research-source-chip:hover {
+  color: var(--mal-violet);
+  border-color: var(--mal-violet);
+  box-shadow: 0 0 16px oklch(0.55 0.13 310 / 0.25);
+}
+
+/* --- Body: neutral gray on black, no drop cap --- */
+.research-entry--mal-dev .research-prose { color: oklch(0.83 0.008 0); }
+.research-entry--mal-dev .research-prose p { color: oklch(0.83 0.008 0); }
+.research-entry--mal-dev .research-prose strong { color: oklch(0.95 0.008 0); }
 .research-entry--mal-dev .research-prose > p:first-of-type::first-letter {
   font-family: inherit;
   font-weight: inherit;
@@ -3301,115 +3317,129 @@ body[data-route="about"] .bg-video-fallback {
   text-shadow: none;
 }
 
-/* --- Sections: incident-log markers, Chakra Petch labels --- */
+/* --- Sections: boxed hex-offset labels (the corner readouts) --- */
 .research-entry--mal-dev .research-prose h2 {
-  font-family: 'Chakra Petch', 'Segoe UI', sans-serif !important;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-family: 'Press Start 2P', monospace !important;
+  font-weight: 400 !important;
+  font-size: 11px;
+  line-height: 1.7;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: oklch(0.87 0.07 200);
-  border-bottom: 1px dashed oklch(0.40 0.07 200 / 0.6);
+  color: var(--mal-red);
+  width: fit-content;
+  max-width: 100%;
+  background: oklch(0 0 0);
+  border: 1px solid oklch(0.97 0 0 / 0.6);
+  padding: 0.7rem 1rem;
+  margin: 2.6rem 0 1.3rem;
 }
 .research-entry--mal-dev .research-prose h2::before {
-  content: 'LOG ' counter(research-h2, decimal-leading-zero) ' //';
-  color: oklch(0.72 0.12 200);
-  font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-shadow: 0 0 8px oklch(0.58 0.12 200 / 0.4);
+  content: '0x' counter(research-h2, decimal-leading-zero) ' ';
+  color: var(--mal-red-dim);
+  margin-right: 0.35rem;
 }
+
+/* --- Sub-headers: violet flame prompts --- */
 .research-entry--mal-dev .research-prose h3 {
-  font-family: 'Chakra Petch', 'Segoe UI', sans-serif !important;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  color: oklch(0.78 0.06 200);
+  font-family: 'Silkscreen', monospace !important;
+  font-weight: 400 !important;
+  font-size: 12.5px;
+  line-height: 1.6;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mal-violet);
 }
 .research-entry--mal-dev .research-prose h3::before {
-  content: '// ';
-  color: oklch(0.60 0.10 200);
+  content: '> ';
+  color: var(--mal-red);
 }
-.research-entry--mal-dev .research-prose h4 { color: oklch(0.84 0.04 200); }
+.research-entry--mal-dev .research-prose h4 { color: oklch(0.90 0.008 0); }
 
-/* --- Teal evidence links (vs the codex crimson ink) --- */
+/* --- Links: blood red, flare to violet --- */
 .research-entry--mal-dev .research-prose a {
-  color: oklch(0.80 0.10 200);
-  border-bottom: 1px dashed oklch(0.52 0.10 200 / 0.55);
+  color: var(--mal-red);
+  border-bottom: 1px solid oklch(0.54 0.19 27 / 0.55);
 }
 .research-entry--mal-dev .research-prose a:hover {
-  color: oklch(0.88 0.12 200);
-  border-bottom-color: oklch(0.68 0.13 200 / 0.95);
+  color: var(--mal-violet);
+  border-bottom-color: var(--mal-violet);
 }
 
-/* --- Dashed specimen tags for inline code --- */
+/* --- Inline code: white-boxed red hex --- */
 .research-entry--mal-dev .research-prose code {
-  color: oklch(0.82 0.08 195);
-  background: oklch(0.13 0.02 220);
-  border: 1px dashed oklch(0.32 0.05 200 / 0.7);
+  color: var(--mal-red);
+  background: oklch(0 0 0);
+  border: 1px solid oklch(0.97 0 0 / 0.45);
 }
 
-/* --- Code cabinets: VT323 terminal readouts in cold cyan --- */
+/* --- Code cabinets: the red hex-dump terminal boxes --- */
 .research-entry--mal-dev .research-prose pre {
-  background: oklch(0.075 0.016 220) !important;
-  border: 1px solid oklch(0.32 0.07 200 / 0.6) !important;
-  box-shadow: inset 0 0 30px oklch(0.40 0.10 200 / 0.06);
+  background: oklch(0 0 0) !important;
+  border: 1px solid oklch(0.97 0 0 / 0.7) !important;
+  box-shadow: none;
 }
 .research-entry--mal-dev .research-prose pre::before {
-  content: ':: ' attr(data-lang);
-  color: oklch(0.70 0.10 200);
-  background: oklch(0.105 0.02 220);
-  border-bottom: 1px dashed oklch(0.30 0.06 200 / 0.6);
+  content: attr(data-lang);
+  color: var(--mal-red);
+  font-family: 'Silkscreen', monospace;
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  background: oklch(0 0 0);
+  border-bottom: 1px solid oklch(0.97 0 0 / 0.5);
 }
 .research-entry--mal-dev .research-prose pre[data-lang='']::before { content: none; }
+.research-entry--mal-dev .research-prose pre[data-lang=''] { padding-top: 1rem !important; }
 .research-entry--mal-dev .research-prose pre code {
   font-family: 'VT323', 'Courier New', monospace;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 16.5px;
   line-height: 1.5;
-  color: oklch(0.80 0.06 190);
+  color: oklch(0.58 0.19 27);
 }
 
-/* --- Evidence plates --- */
+/* --- Evidence plates: white chrome, red spine --- */
 .research-entry--mal-dev .research-prose blockquote {
-  background: oklch(0.115 0.02 220);
-  border: 1px dashed oklch(0.36 0.05 200 / 0.55);
-  border-left: 3px solid oklch(0.58 0.11 200);
-  color: oklch(0.78 0.03 210);
+  background: oklch(0 0 0);
+  border: 1px solid oklch(0.97 0 0 / 0.6);
+  border-left: 4px solid var(--mal-red);
+  color: oklch(0.80 0.008 0);
 }
 .research-entry--mal-dev .research-prose blockquote a {
-  color: oklch(0.84 0.09 195);
-  border-bottom-color: oklch(0.56 0.10 200 / 0.6);
+  color: var(--mal-red);
+  border-bottom-color: oklch(0.54 0.19 27 / 0.5);
 }
 
-/* --- Lab-result tables --- */
+/* --- Tables: white grid, red headers --- */
 .research-entry--mal-dev .research-prose table {
-  border: 1px solid oklch(0.32 0.05 200 / 0.8);
-  background: oklch(0.09 0.015 220);
+  border: 1px solid oklch(0.97 0 0 / 0.5);
+  background: oklch(0 0 0);
 }
 .research-entry--mal-dev .research-prose th {
-  background: oklch(0.125 0.022 220);
-  color: oklch(0.80 0.08 195);
-  border-bottom: 1px dashed oklch(0.42 0.07 200 / 0.7);
+  background: oklch(0 0 0);
+  color: var(--mal-red);
+  font-family: 'Silkscreen', monospace;
+  border-bottom: 1px solid oklch(0.97 0 0 / 0.5);
 }
 .research-entry--mal-dev .research-prose td {
-  border: 1px solid oklch(0.22 0.025 220 / 0.6);
-  color: oklch(0.77 0.012 210);
+  border: 1px solid oklch(0.97 0 0 / 0.18);
+  color: oklch(0.80 0.008 0);
 }
 .research-entry--mal-dev .research-prose tbody tr:hover td {
-  background: oklch(0.125 0.02 220);
+  background: oklch(0.16 0.05 27);
 }
 
-/* --- Markers + hazard-stripe dividers --- */
-.research-entry--mal-dev .research-prose ul li::marker { color: oklch(0.62 0.10 200); }
+/* --- Markers + pixel-dash dividers --- */
+.research-entry--mal-dev .research-prose ul li::marker { color: var(--mal-red); }
 .research-entry--mal-dev .research-prose ol li::marker {
-  color: oklch(0.72 0.12 200);
+  color: var(--mal-violet);
   font-family: 'Space Mono', monospace;
   font-weight: 700;
 }
 .research-entry--mal-dev .research-prose hr {
   border: none;
-  height: 4px;
-  background: repeating-linear-gradient(-55deg,
-    oklch(0.55 0.10 200 / 0.45) 0 9px,
-    transparent 9px 18px);
+  height: 2px;
+  background: repeating-linear-gradient(90deg,
+    oklch(0.54 0.19 27 / 0.6) 0 10px,
+    transparent 10px 16px);
 }
