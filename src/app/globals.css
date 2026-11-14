@@ -3182,6 +3182,8 @@ body[data-route="about"] .bg-video-fallback {
   border: 1px solid oklch(0.24 0.02 70 / 0.6);
   color: oklch(0.78 0.015 70);
 }
+/* First-column chips (tool names, malware types) never break mid-word */
+.research-prose td:first-child code { white-space: nowrap; }
 @media (hover: hover) {
   .research-prose tbody tr:hover td { background: oklch(0.135 0.018 70); }
 }
