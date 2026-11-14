@@ -32,4 +32,9 @@ export const LINKS: ArchiveLink[] = [
     url: 'https://github.com/tanayshukla05',
     note: 'tanayshukla05',
   },
+  {
+    label: 'RCWS v5',
+    url: 'https://github.com/wildcard1719/RCWS_v5',
+    note: '3D-printed remote weapon system — STEP files + design handbook',
+  },
 ]
