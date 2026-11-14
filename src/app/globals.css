@@ -3021,6 +3021,105 @@ body[data-route="about"] .bg-video-fallback {
   .artifact--specimen::after { animation: none; left: 50%; opacity: 0.25; }
 }
 
+/* --- BLUEPRINT · cocomelonc — the drafting sheet: the only
+   saturated-blue artifact in the archive. Cobalt sheet, white
+   graph grid (fine 8px + major 40px), dashed drafting frame,
+   Share Tech Mono annotations, and a slow plotter sweep that
+   draws the sheet top to bottom — fast and bright on hover.
+   Zero border-radius (archive rule). --- */
+@font-face {
+  font-family: 'Share Tech Mono';
+  src: url('/fonts/share-tech-mono-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+.artifact--blueprint {
+  background: oklch(0.30 0.11 258);
+  outline: 1px dashed oklch(0.96 0.01 250 / 0.35);
+  outline-offset: -8px;
+  border: 1px solid oklch(0.96 0.01 250 / 0.4);
+  transition: border-color 200ms ease, outline-color 200ms ease, box-shadow 200ms ease;
+}
+/* graph paper: fine grid + major grid */
+.artifact--blueprint::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(oklch(0.96 0.01 250 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0.96 0.01 250 / 0.07) 1px, transparent 1px),
+    linear-gradient(oklch(0.96 0.01 250 / 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0.96 0.01 250 / 0.16) 1px, transparent 1px);
+  background-size: 8px 8px, 8px 8px, 40px 40px, 40px 40px;
+  pointer-events: none;
+}
+/* plotter sweep — slow at idle */
+.artifact--blueprint::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: oklch(0.96 0.01 250 / 0.55);
+  opacity: 0;
+  pointer-events: none;
+  animation: blueprint-plot 7s linear infinite;
+}
+@keyframes blueprint-plot {
+  0% { top: 0; opacity: 0; }
+  12% { opacity: 0.4; }
+  88% { opacity: 0.4; }
+  100% { top: calc(100% - 2px); opacity: 0; }
+}
+@keyframes blueprint-plot-fast {
+  from { top: 0; }
+  to { top: calc(100% - 2px); }
+}
+.artifact--blueprint .artifact-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 21px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: oklch(0.96 0.01 250);
+}
+.artifact--blueprint .artifact-num { color: oklch(0.96 0.01 250 / 0.6); }
+.artifact--blueprint .artifact-note {
+  color: oklch(0.96 0.01 250 / 0.75);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12.5px;
+}
+.artifact--blueprint .artifact-url {
+  color: oklch(0.96 0.01 250 / 0.6);
+  font-family: 'Share Tech Mono', monospace;
+}
+.artifact--blueprint .artifact-go {
+  color: oklch(0.96 0.01 250 / 0.6);
+  transition: color 200ms ease, transform 200ms ease;
+}
+.artifact--blueprint:hover {
+  border-color: oklch(0.96 0.01 250 / 0.8);
+  outline-color: oklch(0.96 0.01 250 / 0.65);
+  box-shadow: 0 0 26px oklch(0.55 0.14 250 / 0.4), inset 0 0 34px oklch(0.40 0.13 250 / 0.5);
+}
+.artifact--blueprint:hover::after {
+  opacity: 1;
+  animation: blueprint-plot-fast 1.2s linear infinite;
+}
+.artifact--blueprint:hover .artifact-label {
+  color: oklch(0.88 0.09 220);
+  text-shadow: 0 0 12px oklch(0.75 0.12 220 / 0.55);
+}
+.artifact--blueprint:hover .artifact-go {
+  color: oklch(0.88 0.09 220);
+  transform: translate(2px, -2px);
+}
+@media (max-width: 700px) {
+  .artifact--blueprint .artifact-label { font-size: 15px; }
+}
+
 @media (max-width: 700px) {
   .tag-pill { padding: 0.65rem 0.75rem; }
   .back-link { padding: 0.5rem 0.75rem 0.5rem 0; }

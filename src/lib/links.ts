@@ -19,7 +19,7 @@ export type ArchiveLink = {
     | 'gothic' | 'goodboy' | 'acid' | 'typewriter' | 'holo' | 'arcade'
     | 'wreck' | 'glitch' | 'friendly' | 'prism'
     | 'neural' | 'grimoire' | 'bbs' | 'detonate' | 'apex' | 'modules'
-    | 'signal' | 'specimen'
+    | 'signal' | 'specimen' | 'blueprint'
 }
 
 export const LINKS: ArchiveLink[] = [
@@ -154,5 +154,11 @@ export const LINKS: ArchiveLink[] = [
     url: 'https://vx-underground.org/',
     note: 'The largest public collection of malware source code and samples',
     variant: 'specimen',
+  },
+  {
+    label: 'cocomelonc',
+    url: 'https://cocomelonc.github.io/',
+    note: 'Malware dev research blog — injection, evasion, crypto, Linux hacking',
+    variant: 'blueprint',
   },
 ]
