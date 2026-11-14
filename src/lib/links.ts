@@ -19,7 +19,7 @@ export type ArchiveLink = {
     | 'gothic' | 'goodboy' | 'acid' | 'typewriter' | 'holo' | 'arcade'
     | 'wreck' | 'glitch' | 'friendly' | 'prism'
     | 'neural' | 'grimoire' | 'bbs' | 'detonate' | 'apex' | 'modules'
-    | 'signal'
+    | 'signal' | 'vault'
 }
 
 export const LINKS: ArchiveLink[] = [
@@ -148,5 +148,11 @@ export const LINKS: ArchiveLink[] = [
     url: 'https://shannon-ai.com',
     note: 'Frontier red-team lab for LLM safety',
     variant: 'signal',
+  },
+  {
+    label: 'VX-Underground',
+    url: 'https://vx-underground.org/',
+    note: 'The largest public collection of malware source code and samples',
+    variant: 'vault',
   },
 ]
