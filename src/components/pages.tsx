@@ -570,6 +570,31 @@ export function FilesPage({ navigate }: { navigate: NavFn }) {
 }
 
 /* ============================================================
+   GAMES — intentionally empty section, same philosophy as the
+   File Archive: the menu exists, the page shows a clean empty
+   state until real games are published.
+   ============================================================ */
+export function GamesPage({ navigate }: { navigate: NavFn }) {
+  // No games have been published yet — empty state until real
+  // content exists. No placeholders.
+  return (
+    <div className="archive-container">
+      <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
+        ← Back
+      </button>
+      <div className="archive-eyebrow">GAMES</div>
+      <h1 className="archive-title">Games</h1>
+      <p className="archive-subtitle">
+        Playable things from the archive — browser games, interactive
+        write-ups, anything you can actually run. Every entry will open
+        in a new tab and document what it is.
+      </p>
+      <EmptyState message="No games available yet" />
+    </div>
+  )
+}
+
+/* ============================================================
    LINKS — the directory as a collection of artifacts. Every row
    is a distinct material with its own typography, texture,
    sparkle and hover behaviour (see .artifact--* in globals.css).

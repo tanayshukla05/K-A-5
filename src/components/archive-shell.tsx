@@ -17,8 +17,9 @@ import { useRouter, type Route } from '@/lib/router'
 import { SearchPanel } from '@/components/search-panel'
 import {
   HomePage, AboutPage, ArchivePage, StagePage, CtfPage,
-  ResearchPage, ResearchEntryPage, CheatsheetsPage, FilesPage, LinksPage,
-  TagsPage, TagPage, CategoriesPage, CategoryPage, NotFoundPage,
+  ResearchPage, ResearchEntryPage, CheatsheetsPage, FilesPage,
+  GamesPage, LinksPage, TagsPage, TagPage, CategoriesPage,
+  CategoryPage, NotFoundPage,
 } from '@/components/pages'
 import { useAllEntries, useAllTags, useAllCategories, useAllResearch } from '@/components/content-provider'
 import { isCtfEntry } from '@/lib/entry-group'
@@ -103,6 +104,7 @@ export function ArchiveShell() {
     { label: 'Research Notes', route: { name: 'research' }, count: researchCount },
     { label: 'Cheat Sheets', route: { name: 'cheatsheets' } },
     { label: 'File Archive', route: { name: 'files' } },
+    { label: 'Games', route: { name: 'games' } },
     { label: 'Links', route: { name: 'links' }, gold: true },
   ]
 
@@ -137,6 +139,7 @@ export function ArchiveShell() {
       case 'research-entry': return <ResearchEntryPage slug={route.slug} navigate={navigate} />
       case 'cheatsheets': return <CheatsheetsPage navigate={navigate} />
       case 'files': return <FilesPage navigate={navigate} />
+      case 'games': return <GamesPage navigate={navigate} />
       case 'links': return <LinksPage navigate={navigate} />
       case 'tags': return <TagsPage navigate={navigate} />
       case 'tag': return <TagPage tag={route.tag} navigate={navigate} />
