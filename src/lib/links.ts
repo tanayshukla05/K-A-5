@@ -18,6 +18,7 @@ export type ArchiveLink = {
   variant?: 'seal' | 'stencil' | 'terminal' | 'tactical'
     | 'gothic' | 'goodboy' | 'acid' | 'typewriter' | 'holo' | 'arcade'
     | 'wreck' | 'glitch' | 'friendly' | 'prism'
+    | 'neural' | 'grimoire' | 'bbs' | 'detonate' | 'apex' | 'modules'
 }
 
 export const LINKS: ArchiveLink[] = [
@@ -104,5 +105,41 @@ export const LINKS: ArchiveLink[] = [
     url: 'https://tnkr.ai/explore',
     note: 'AI experiment explorer',
     variant: 'prism',
+  },
+  {
+    label: 'Z.AI',
+    url: 'https://z.ai/',
+    note: 'AI chat and model platform',
+    variant: 'neural',
+  },
+  {
+    label: 'HackTricks',
+    url: 'https://hacktricks.wiki',
+    note: 'The pentesting methods bible',
+    variant: 'grimoire',
+  },
+  {
+    label: 'PHRACK',
+    url: 'https://phrack.org/',
+    note: 'Legendary hacker e-zine — exploit craft since 1985',
+    variant: 'bbs',
+  },
+  {
+    label: 'Windows RCE',
+    url: 'https://github.com/smgorelik/Windows-RCE-exploits/tree/master/Web/Javascript',
+    note: 'Archive of Windows RCE exploits — web/JavaScript section',
+    variant: 'detonate',
+  },
+  {
+    label: 'Brute Ratel',
+    url: 'https://bruteratel.com/',
+    note: 'Commercial red-team C2 — the badger',
+    variant: 'apex',
+  },
+  {
+    label: 'C4 KIT',
+    url: 'https://github.com/paranoidninja/Brute-Ratel-C4-Community-Kit',
+    note: 'Community extensions for Brute Ratel C4',
+    variant: 'modules',
   },
 ]

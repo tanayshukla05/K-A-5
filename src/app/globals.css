@@ -2478,6 +2478,373 @@ body[data-route="about"] .bg-video-fallback {
   .artifact--prism .artifact-label { font-size: 11px; }
 }
 
+/* ============================================================
+   ARTIFACT SET 03 — six more materials. One identity per row,
+   CSS-only motion, GPU-cheap properties only.
+   ============================================================ */
+@font-face {
+  font-family: 'Unbounded';
+  src: url('/fonts/unbounded-latin.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'MedievalSharp';
+  src: url('/fonts/medievalsharp-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'VT323';
+  src: url('/fonts/vt323-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Saira Stencil One';
+  src: url('/fonts/saira-stencil-one-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url('/fonts/chakra-petch-latin.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Zen Dots';
+  src: url('/fonts/zen-dots-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- NEURAL · Z.ai — white-hot core on void, model thinking pulse --- */
+.artifact--neural {
+  background: radial-gradient(120% 160% at 50% -20%, oklch(0.16 0.015 260) 0%, oklch(0.07 0.008 260) 60%);
+  border: 1px solid oklch(0.34 0.02 260 / 0.8);
+  transition: border-color 260ms ease, box-shadow 260ms ease;
+}
+.artifact--neural .artifact-label {
+  font-family: 'Unbounded', 'Segoe UI', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.12em;
+  color: oklch(0.95 0.005 260);
+  text-shadow: 0 0 14px oklch(1 0 0 / 0.35), 0 0 2px oklch(1 0 0 / 0.6);
+}
+.artifact--neural .artifact-num { color: oklch(0.52 0.02 260); }
+.artifact--neural .artifact-note, .artifact--neural .artifact-url { color: oklch(0.60 0.02 260); }
+.artifact--neural .artifact-go { color: oklch(0.52 0.02 260); }
+.artifact--neural::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(34% 90% at 50% 50%, oklch(0.85 0.02 260 / 0.12), transparent 70%);
+  animation: neural-pulse 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+.artifact--neural::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid oklch(0.95 0.01 260 / 0.35);
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 300ms ease, transform 300ms ease;
+  pointer-events: none;
+}
+.artifact--neural:hover {
+  border-color: oklch(0.72 0.02 260 / 0.95);
+  box-shadow: 0 0 30px oklch(0.80 0.02 260 / 0.18);
+}
+.artifact--neural:hover .artifact-label {
+  letter-spacing: 0.16em;
+  text-shadow: 0 0 20px oklch(1 0 0 / 0.55), 0 0 3px oklch(1 0 0 / 0.8);
+}
+.artifact--neural:hover::after { opacity: 1; transform: scale(1); }
+@keyframes neural-pulse {
+  0%, 100% { opacity: 0.35; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+/* --- GRIMOIRE · HackTricks — candle-lit parchment, flame flicker --- */
+.artifact--grimoire {
+  background:
+    radial-gradient(60% 120% at 50% 0%, oklch(0.20 0.035 70) 0%, oklch(0.13 0.02 60) 70%),
+    oklch(0.11 0.015 60);
+  border: 1px solid oklch(0.44 0.07 70 / 0.65);
+  box-shadow: inset 0 0 26px oklch(0 0 0 / 0.4);
+  transition: border-color 250ms ease, box-shadow 250ms ease;
+}
+.artifact--grimoire .artifact-label {
+  font-family: 'MedievalSharp', Georgia, serif;
+  font-size: 21px;
+  letter-spacing: 0.05em;
+  color: oklch(0.84 0.09 80);
+  text-shadow: 0 0 8px oklch(0.65 0.12 70 / 0.45), 0 1px 1px oklch(0 0 0 / 0.8);
+}
+.artifact--grimoire .artifact-num { color: oklch(0.55 0.06 70); }
+.artifact--grimoire .artifact-note, .artifact--grimoire .artifact-url { color: oklch(0.62 0.05 75); }
+.artifact--grimoire .artifact-go { color: oklch(0.55 0.06 70); }
+.artifact--grimoire::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(50% 80% at 12% 0%, oklch(0.70 0.14 65 / 0.20), transparent 70%);
+  animation: grimoire-flicker 2.7s ease-in-out infinite;
+  pointer-events: none;
+}
+.artifact--grimoire::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  background: radial-gradient(70% 110% at 50% 20%, oklch(0.75 0.14 70 / 0.14), transparent 70%);
+  pointer-events: none;
+}
+.artifact--grimoire:hover {
+  border-color: oklch(0.66 0.11 70 / 0.95);
+  box-shadow: inset 0 0 26px oklch(0 0 0 / 0.4), 0 0 24px oklch(0.60 0.13 70 / 0.22);
+}
+.artifact--grimoire:hover .artifact-label {
+  color: oklch(0.90 0.11 80);
+  text-shadow: 0 0 12px oklch(0.70 0.15 70 / 0.6), 0 1px 1px oklch(0 0 0 / 0.8);
+}
+.artifact--grimoire:hover::after { opacity: 1; }
+@keyframes grimoire-flicker {
+  0%, 100% { opacity: 0.7; }
+  20% { opacity: 1; }
+  45% { opacity: 0.55; }
+  70% { opacity: 0.95; }
+  85% { opacity: 0.75; }
+}
+
+/* --- BBS · PHRACK — amber phosphor bulletin terminal, rolling band --- */
+.artifact--bbs {
+  background: oklch(0.10 0.02 60);
+  border: 1px solid oklch(0.44 0.10 70 / 0.7);
+  box-shadow: inset 0 0 28px oklch(0.45 0.14 70 / 0.10);
+  transition: border-color 220ms ease, box-shadow 220ms ease;
+}
+.artifact--bbs .artifact-label {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: 23px;
+  letter-spacing: 0.06em;
+  color: oklch(0.83 0.15 75);
+  text-shadow: 0 0 7px oklch(0.78 0.15 75 / 0.55);
+}
+.artifact--bbs .artifact-num { color: oklch(0.55 0.09 70); }
+.artifact--bbs .artifact-note, .artifact--bbs .artifact-url { color: oklch(0.63 0.09 75); }
+.artifact--bbs .artifact-go { color: oklch(0.55 0.09 70); }
+.artifact--bbs::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, oklch(0.83 0.15 75 / 0.09) 50%, transparent 100%) no-repeat;
+  background-size: 100% 56px;
+  animation: bbs-roll 5.5s linear infinite;
+  pointer-events: none;
+}
+.artifact--bbs::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 220ms ease;
+  background: repeating-linear-gradient(0deg, oklch(0 0 0 / 0.18) 0 1px, transparent 1px 3px);
+  pointer-events: none;
+}
+.artifact--bbs:hover {
+  border-color: oklch(0.68 0.13 75 / 0.95);
+  box-shadow: inset 0 0 28px oklch(0.45 0.14 70 / 0.16), 0 0 20px oklch(0.68 0.14 75 / 0.2);
+}
+.artifact--bbs:hover .artifact-label { color: oklch(0.90 0.16 75); }
+.artifact--bbs:hover::after { opacity: 1; }
+@keyframes bbs-roll {
+  0% { background-position: 0 -56px; }
+  100% { background-position: 0 calc(100% + 56px); }
+}
+
+/* --- DETONATE · Windows RCE — crimson ordnance stamp, heartbeat --- */
+.artifact--detonate {
+  background: linear-gradient(180deg, oklch(0.13 0.03 25) 0%, oklch(0.09 0.025 25) 100%);
+  border: 1px solid oklch(0.46 0.15 25 / 0.6);
+  transition: border-color 200ms ease;
+}
+.artifact--detonate .artifact-label {
+  font-family: 'Saira Stencil One', 'Arial Black', sans-serif;
+  font-size: 19px;
+  letter-spacing: 0.07em;
+  color: oklch(0.80 0.16 25);
+  text-shadow: 0 1px 0 oklch(0 0 0 / 0.8), 0 0 10px oklch(0.55 0.18 25 / 0.4);
+}
+.artifact--detonate .artifact-num { color: oklch(0.55 0.11 25); }
+.artifact--detonate .artifact-note, .artifact--detonate .artifact-url { color: oklch(0.62 0.08 25); }
+.artifact--detonate .artifact-go { color: oklch(0.55 0.11 25); }
+.artifact--detonate::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(80% 130% at 50% 50%, oklch(0.55 0.19 25 / 0.14), transparent 75%);
+  animation: detonate-beat 1.6s ease-in-out infinite;
+  pointer-events: none;
+}
+.artifact--detonate::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid oklch(0.80 0.18 25 / 0.8);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 220ms ease, transform 220ms ease;
+  pointer-events: none;
+}
+.artifact--detonate:hover { border-color: oklch(0.68 0.17 25 / 0.95); }
+.artifact--detonate:hover .artifact-label {
+  color: oklch(0.86 0.18 25);
+  animation: detonate-rattle 0.38s linear 1;
+}
+.artifact--detonate:hover::after { opacity: 1; transform: scale(1); }
+@keyframes detonate-beat {
+  0%, 100% { opacity: 0.45; }
+  12% { opacity: 1; }
+  24% { opacity: 0.55; }
+  36% { opacity: 0.9; }
+}
+@keyframes detonate-rattle {
+  0%, 100% { transform: none; }
+  25% { transform: translate(-1.5px, 0.5px) rotate(-0.6deg); }
+  50% { transform: translate(1.5px, -0.5px) rotate(0.5deg); }
+  75% { transform: translate(-1px, 0) rotate(-0.3deg); }
+}
+
+/* --- APEX · Brute Ratel — obsidian command plate, beacon eyes --- */
+.artifact--apex {
+  background: oklch(0.075 0.008 20);
+  border: 1px solid oklch(0.28 0.04 20 / 0.9);
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.05), inset 0 0 30px oklch(0 0 0 / 0.5);
+  transition: border-color 240ms ease, box-shadow 240ms ease;
+}
+.artifact--apex .artifact-label {
+  font-family: 'Chakra Petch', 'Segoe UI', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 0.18em;
+  color: oklch(0.88 0.02 20);
+  text-shadow: 0 1px 0 oklch(0 0 0 / 0.9);
+}
+.artifact--apex .artifact-num { color: oklch(0.45 0.03 20); }
+.artifact--apex .artifact-note, .artifact--apex .artifact-url { color: oklch(0.55 0.03 20); }
+.artifact--apex .artifact-go { color: oklch(0.45 0.03 20); }
+.artifact--apex::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 52px;
+  width: 8px;
+  background:
+    radial-gradient(3px 3px at 50% 42%, oklch(0.72 0.21 25 / 0.95) 50%, transparent 51%),
+    radial-gradient(3px 3px at 50% 58%, oklch(0.72 0.21 25 / 0.95) 50%, transparent 51%);
+  animation: apex-eyes 2.2s ease-in-out infinite;
+  pointer-events: none;
+}
+.artifact--apex::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 280ms ease;
+  background: linear-gradient(90deg, transparent 55%, oklch(0.60 0.18 25 / 0.10) 85%, oklch(0.60 0.18 25 / 0.18) 100%);
+  pointer-events: none;
+}
+.artifact--apex:hover {
+  border-color: oklch(0.55 0.16 25 / 0.95);
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.05), inset 0 0 30px oklch(0 0 0 / 0.5), 0 0 22px oklch(0.55 0.18 25 / 0.22);
+}
+.artifact--apex:hover .artifact-label { color: oklch(0.95 0.03 20); letter-spacing: 0.21em; }
+.artifact--apex:hover::after { opacity: 1; }
+@keyframes apex-eyes {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* --- MODULES · C4 KIT — teal pin-grid, breathing circuitry --- */
+.artifact--modules {
+  background:
+    repeating-linear-gradient(90deg, oklch(0.14 0.02 200) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(0deg, oklch(0.14 0.02 200) 0 1px, transparent 1px 22px),
+    oklch(0.095 0.02 200);
+  border: 1px solid oklch(0.42 0.09 200 / 0.65);
+  transition: border-color 220ms ease, box-shadow 220ms ease;
+}
+.artifact--modules .artifact-label {
+  font-family: 'Zen Dots', 'Segoe UI', sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.14em;
+  color: oklch(0.84 0.10 200);
+  text-shadow: 0 0 8px oklch(0.70 0.12 200 / 0.45);
+}
+.artifact--modules .artifact-num { color: oklch(0.55 0.07 200); }
+.artifact--modules .artifact-note, .artifact--modules .artifact-url { color: oklch(0.62 0.06 200); }
+.artifact--modules .artifact-go { color: oklch(0.55 0.07 200); }
+.artifact--modules::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(2px 2px at 22px 22px, oklch(0.78 0.12 200 / 0.9) 50%, transparent 51%),
+    radial-gradient(2px 2px at 22px 22px, oklch(0.78 0.12 200 / 0.9) 50%, transparent 51%);
+  background-size: 44px 44px;
+  background-position: 11px 11px;
+  animation: modules-breathe 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+.artifact--modules::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 280ms ease;
+  background: radial-gradient(70% 120% at 50% 50%, oklch(0.70 0.13 200 / 0.14), transparent 70%);
+  pointer-events: none;
+}
+.artifact--modules:hover {
+  border-color: oklch(0.66 0.11 200 / 0.95);
+  box-shadow: 0 0 22px oklch(0.55 0.12 200 / 0.2);
+}
+.artifact--modules:hover .artifact-label {
+  color: oklch(0.90 0.11 200);
+  letter-spacing: 0.18em;
+}
+.artifact--modules:hover::after { opacity: 1; }
+@keyframes modules-breathe {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* Mobile: third set tighter type, same identities */
+@media (max-width: 700px) {
+  .artifact--neural .artifact-label { font-size: 13px; }
+  .artifact--grimoire .artifact-label { font-size: 18px; }
+  .artifact--bbs .artifact-label { font-size: 19px; }
+  .artifact--detonate .artifact-label { font-size: 16px; }
+  .artifact--apex .artifact-label { font-size: 15px; }
+  .artifact--modules .artifact-label { font-size: 12px; }
+}
+
 @media (max-width: 700px) {
   .tag-pill { padding: 0.65rem 0.75rem; }
   .back-link { padding: 0.5rem 0.75rem 0.5rem 0; }
