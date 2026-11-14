@@ -2947,3 +2947,267 @@ body[data-route="about"] .bg-video-fallback {
 /* (No body scroll lock here — the new loader manages body.overflow via
    inline style in src/components/loader.tsx, restoring it the moment the
    loader becomes invisible at t=5s.) */
+
+/* ============================================================
+   RESEARCH READER — research notes read like a codex. Warm
+   ink-and-paper header plate with a breathing glow, engraved
+   Cinzel title, §-numbered sections, amber HUD tool tables and
+   phosphor terminal-cabinet code blocks. Scoped to .research-*
+   so learning-path / CTF articles keep their existing look.
+   Fonts (Cinzel, Space Mono) are already self-hosted.
+   ============================================================ */
+
+/* --- Header plate --- */
+.research-head {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 2.2rem 2rem 1.8rem;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid oklch(0.42 0.05 60 / 0.6);
+  background:
+    radial-gradient(90% 130% at 12% 0%, oklch(0.17 0.030 60) 0%, transparent 62%),
+    oklch(0.105 0.016 60);
+  box-shadow: inset 0 0 44px oklch(0 0 0 / 0.35), inset 0 1px 0 oklch(1 0 0 / 0.05);
+}
+.research-head::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(52% 90% at 14% 0%, oklch(0.68 0.12 65 / 0.10), transparent 70%);
+  animation: research-glow 6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes research-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Series chip — crimson for Exploit-Dev, teal for Mal-Dev */
+.research-series-chip {
+  display: inline-block;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid;
+  position: relative;
+}
+.research-series-chip--exploit-dev {
+  color: oklch(0.80 0.14 25);
+  border-color: oklch(0.48 0.13 25 / 0.65);
+  text-shadow: 0 0 8px oklch(0.60 0.16 25 / 0.4);
+}
+.research-series-chip--mal-dev {
+  color: oklch(0.82 0.10 200);
+  border-color: oklch(0.44 0.09 200 / 0.65);
+  text-shadow: 0 0 8px oklch(0.60 0.11 200 / 0.4);
+}
+
+.research-title {
+  font-family: 'Cinzel', Georgia, serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  color: oklch(0.92 0.025 70) !important;
+  text-shadow: 0 1px 0 oklch(0 0 0 / 0.85), 0 -1px 0 oklch(1 0 0 / 0.10);
+  margin: 1.1rem 0 0.7rem !important;
+  overflow-wrap: anywhere;
+}
+.research-meta {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: oklch(0.62 0.035 70);
+}
+.research-source-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: oklch(0.74 0.09 70);
+  border: 1px solid oklch(0.44 0.05 70 / 0.65);
+  padding: 0.5rem 0.85rem;
+  text-decoration: none;
+  transition: border-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
+}
+.research-source-chip span { transition: transform 200ms ease; }
+.research-source-chip:hover {
+  color: oklch(0.86 0.11 70);
+  border-color: oklch(0.64 0.09 70 / 0.95);
+  box-shadow: 0 0 18px oklch(0.60 0.10 70 / 0.18);
+}
+.research-source-chip:hover span { transform: translate(2px, -2px); }
+
+/* --- Body prose --- */
+.research-prose {
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: oklch(0.80 0.015 70);
+  counter-reset: research-h2;
+}
+.research-prose p { color: oklch(0.80 0.015 70); }
+.research-prose strong { color: oklch(0.90 0.02 70); }
+
+/* Drop cap opens the codex */
+.research-prose > p:first-of-type::first-letter {
+  font-family: 'Cinzel', Georgia, serif;
+  font-weight: 700;
+  font-size: 3.1em;
+  float: left;
+  line-height: 0.85;
+  padding: 0.06em 0.14em 0 0;
+  color: oklch(0.85 0.09 70);
+  text-shadow: 0 1px 0 oklch(0 0 0 / 0.7);
+}
+
+/* §-numbered sections */
+.research-prose h2 {
+  counter-increment: research-h2;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: oklch(0.88 0.05 70);
+  border-bottom: 1px solid oklch(0.34 0.03 70 / 0.8);
+  margin: 2.8rem 0 1.2rem;
+  padding-bottom: 0.55rem;
+}
+.research-prose h2::before {
+  content: '§ ' counter(research-h2, decimal-leading-zero);
+  margin-right: 0.9rem;
+  color: oklch(0.66 0.14 25);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 8px oklch(0.55 0.16 25 / 0.35);
+}
+.research-prose h3, .research-prose h4 { color: oklch(0.86 0.04 70); }
+.research-prose h3 {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 1.9rem 0 0.7rem;
+}
+
+/* Crimson ink links */
+.research-prose a {
+  color: oklch(0.82 0.12 30);
+  text-decoration: none;
+  border-bottom: 1px solid oklch(0.55 0.13 30 / 0.55);
+  overflow-wrap: anywhere;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+@media (hover: hover) {
+  .research-prose a:hover {
+    color: oklch(0.90 0.14 30);
+    border-bottom-color: oklch(0.72 0.16 30 / 0.95);
+  }
+}
+
+/* Amber inline code chips (zero radius, archive rule) */
+.research-prose code {
+  font-family: 'Space Mono', monospace;
+  color: oklch(0.84 0.09 75);
+  background: oklch(0.15 0.018 70);
+  border: 1px solid oklch(0.30 0.03 70 / 0.75);
+  font-size: 0.9em;
+  padding: 0.12rem 0.38rem;
+  overflow-wrap: anywhere;
+}
+
+/* Phosphor terminal cabinets with a data-lang header bar */
+.research-prose pre {
+  background: oklch(0.085 0.014 155) !important;
+  border: 1px solid oklch(0.30 0.055 155 / 0.65) !important;
+  padding: 2.3rem 1.2rem 1.15rem !important;
+  position: relative;
+  box-shadow: inset 0 0 26px oklch(0.30 0.09 155 / 0.07);
+}
+.research-prose pre::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0.5rem 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: oklch(0.66 0.12 155);
+  background: oklch(0.115 0.018 155);
+  border-bottom: 1px solid oklch(0.27 0.05 155 / 0.6);
+}
+.research-prose pre[data-lang='']::before { content: none; }
+.research-prose pre[data-lang=''] { padding-top: 1rem !important; }
+.research-prose pre code {
+  background: transparent !important;
+  border: none !important;
+  padding: 0;
+  color: oklch(0.77 0.055 155);
+  font-size: 12.5px;
+  line-height: 1.65;
+}
+
+/* Attribution plates */
+.research-prose blockquote {
+  margin: 1.8rem 0;
+  padding: 1.05rem 1.25rem;
+  background: oklch(0.125 0.02 60);
+  border: 1px solid oklch(0.38 0.05 70 / 0.6);
+  border-left: 3px solid oklch(0.64 0.12 70);
+  color: oklch(0.78 0.04 70);
+}
+.research-prose blockquote a {
+  color: oklch(0.85 0.10 75);
+  border-bottom-color: oklch(0.60 0.10 75 / 0.6);
+}
+
+/* HUD tool tables */
+.research-prose table {
+  border: 1px solid oklch(0.32 0.03 70 / 0.85);
+  background: oklch(0.095 0.012 70);
+}
+.research-prose th {
+  background: oklch(0.14 0.02 70);
+  color: oklch(0.82 0.10 75);
+  font-family: 'Space Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  border-bottom: 1px solid oklch(0.42 0.06 70 / 0.85);
+}
+.research-prose td {
+  border: 1px solid oklch(0.24 0.02 70 / 0.6);
+  color: oklch(0.78 0.015 70);
+}
+@media (hover: hover) {
+  .research-prose tbody tr:hover td { background: oklch(0.135 0.018 70); }
+}
+
+/* Markers + rules */
+.research-prose ul li::marker { color: oklch(0.66 0.12 75); }
+.research-prose ol li::marker {
+  color: oklch(0.66 0.14 25);
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+}
+.research-prose hr {
+  border: none;
+  height: 1px;
+  margin: 2.4rem 0;
+  background: linear-gradient(90deg, transparent, oklch(0.42 0.05 70 / 0.85), transparent);
+}
+
+/* Mobile reader */
+@media (max-width: 700px) {
+  .research-head { padding: 1.5rem 1.1rem 1.3rem; }
+  .research-prose > p:first-of-type::first-letter { font-size: 2.4em; }
+  .research-prose pre { padding: 2rem 0.9rem 1rem !important; }
+}
+
+/* Reduced motion: the plate glow stops */
+@media (prefers-reduced-motion: reduce) {
+  .research-head::before { animation: none !important; }
+}

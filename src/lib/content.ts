@@ -95,7 +95,7 @@ function renderMarkdown(md: string): { html: string; sections: Array<{ heading: 
       } else {
         inCode = false
         const code = esc(codeBuf.join('\n'))
-        out.push(`<pre><code data-lang="${esc(codeLang)}">${code}</code></pre>`)
+        out.push(`<pre data-lang="${esc(codeLang)}"><code data-lang="${esc(codeLang)}">${code}</code></pre>`)
       }
       i++
       continue
@@ -439,11 +439,11 @@ export function getAllResearchEntries(): ResearchEntry[] {
     const meta = parseResearchMetadata(raw)
     const h1 = raw.match(/^#\s+(.+)$/m)
     const title = h1 ? h1[1].trim() : slug
-    // Render from the first H1 onward — the key/value metadata table at
-    // the top is parsed, not displayed.
+    // Render from the line after the H1 — the title lives in the custom
+    // header plate, and the key/value metadata table is parsed, not shown.
     const lines = raw.split('\n')
     const h1Line = lines.findIndex(l => /^#\s+/.test(l))
-    const body = h1Line > 0 ? lines.slice(h1Line).join('\n') : raw
+    const body = h1Line >= 0 ? lines.slice(h1Line + 1).join('\n') : raw
     const { html, sections, excerpt } = renderMarkdown(body)
     return {
       slug,

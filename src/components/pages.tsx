@@ -413,38 +413,28 @@ export function ResearchEntryPage({ slug, navigate }: { slug: string; navigate: 
       </button>
 
       <article>
-        <header className="article-head">
-          <div className="article-stage">RESEARCH · {entry.series === 'mal-dev' ? 'MAL-DEV' : 'EXPLOIT-DEV'} · {entry.dateLabel}</div>
-          <h1 className="article-title">{entry.title}</h1>
+        <header className="article-head research-head">
+          <div className={`research-series-chip research-series-chip--${entry.series}`}>
+            {entry.series === 'mal-dev' ? 'MAL-DEV' : 'EXPLOIT-DEV'} · {entry.dateLabel}
+          </div>
+          <h1 className="article-title research-title">{entry.title}</h1>
           {entry.sourceLabel && (
-            <div style={{ fontSize: 13, color: 'var(--muted-foreground)', letterSpacing: '0.04em' }}>
-              Free course — {entry.sourceLabel}
-            </div>
+            <div className="research-meta">Free course — {entry.sourceLabel}</div>
           )}
           {entry.sourceUrl && (
             <a
+              className="research-source-chip"
               href={entry.sourceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              style={{
-                display: 'inline-block',
-                marginTop: '0.9rem',
-                fontSize: 10,
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color: 'var(--muted-foreground)',
-                textDecoration: 'none',
-                border: '1px solid var(--border)',
-                padding: '0.45rem 0.7rem',
-              }}
             >
-              Source ↗
+              SOURCE <span aria-hidden="true">↗</span>
             </a>
           )}
         </header>
 
         <div
-          className="article-prose"
+          className="article-prose research-prose"
           dangerouslySetInnerHTML={{ __html: entry.rawHtml }}
         />
       </article>
