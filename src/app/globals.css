@@ -2900,82 +2900,126 @@ body[data-route="about"] .bg-video-fallback {
   .artifact--apex .artifact-label { font-size: 15px; }
   .artifact--modules .artifact-label { font-size: 12px; }
   .artifact--signal .artifact-label { font-size: 16px; }
-  .artifact--vault .artifact-label { font-size: 24px; }
 }
 
-/* --- VAULT · VX-UNDERGROUND — the specimen vault: violet
-   isolation glow, Handjet dot-matrix label, and a crawling
-   grid of sample dots drifting left like an index rolling by.
-   Hover flares the grid and washes violet from the right. --- */
+/* --- SPECIMEN · VX-UNDERGROUND — the evidence label. The only
+   light artifact in the archive: off-white paper against 21 dark
+   rows, 2px black chrome, Bebas Neue caps, the URL rendered as a
+   genuine scannable Code 39 barcode (Libre Barcode 39 Text), a
+   red laser that drifts across the label at idle and scans it
+   hard on hover, and a paper-grain texture. Zero border-radius
+   (archive rule). --- */
 @font-face {
-  font-family: 'Handjet';
-  src: url('/fonts/handjet-latin.woff2') format('woff2');
+  font-family: 'Bebas Neue';
+  src: url('/fonts/bebas-neue-latin.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
-.artifact--vault {
-  background: oklch(0.09 0.03 300);
-  border: 1px solid oklch(0.45 0.14 300 / 0.7);
-  box-shadow: inset 0 0 26px oklch(0.45 0.16 300 / 0.10);
-  transition: border-color 240ms ease, box-shadow 240ms ease;
-}
-.artifact--vault .artifact-label {
-  font-family: 'Handjet', monospace;
-  font-size: 34px;
+@font-face {
+  font-family: 'Libre Barcode 39 Text';
+  src: url('/fonts/libre-barcode-39-text-latin.woff2') format('woff2');
   font-weight: 400;
-  letter-spacing: 0.10em;
-  color: oklch(0.86 0.09 300);
-  text-shadow: 0 0 10px oklch(0.55 0.18 300 / 0.5);
+  font-style: normal;
+  font-display: swap;
 }
-.artifact--vault .artifact-num {
-  color: oklch(0.52 0.12 300);
-  font-family: 'Handjet', monospace;
-  font-size: 20px;
+.artifact--specimen {
+  background: oklch(0.965 0.006 85);
+  border: 2px solid oklch(0.13 0.01 85);
+  box-shadow: 4px 4px 0 oklch(0 0 0 / 0.55);
+  transition: border-color 200ms ease, box-shadow 200ms ease;
 }
-.artifact--vault .artifact-note, .artifact--vault .artifact-url { color: oklch(0.62 0.07 300); }
-.artifact--vault .artifact-go {
-  color: oklch(0.52 0.12 300);
-  transition: color 240ms ease, transform 240ms ease;
+.artifact--specimen .artifact-num {
+  color: oklch(0.965 0.006 85);
+  background: oklch(0.13 0.01 85);
+  padding: 0.28rem 0.55rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.08em;
 }
-/* crawling specimen grid — tiny violet sample dots rolling left */
-.artifact--vault::before {
+.artifact--specimen .artifact-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: oklch(0.13 0.01 85);
+}
+.artifact--specimen .artifact-note {
+  color: oklch(0.38 0.01 85);
+  font-family: 'Space Mono', monospace;
+  font-size: 12.5px;
+}
+/* the URL is the barcode — uppercase keeps every glyph inside the
+   Code 39 charset (A-Z 0-9 - . $ / + %) */
+.artifact--specimen .artifact-url {
+  font-family: 'Libre Barcode 39 Text', monospace;
+  font-size: 27px;
+  line-height: 1.25;
+  text-transform: uppercase;
+  color: oklch(0.13 0.01 85);
+  overflow-wrap: anywhere;
+}
+.artifact--specimen .artifact-go {
+  color: oklch(0.13 0.01 85);
+  transition: color 200ms ease, transform 200ms ease;
+}
+/* laid-paper grain */
+.artifact--specimen::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(circle, oklch(0.60 0.16 300 / 0.55) 1px, transparent 1.6px);
-  background-size: 14px 14px;
-  opacity: 0.26;
-  animation: vault-crawl 9s linear infinite;
+  background: repeating-linear-gradient(0deg, oklch(0.13 0.01 85 / 0.04) 0 1px, transparent 1px 4px);
   pointer-events: none;
 }
-@keyframes vault-crawl {
-  from { background-position: 0 0; }
-  to { background-position: -140px 0; }
-}
-.artifact--vault::after {
+/* the laser — faint drift at idle, full scan on hover */
+.artifact--specimen::after {
   content: '';
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  background: oklch(0.58 0.21 25 / 0.9);
+  box-shadow: 0 0 12px oklch(0.58 0.21 25 / 0.75);
   opacity: 0;
-  transition: opacity 260ms ease;
-  background: linear-gradient(90deg, transparent 55%, oklch(0.50 0.16 300 / 0.12) 85%, oklch(0.50 0.16 300 / 0.22) 100%);
   pointer-events: none;
+  animation: specimen-drift 9s ease-in-out infinite;
 }
-.artifact--vault:hover {
-  border-color: oklch(0.60 0.16 300 / 0.95);
-  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06), inset 0 0 30px oklch(0 0 0 / 0.5), 0 0 22px oklch(0.50 0.18 300 / 0.25);
+@keyframes specimen-drift {
+  0% { left: 0%; opacity: 0; }
+  12% { opacity: 0.3; }
+  88% { opacity: 0.3; }
+  100% { left: calc(100% - 3px); opacity: 0; }
 }
-.artifact--vault:hover .artifact-label {
-  color: oklch(0.94 0.10 300);
-  text-shadow: 0 0 14px oklch(0.60 0.20 300 / 0.7);
+@keyframes specimen-scan {
+  from { left: 0%; }
+  to { left: calc(100% - 3px); }
 }
-.artifact--vault:hover .artifact-go {
-  color: oklch(0.80 0.12 300);
+.artifact--specimen:hover {
+  border-color: oklch(0.13 0.01 85);
+  box-shadow: 4px 4px 0 oklch(0.58 0.21 25 / 0.85);
+}
+.artifact--specimen:hover::after {
+  opacity: 1;
+  animation: specimen-scan 1.3s linear infinite;
+}
+.artifact--specimen:hover .artifact-num {
+  background: oklch(0.58 0.21 25);
+  color: oklch(0.98 0 0);
+}
+.artifact--specimen:hover .artifact-go {
+  color: oklch(0.58 0.21 25);
   transform: translate(2px, -2px);
 }
-.artifact--vault:hover::before { opacity: 0.5; }
-.artifact--vault:hover::after { opacity: 1; }
+@media (max-width: 700px) {
+  .artifact--specimen .artifact-label { font-size: 26px; }
+  .artifact--specimen .artifact-url { font-size: 21px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--specimen::after { animation: none; left: 50%; opacity: 0.25; }
+}
 
 @media (max-width: 700px) {
   .tag-pill { padding: 0.65rem 0.75rem; }
