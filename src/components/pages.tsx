@@ -18,6 +18,7 @@ import type { ArchiveEntry, ResearchSeries } from '@/lib/types'
 import type { Route } from '@/lib/router'
 import { isCtfEntry, ctfSourceOf, type CtfSource } from '@/lib/entry-group'
 import { LINKS, type ArchiveLink } from '@/lib/links'
+import { MarioGame } from '@/components/mario-game'
 import { GiftOverlay } from '@/components/gift-overlay'
 
 type NavFn = (route: Route) => void
@@ -570,13 +571,11 @@ export function FilesPage({ navigate }: { navigate: NavFn }) {
 }
 
 /* ============================================================
-   GAMES — intentionally empty section, same philosophy as the
-   File Archive: the menu exists, the page shows a clean empty
-   state until real games are published.
+   GAMES — playable things built for and hosted by the archive.
+   First cabinet: a complete side-scrolling platformer written
+   from scratch (original engine, sprites, and sound — no ROMs).
    ============================================================ */
 export function GamesPage({ navigate }: { navigate: NavFn }) {
-  // No games have been published yet — empty state until real
-  // content exists. No placeholders.
   return (
     <div className="archive-container">
       <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
@@ -585,11 +584,25 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
       <div className="archive-eyebrow">GAMES</div>
       <h1 className="archive-title">Games</h1>
       <p className="archive-subtitle">
-        Playable things from the archive — browser games, interactive
-        write-ups, anything you can actually run. Every entry will open
-        in a new tab and document what it is.
+        Playable things from the archive. First cabinet: SUPER ARCHIVE
+        BROS. — a complete side-scrolling platformer built from scratch
+        for this site. Three courses, original sprites, synthesized sound.
+        No ROMs, no emulators — every pixel and every note is code.
       </p>
-      <EmptyState message="No games available yet" />
+
+      <div className="game-cabinet">
+        <div className="game-cab-head">
+          <span className="game-num">01</span>
+          <span className="game-cab-label">Super Archive Bros.</span>
+          <span className="game-cab-note">side-scrolling platformer · 3 courses · original engine</span>
+        </div>
+        <div className="game-screen">
+          <MarioGame />
+        </div>
+        <div className="game-cab-foot">
+          <span className="game-keys">← → MOVE · Z JUMP (HOLD = HIGHER) · X RUN · ENTER PAUSE · M SOUND</span>
+        </div>
+      </div>
     </div>
   )
 }

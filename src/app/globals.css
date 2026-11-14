@@ -3661,3 +3661,140 @@ body[data-route="about"] .bg-video-fallback {
     oklch(0.54 0.19 27 / 0.6) 0 10px,
     transparent 10px 16px);
 }
+
+/* ============================================================
+   GAMES — the arcade cabinet. Dark chrome around a CRT screen:
+   scanlines + vignette over the canvas, Press Start 2P header,
+   key legend, and touch pads for mobile. Zero border-radius
+   (archive rule).
+   ============================================================ */
+.game-cabinet {
+  border: 2px solid oklch(0.72 0 0 / 0.75);
+  background: oklch(0.115 0.004 0);
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.05), 6px 6px 0 oklch(0 0 0 / 0.5);
+  margin-top: 2.5rem;
+}
+.game-cab-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  padding: 0.85rem 1.1rem;
+  border-bottom: 1px solid oklch(0.72 0 0 / 0.28);
+}
+.game-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  background: oklch(0.88 0 0);
+  color: oklch(0.1 0 0);
+  padding: 0.32rem 0.55rem;
+}
+.game-cab-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: oklch(0.95 0 0);
+  text-shadow: 0 0 12px oklch(0.6 0.19 145 / 0.35);
+}
+.game-cab-note {
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  color: oklch(0.6 0 0);
+  margin-left: auto;
+}
+.game-screen {
+  position: relative;
+  padding: 1.1rem;
+  background:
+    radial-gradient(ellipse at 50% 40%, oklch(0.2 0 0) 0%, oklch(0.07 0 0) 100%);
+}
+.game-stage {
+  position: relative;
+  max-width: 768px;
+  margin: 0 auto;
+}
+.game-canvas {
+  display: block;
+  width: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background: #000;
+  touch-action: manipulation;
+}
+/* CRT: scanlines + vignette overlay, exactly over the canvas */
+.game-crt {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.22) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, transparent 62%, rgb(0 0 0 / 0.38) 100%);
+}
+.game-ui {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.8rem 1.1rem 0.2rem;
+}
+.game-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: oklch(0.7 0 0);
+  background: transparent;
+  border: 1px solid oklch(0.72 0 0 / 0.4);
+  padding: 0.35rem 0.8rem;
+  cursor: pointer;
+  transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+.game-btn:hover {
+  color: oklch(0.1 0 0);
+  background: oklch(0.88 0 0);
+  border-color: oklch(0.88 0 0);
+}
+.game-cab-foot {
+  padding: 0.55rem 1.1rem 0.95rem;
+  text-align: center;
+}
+.game-keys {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: oklch(0.52 0 0);
+}
+/* touch pads — visible on touch/small screens */
+.game-pads {
+  display: none;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1.1rem 1rem;
+}
+.game-pad-group { display: flex; gap: 0.7rem; }
+.game-pad {
+  width: 62px;
+  height: 62px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 13px;
+  color: oklch(0.85 0 0);
+  background: oklch(0.16 0 0);
+  border: 2px solid oklch(0.72 0 0 / 0.55);
+  box-shadow: 0 3px 0 oklch(0 0 0 / 0.6);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+.game-pad:active {
+  background: oklch(0.88 0 0);
+  color: oklch(0.1 0 0);
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 oklch(0 0 0 / 0.6);
+}
+@media (max-width: 700px), (pointer: coarse) {
+  .game-pads { display: flex; }
+  .game-cab-label { font-size: 10px; }
+  .game-cab-note { font-size: 14px; margin-left: 0; width: 100%; }
+  .game-screen { padding: 0.6rem; }
+  .game-keys { font-size: 10px; }
+}
