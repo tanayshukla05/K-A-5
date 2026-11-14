@@ -12,12 +12,13 @@
  */
 
 import { createContext, useContext, useMemo } from 'react'
-import type { ArchiveEntry, TagCount, CategoryCount } from '@/lib/types'
+import type { ArchiveEntry, TagCount, CategoryCount, ResearchEntry } from '@/lib/types'
 
 type ContentData = {
   entries: ArchiveEntry[]
   tags: TagCount[]
   categories: CategoryCount[]
+  research: ResearchEntry[]
 }
 
 const ContentContext = createContext<ContentData | null>(null)
@@ -26,9 +27,10 @@ export function ContentProvider({
   entries,
   tags,
   categories,
+  research,
   children,
 }: ContentData & { children: React.ReactNode }) {
-  const value = useMemo(() => ({ entries, tags, categories }), [entries, tags, categories])
+  const value = useMemo(() => ({ entries, tags, categories, research }), [entries, tags, categories, research])
   return (
     <ContentContext.Provider value={value}>
       {children}
@@ -63,6 +65,15 @@ export function useAllTags(): TagCount[] {
 
 export function useAllCategories(): CategoryCount[] {
   return useContent().categories
+}
+
+export function useAllResearch(): ResearchEntry[] {
+  return useContent().research
+}
+
+export function useResearchBySlug(slug: string): ResearchEntry | null {
+  const { research } = useContent()
+  return useMemo(() => research.find(e => e.slug === slug) ?? null, [research, slug])
 }
 
 export function useSearchEntries(query: string): ArchiveEntry[] {

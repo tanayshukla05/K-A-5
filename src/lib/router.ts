@@ -9,6 +9,7 @@ export type Route =
     | { name: 'stage'; slug: string }
     | { name: 'ctf' }
     | { name: 'research' }
+    | { name: 'research-entry'; slug: string }
     | { name: 'cheatsheets' }
     | { name: 'files' }
     | { name: 'links' }
@@ -39,6 +40,8 @@ export function parseHash(hash: string): Route {
         return { name: 'stage', slug: safeDecode(parts[1]) }
     if (parts[0] === 'ctf' || parts[0] === 'walkthroughs')
         return { name: 'ctf' }
+    if (parts[0] === 'research' && parts[1])
+        return { name: 'research-entry', slug: safeDecode(parts[1]) }
     if (parts[0] === 'research')
         return { name: 'research' }
     if (parts[0] === 'cheatsheets' || parts[0] === 'cheat-sheets')
@@ -81,6 +84,9 @@ export function routeToHash(route: Route): string {
 
         case 'research':
             return '#/research'
+
+        case 'research-entry':
+            return `#/research/${encodeURIComponent(route.slug)}`
 
         case 'cheatsheets':
             return '#/cheatsheets'

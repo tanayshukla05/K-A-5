@@ -383,3 +383,79 @@ export function searchEntries(query: string): ArchiveEntry[] {
   }
   return results.sort((a, b) => b.score - a.score).map(r => r.entry)
 }
+
+/* ============================================================
+   RESEARCH NOTES — a second content directory with the same
+   markdown pipeline. Files carry a small metadata table:
+
+     | **Series** | Exploit-Dev |
+     | **Source** | The Perkins Cybersecurity Educational Fund |
+     | **Source URL** | https://… |
+     | **Date** | 2026 |
+
+   The Series row selects the sub-menu on the Research Notes page
+   ('Exploit-Dev' | 'Mal-Dev'). Adding a new .md file extends the
+   menu automatically — no manual edits required.
+   ============================================================ */
+const RESEARCH_DIR = path.join(process.cwd(), 'content', 'research-notes')
+
+export type { ResearchEntry, ResearchSeries } from '@/lib/types'
+import type { ResearchEntry, ResearchSeries } from '@/lib/types'
+
+function normalizeSeries(raw: string): ResearchSeries {
+  return /mal.?dev/i.test(raw) ? 'mal-dev' : 'exploit-dev'
+}
+
+function parseResearchMetadata(md: string) {
+  const get = (key: string): string => {
+    const re = new RegExp(`\\|\\s*\\*\\*${key}\\*\\*\\s*\\|\\s*(.*?)\\s*\\|`, 'i')
+    const m = md.match(re)
+    return m ? m[1].trim() : ''
+  }
+  return {
+    series: normalizeSeries(get('Series')),
+    sourceLabel: get('Source'),
+    sourceUrl: get('Source URL'),
+    dateLabel: get('Date') || '2026',
+  }
+}
+
+let _researchCache: ResearchEntry[] | null = null
+
+export function getAllResearchEntries(): ResearchEntry[] {
+  if (_researchCache) return _researchCache
+  if (!fs.existsSync(RESEARCH_DIR)) {
+    _researchCache = []
+    return _researchCache
+  }
+
+  const files = fs.readdirSync(RESEARCH_DIR)
+    .filter(f => f.endsWith('.md'))
+    .sort()
+
+  _researchCache = files.map(file => {
+    const raw = fs.readFileSync(path.join(RESEARCH_DIR, file), 'utf8')
+    const slug = file.replace(/\.md$/, '')
+    const meta = parseResearchMetadata(raw)
+    const h1 = raw.match(/^#\s+(.+)$/m)
+    const title = h1 ? h1[1].trim() : slug
+    // Render from the first H1 onward — the key/value metadata table at
+    // the top is parsed, not displayed.
+    const lines = raw.split('\n')
+    const h1Line = lines.findIndex(l => /^#\s+/.test(l))
+    const body = h1Line > 0 ? lines.slice(h1Line).join('\n') : raw
+    const { html, sections, excerpt } = renderMarkdown(body)
+    return {
+      slug,
+      series: meta.series,
+      title,
+      sourceLabel: meta.sourceLabel,
+      sourceUrl: meta.sourceUrl,
+      dateLabel: meta.dateLabel,
+      rawHtml: html,
+      excerpt,
+      sections,
+    }
+  })
+  return _researchCache
+}

@@ -30,3 +30,22 @@ export type ArchiveEntry = {
 
 export type TagCount = { tag: string; count: number }
 export type CategoryCount = { category: string; count: number }
+
+/* ============================================================
+   RESEARCH NOTES — long-form notes grouped into sub-menus
+   (Exploit-Dev, Mal-Dev). Rendered through the same hardened
+   markdown pipeline as the learning paths.
+   ============================================================ */
+export type ResearchSeries = 'exploit-dev' | 'mal-dev'
+
+export type ResearchEntry = {
+  slug: string
+  series: ResearchSeries
+  title: string
+  sourceLabel: string
+  sourceUrl: string
+  dateLabel: string
+  rawHtml: string
+  excerpt: string
+  sections: Array<{ heading: string; level: number }>
+}

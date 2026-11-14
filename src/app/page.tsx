@@ -1,7 +1,7 @@
 import { LoadingScreen } from '@/components/loader'
 import { ArchiveShell } from '@/components/archive-shell'
 import { ContentProvider } from '@/components/content-provider'
-import { getAllEntries, getAllTags, getAllCategories } from '@/lib/content'
+import { getAllEntries, getAllTags, getAllCategories, getAllResearchEntries } from '@/lib/content'
 
 /**
  * The single user-visible route. This is a SERVER component — it reads
@@ -25,9 +25,10 @@ export default function Home() {
   const entries = getAllEntries()
   const tags = getAllTags()
   const categories = getAllCategories()
+  const research = getAllResearchEntries()
 
   return (
-    <ContentProvider entries={entries} tags={tags} categories={categories}>
+    <ContentProvider entries={entries} tags={tags} categories={categories} research={research}>
       <LoadingScreen />
       <ArchiveShell />
     </ContentProvider>

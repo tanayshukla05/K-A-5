@@ -17,10 +17,10 @@ import { useRouter, type Route } from '@/lib/router'
 import { SearchPanel } from '@/components/search-panel'
 import {
   HomePage, AboutPage, ArchivePage, StagePage, CtfPage,
-  ResearchPage, CheatsheetsPage, FilesPage, LinksPage, TagsPage, TagPage,
-  CategoriesPage, CategoryPage, NotFoundPage,
+  ResearchPage, ResearchEntryPage, CheatsheetsPage, FilesPage, LinksPage,
+  TagsPage, TagPage, CategoriesPage, CategoryPage, NotFoundPage,
 } from '@/components/pages'
-import { useAllEntries, useAllTags, useAllCategories } from '@/components/content-provider'
+import { useAllEntries, useAllTags, useAllCategories, useAllResearch } from '@/components/content-provider'
 import { isCtfEntry } from '@/lib/entry-group'
 
 type NavItem = {
@@ -86,6 +86,7 @@ export function ArchiveShell() {
   const entries = useAllEntries()
   const tagCount = useAllTags().length
   const catCount = useAllCategories().length
+  const researchCount = useAllResearch().length
 
   const navPrimary: NavItem[] = [
     { label: 'Home', route: { name: 'home' } },
@@ -99,7 +100,7 @@ export function ArchiveShell() {
     // (no content published for them yet), so they carry no count badge.
     { label: 'Archive', route: { name: 'archive' }, count: entries.filter(e => !isCtfEntry(e)).length },
     { label: 'CTF Walkthroughs', route: { name: 'ctf' } },
-    { label: 'Research Notes', route: { name: 'research' } },
+    { label: 'Research Notes', route: { name: 'research' }, count: researchCount },
     { label: 'Cheat Sheets', route: { name: 'cheatsheets' } },
     { label: 'File Archive', route: { name: 'files' } },
     { label: 'Links', route: { name: 'links' }, gold: true },
@@ -133,6 +134,7 @@ export function ArchiveShell() {
       case 'stage': return <StagePage slug={route.slug} navigate={navigate} />
       case 'ctf': return <CtfPage navigate={navigate} />
       case 'research': return <ResearchPage navigate={navigate} />
+      case 'research-entry': return <ResearchEntryPage slug={route.slug} navigate={navigate} />
       case 'cheatsheets': return <CheatsheetsPage navigate={navigate} />
       case 'files': return <FilesPage navigate={navigate} />
       case 'links': return <LinksPage navigate={navigate} />

@@ -11,9 +11,10 @@
 
 import {
   useAllEntries, useEntryBySlug, useAllTags, useAllCategories,
+  useAllResearch, useResearchBySlug,
 } from '@/components/content-provider'
 import { useState } from 'react'
-import type { ArchiveEntry } from '@/lib/types'
+import type { ArchiveEntry, ResearchSeries } from '@/lib/types'
 import type { Route } from '@/lib/router'
 import { isCtfEntry, ctfSourceOf, type CtfSource } from '@/lib/entry-group'
 import { LINKS, type ArchiveLink } from '@/lib/links'
@@ -316,12 +317,22 @@ export function CtfPage({ navigate }: { navigate: NavFn }) {
 }
 
 /* ============================================================
-   RESEARCH NOTES — intentionally empty section
+   RESEARCH NOTES — sub-menus per series, mirroring the CTF tab
+   pattern. Series comes from each note's **Series** metadata row;
+   adding a markdown file to content/research-notes/ extends the
+   menus automatically.
    ============================================================ */
+const RESEARCH_TABS: Array<{ id: ResearchSeries; label: string }> = [
+  { id: 'exploit-dev', label: 'Exploit-Dev' },
+  { id: 'mal-dev', label: 'Mal-Dev' },
+]
+
 export function ResearchPage({ navigate }: { navigate: NavFn }) {
-  // No research notes have been published yet. Per the archive philosophy
-  // this page shows its empty state plainly until real content exists —
-  // no placeholder entries.
+  const all = useAllResearch()
+  const [series, setSeries] = useState<ResearchSeries>('exploit-dev')
+  const entries = all.filter(e => e.series === series)
+  const counts: Record<ResearchSeries, number> = { 'exploit-dev': 0, 'mal-dev': 0 }
+  for (const e of all) counts[e.series]++
   return (
     <div className="archive-container">
       <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
@@ -330,11 +341,113 @@ export function ResearchPage({ navigate }: { navigate: NavFn }) {
       <div className="archive-eyebrow">RESEARCH NOTES</div>
       <h1 className="archive-title">Research Notes</h1>
       <p className="archive-subtitle">
-        Long-form research notes — cryptanalysis, memory forensics, detection
-        engineering, and Windows internals. These are working documents, not
-        polished posts.
+        Long-form working notes and curated free courses — exploit
+        development, malware development, and the internals they live in.
+        Third-party material is archived with full attribution.
       </p>
-      <EmptyState message="No research notes published yet" />
+      <div className="ctf-tabs" role="tablist" aria-label="Research series">
+        {RESEARCH_TABS.map(t => (
+          <button
+            key={t.id}
+            type="button"
+            role="tab"
+            aria-selected={series === t.id}
+            className={`ctf-tab${series === t.id ? ' ctf-tab--active' : ''}`}
+            onClick={() => setSeries(t.id)}
+          >
+            <span>{t.label}</span>
+            <span className="ctf-tab-count">{String(counts[t.id]).padStart(2, '0')}</span>
+          </button>
+        ))}
+      </div>
+      {entries.length === 0 ? (
+        <EmptyState message={`No ${RESEARCH_TABS.find(t => t.id === series)?.label} notes published yet`} />
+      ) : (
+        <div>
+          {entries.map(e => (
+            <button
+              key={e.slug}
+              type="button"
+              className="entry-row"
+              onClick={() => navigate({ name: 'research-entry', slug: e.slug })}
+            >
+              <div className="entry-row-stage">NOTE</div>
+              <div>
+                <div className="entry-row-title">{e.title}</div>
+                <div className="entry-row-meta">
+                  {e.sourceLabel}
+                  {e.sourceUrl ? ` · ${e.sourceUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}` : ''}
+                </div>
+              </div>
+              <div className="entry-row-vt">↗</div>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ============================================================
+   RESEARCH NOTE DETAIL — rendered through the same hardened
+   markdown pipeline as every other entry on the site.
+   ============================================================ */
+export function ResearchEntryPage({ slug, navigate }: { slug: string; navigate: NavFn }) {
+  const entry = useResearchBySlug(slug)
+
+  if (!entry) {
+    return (
+      <div className="archive-container">
+        <button type="button" className="back-link" onClick={() => navigate({ name: 'research' })}>
+          ← Back to Research Notes
+        </button>
+        <EmptyState message="No content available yet" />
+      </div>
+    )
+  }
+
+  return (
+    <div className="archive-container">
+      <button type="button" className="back-link" onClick={() => navigate({ name: 'research' })}>
+        ← Back to Research Notes
+      </button>
+
+      <article>
+        <header className="article-head">
+          <div className="article-stage">RESEARCH · {entry.series === 'mal-dev' ? 'MAL-DEV' : 'EXPLOIT-DEV'} · {entry.dateLabel}</div>
+          <h1 className="article-title">{entry.title}</h1>
+          {entry.sourceLabel && (
+            <div style={{ fontSize: 13, color: 'var(--muted-foreground)', letterSpacing: '0.04em' }}>
+              Free course — {entry.sourceLabel}
+            </div>
+          )}
+          {entry.sourceUrl && (
+            <a
+              href={entry.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-block',
+                marginTop: '0.9rem',
+                fontSize: 10,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: 'var(--muted-foreground)',
+                textDecoration: 'none',
+                border: '1px solid var(--border)',
+                padding: '0.45rem 0.7rem',
+              }}
+            >
+              Source ↗
+            </a>
+          )}
+        </header>
+
+        <div
+          className="article-prose"
+          dangerouslySetInnerHTML={{ __html: entry.rawHtml }}
+        />
+      </article>
     </div>
   )
 }
