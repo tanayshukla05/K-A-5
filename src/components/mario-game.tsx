@@ -551,6 +551,21 @@ export function MarioGame() {
     }
     let hi = loadHi()
 
+    /* spawn voice — "JAI HIND!" plays on game start and on every respawn */
+    let spawnSnd: HTMLAudioElement | null = null
+    try {
+      spawnSnd = new Audio('/sounds/JAI_HIND.mp3')
+      spawnSnd.preload = 'auto'
+      spawnSnd.volume = 1
+    } catch { spawnSnd = null }
+    function playSpawn() {
+      if (!spawnSnd || mutedFlag) return
+      try {
+        spawnSnd.currentTime = 0
+        void spawnSnd.play().catch(() => { /* autoplay guard */ })
+      } catch { /* ignore */ }
+    }
+
     function loadLevel() {
       L = build(levelIdx)
       enemies = L.spawns.map(s => ({ x: s.tx * TILE, y: s.ty * TILE, w: 16, h: 16, vx: 0, vy: 0, dir: -1, squish: 0 }))
@@ -565,6 +580,7 @@ export function MarioGame() {
     function startGame() {
       score = 0; coinCount = 0; lives = 3; levelIdx = 0
       loadLevel()
+      playSpawn()
     }
     function respawn() {
       L = build(levelIdx)
@@ -575,6 +591,7 @@ export function MarioGame() {
       flagClothY = 3 * TILE
       state = 'intro'; stateT = 0
       stateRef.current = state
+      playSpawn()
     }
     function die() {
       state = 'dying'; stateT = 0
