@@ -43,3 +43,16 @@ next-env.d.ts
 # local dev
 *.log
 local-*
+
+# game ROMs must never be committed - the archive hosts none (bring-your-own loading only)
+*.sfc
+*.smc
+*.fig
+*.srm
+*.gba
+*.gb
+*.gbc
+*.nes
+*.fds
+*.z64
+*.v64
