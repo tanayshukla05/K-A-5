@@ -657,7 +657,7 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
         <div className="game-cab-head">
           <span className="game-num">03</span>
           <span className="game-cab-label">MultiHero — Web Edition</span>
-          <span className="game-cab-note">browser beat-&rsquo;em-up · up to 4 players · one click to play</span>
+          <span className="game-cab-note">browser beat-&rsquo;em-up · touch + gamepad · up to 4 players online</span>
         </div>
         <div className="game-screen">
           {heroOn ? (
@@ -685,7 +685,7 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
           )}
         </div>
         <div className="game-cab-foot">
-          <span className="game-keys">WASD MOVE · N ATTACK · M JUMP · H SPECIAL · SPACE BLOCK · J THROW · ONLINE PLAY IN MENU · CREDITS AT /MULTIHERO</span>
+          <span className="game-keys">WASD MOVE · N ATTACK · M JUMP · H SPECIAL · SPACE BLOCK · J THROW · ONLINE PLAY IN MENU · TOUCH PADS ON MOBILE · CREDITS AT /MULTIHERO</span>
         </div>
       </div>
     </div>

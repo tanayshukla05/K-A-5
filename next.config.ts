@@ -53,10 +53,14 @@ const securityHeaders = [
 /**
  * Cabinet 03 (MultiHero) runs the game shell document in a same-origin
  * iframe on the Games page, so that one path must be allowed to be framed
- * by its own origin. Only the framing headers are relaxed here — every
- * other rule in securityHeaders still applies (Next merges headers across
- * matching rules; this later rule wins on the duplicate keys). Every other
- * path on the archive keeps frame-ancestors 'none' / X-Frame-Options DENY.
+ * by its own origin. The game's own networking (online multiplayer over
+ * WebSocket, region checks, pings) connects to endpoints the WASM build
+ * constructs at runtime — they cannot be enumerated statically — so
+ * connect-src here allows secure https:/wss: schemes for that document
+ * only. Everything else stays strict (script-src is unchanged), and every
+ * other path on the archive keeps frame-ancestors 'none' / DENY.
+ * Cache-Control: the build's data/wasm are immutable content, so repeat
+ * visits (and mobile data) load from cache instead of re-downloading ~13 MB.
  */
 const gameFrameHeaders = [
   {
@@ -69,7 +73,7 @@ const gameFrameHeaders = [
       "img-src 'self' data:",
       "media-src 'self' data:",
       "font-src 'self'",
-      "connect-src 'self' blob:",
+      "connect-src 'self' blob: https: wss:",
       "worker-src 'self' blob:",
       "object-src 'none'",
       "base-uri 'self'",
@@ -78,6 +82,19 @@ const gameFrameHeaders = [
     ].join("; "),
   },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
+  { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+];
+
+/**
+ * Cache rules for immutable static game content. Cartridges and the
+ * EmulatorJS runtime never change between deploys (a content change ships
+ * with a deploy, which browsers revalidate on HTML), so they are cached
+ * aggressively: repeat visits — and mobile data — load them from the
+ * browser cache instead of re-downloading megabytes. This is the "no lag
+ * on repeat visits" guarantee for cabinets 02 and 03.
+ */
+const cacheHeaders = [
+  { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
 ];
 
 const nextConfig: NextConfig = {
@@ -92,6 +109,14 @@ const nextConfig: NextConfig = {
       {
         source: "/multihero/multihero-web/:path*",
         headers: gameFrameHeaders,
+      },
+      {
+        source: "/roms/:path*",
+        headers: cacheHeaders,
+      },
+      {
+        source: "/emulatorjs/:path*",
+        headers: cacheHeaders,
       },
     ];
   },
