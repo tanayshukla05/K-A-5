@@ -41,8 +41,12 @@ syntax-highlighter bundle.
 ├── content/
 │   └── learning-paths/      # Markdown entries — drop new .md files here
 ├── public/
+│   ├── emulatorjs/          # Self-hosted EmulatorJS runtime (cabinet 02)
+│   ├── multihero/           # MultiHero WASM web build (cabinet 03)
+│   ├── roms/                # SNES cartridges + CREDITS.md attribution
+│   ├── sounds/              # UI + game sounds
+│   ├── fonts/               # Site fonts
 │   ├── logo.png             # Used by loader + header
-│   ├── favicon.png
 │   ├── bg-boulder.mp4       # Fixed background video (rain-boulder loop)
 │   └── home-click.mp3       # Sound played when the HOME menu is clicked
 ├── src/
@@ -123,6 +127,46 @@ stay inside their own series.
 Three index sections — Research Notes, Cheat Sheets, and File Archive — are
 kept in the menu but are intentionally empty for now: they render their
 "no content" states until real entries are published for them.
+
+---
+
+## Games Room
+
+Three cabinets, all one-click playable — nothing runs until it is clicked:
+
+| Cabinet | What it is | Runtime |
+| --- | --- | --- |
+| 01 | Super Archive Bros. — original side-scrolling platformer (3 courses) | Original canvas engine, built from scratch |
+| 02 | Super Nintendo — 7 pre-installed cartridges | Self-hosted EmulatorJS (`public/emulatorjs/`) |
+| 03 | MultiHero — Web Edition (0.96) | Official WASM build, self-hosted (`public/multihero/`) |
+
+Cartridge attribution lives at `public/roms/CREDITS.md`; MultiHero port
+license and character notices live at `public/multihero/multihero-web/NOTICE.md`.
+
+---
+
+## Deployment (Vercel)
+
+1. Push the project to a **private** GitHub/GitLab repository (the repo
+   carries the Games room cartridges — see the ROM guard in `.gitignore`).
+2. Import the repo in Vercel. Framework preset: Next.js. Build command and
+   output are picked up automatically from `package.json` / `next.config.ts`.
+3. Set the environment variable (Project → Settings → Environment Variables):
+
+   ```
+   NEXT_PUBLIC_SITE_URL=https://your-domain.example
+   ```
+
+   `/sitemap.xml` and `/rss.xml` build their links from it (a placeholder
+   fallback exists for builds without it — see `.env.example`).
+4. Deploy. No database, no extra services — the archive reads Markdown
+   from `content/learning-paths/` at build time (file tracing is already
+   configured in `next.config.ts`).
+
+Alternative — any Node host / VPS: `npm install && npm run build`, then
+`npm start -p 3000` behind your reverse proxy. The multi-line games room
+cartridges and WASM build ship inside `public/`, so they need no extra
+steps on any host.
 
 ---
 

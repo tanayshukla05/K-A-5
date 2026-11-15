@@ -44,10 +44,11 @@ next-env.d.ts
 *.log
 local-*
 
-# ROM guard: commercial cartridges must never be committed.
-# The archive hosts no commercial ROMs. Exception: public/roms/ carries
-# homebrew games released free by their own authors and licensed for
-# redistribution - per-game attribution lives in public/roms/CREDITS.md.
+# ROM guard: cartridges live in public/roms and deploy with the site.
+# Homebrew carts are author-released freeware (attribution:
+# public/roms/CREDITS.md). PowerFest 94, Yoshi's Island and Aladdin are
+# the site owner's own cartridges added for the Games room — keep the
+# git repository PRIVATE while they are in it.
 *.sfc
 *.smc
 *.fig
@@ -61,7 +62,10 @@ local-*
 *.v64
 !public/roms/*.sfc
 
-# fan-game builds with ripped commercial assets (Mario, Ryu, Shredder,
-# Joker, Spider-Man etc.) - never committed, never served. Local play only.
+# MultiHero: the official WASM web build is served from
+# public/multihero/multihero-web/ (web port MIT by richardyusan, original
+# freeware game by mhman — characters remain property of their owners,
+# see public/multihero/multihero-web/NOTICE.md). The native Windows copy
+# and any extracted asset trees stay local only, never committed.
 /MultiHero094/
 *.exe

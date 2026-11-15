@@ -575,10 +575,17 @@ export function FilesPage({ navigate }: { navigate: NavFn }) {
    GAMES — playable things built for and hosted by the archive.
    Cabinet 01: a complete side-scrolling platformer written
    from scratch (original engine, sprites, and sound — no ROMs).
-   Cabinet 02: a self-hosted Super Nintendo emulator that plays
-   the visitor's own cartridges, entirely in the browser.
+   Cabinet 02: a self-hosted Super Nintendo whose shelf of
+   cartridges runs in the browser on the self-hosted
+   EmulatorJS runtime.
+   Cabinet 03: MultiHero — the freeware fan game's official
+   WASM build, self-hosted and embedded same-origin.
    ============================================================ */
 export function GamesPage({ navigate }: { navigate: NavFn }) {
+  /* cabinet 01 stays powered off until the visitor clicks — no auto-start */
+  const [marioOn, setMarioOn] = useState(false)
+  /* cabinet 03 same deal — the WASM build only downloads on click (~13 MB) */
+  const [heroOn, setHeroOn] = useState(false)
   return (
     <div className="archive-container games-room">
       <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
@@ -591,16 +598,34 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
         a complete side-scrolling platformer built from scratch for this
         site. Cabinet 02: a Super Nintendo with its games pre-installed —
         tap a title on the shelf and it runs right here in the browser.
+        Cabinet 03: MultiHero — a freeware browser beat-&rsquo;em-up,
+        solo or with up to four players online.
       </p>
 
       <div className="game-cabinet">
         <div className="game-cab-head">
           <span className="game-num">01</span>
           <span className="game-cab-label">Super Archive Bros.</span>
-          <span className="game-cab-note">side-scrolling platformer · 3 courses · original engine</span>
+          <span className="game-cab-note">side-scrolling platformer · 3 courses · one click to play</span>
         </div>
         <div className="game-screen">
-          <MarioGame />
+          {marioOn ? (
+            <>
+              <MarioGame autoStart />
+              <div className="game-ui">
+                <button type="button" className="game-btn" onClick={() => setMarioOn(false)}>
+                  ⏏ EJECT
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="game-launch">
+              <p className="game-launch-head">CARTRIDGE INSTALLED — TAP TO POWER ON</p>
+              <button type="button" className="game-launch-btn" onClick={() => setMarioOn(true)}>
+                ▶ INSERT COIN · ONE CLICK PLAY
+              </button>
+            </div>
+          )}
         </div>
         <div className="game-cab-foot">
           <span className="game-keys">← → MOVE · Z JUMP (HOLD = HIGHER) · X RUN · ENTER PAUSE · M SOUND</span>
@@ -617,7 +642,50 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
           <SnesCabinet />
         </div>
         <div className="game-cab-foot">
-          <span className="game-keys">4 GAMES INSTALLED · SAVE STATES + TOUCH CONTROLS BUILT IN · CREDITS AT /ROMS</span>
+          <span className="game-keys">7 GAMES INSTALLED · SAVE STATES + TOUCH CONTROLS BUILT IN · CREDITS AT /ROMS</span>
+        </div>
+      </div>
+
+      {/* ============================================================
+          CABINET 03 — MultiHero, Web Edition. The port author ships a
+          complete self-hostable WASM build (public/multihero/multihero-web,
+          MIT; original freeware game by mhman — see NOTICE.md). The
+          loader fetches its ~13 MB data package the moment it runs, so
+          the iframe only mounts on click — nothing downloads before it.
+          ============================================================ */}
+      <div className="game-cabinet game-cabinet--hero">
+        <div className="game-cab-head">
+          <span className="game-num">03</span>
+          <span className="game-cab-label">MultiHero — Web Edition</span>
+          <span className="game-cab-note">browser beat-&rsquo;em-up · up to 4 players · one click to play</span>
+        </div>
+        <div className="game-screen">
+          {heroOn ? (
+            <>
+              <iframe
+                src="/multihero/multihero-web/index.html"
+                title="Play MultiHero"
+                className="game-hero-frame"
+                allow="fullscreen; gamepad"
+                allowFullScreen
+              />
+              <div className="game-ui">
+                <button type="button" className="game-btn" onClick={() => setHeroOn(false)}>
+                  ⏏ EJECT
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="game-launch">
+              <p className="game-launch-head">GAME INSTALLED — TAP TO POWER ON</p>
+              <button type="button" className="game-launch-btn" onClick={() => setHeroOn(true)}>
+                ▶ INSERT COIN · ONE CLICK PLAY
+              </button>
+            </div>
+          )}
+        </div>
+        <div className="game-cab-foot">
+          <span className="game-keys">WASD MOVE · N ATTACK · M JUMP · H SPECIAL · SPACE BLOCK · J THROW · ONLINE PLAY IN MENU · CREDITS AT /MULTIHERO</span>
         </div>
       </div>
     </div>

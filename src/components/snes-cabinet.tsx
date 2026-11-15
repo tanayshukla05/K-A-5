@@ -3,13 +3,14 @@
 /**
  * SNES CABINET — cabinet 02 of the Games room.
  *
- * A shelf of pre-installed cartridges. Every game here is homebrew released
- * free by its own author (per-game attribution: public/roms/CREDITS.md), so
- * the cabinet ships complete — visitors tap a title and it plays. No file
+ * A shelf of pre-installed cartridges: author-released homebrew plus the
+ * owner's own cartridges (per-game attribution: public/roms/CREDITS.md).
+ * The cabinet ships complete — visitors tap a title and it plays. No file
  * picker, no downloads, nothing to bring.
  *
- * The archive never hosts commercial ROMs; this shelf only carries
- * author-released homebrew. Games run on the self-hosted EmulatorJS runtime
+ * The homebrew shelf carts are author-released freeware; PowerFest 94,
+ * Yoshi's Island and Aladdin are the owner's own cartridges, added by the
+ * site owner. Games run on the self-hosted EmulatorJS runtime
  * (public/emulatorjs/data/ — no CDN, archive law) and are fetched from
  * same-origin paths (/roms/…), so the Content-Security-Policy stays narrow.
  *
@@ -34,7 +35,7 @@ type ShelfGame = {
   blurb: string
 }
 
-/** author-released homebrew — verified sources in public/roms/CREDITS.md */
+/** the shelf — author-released homebrew carts plus the owner's own cartridges (see public/roms/CREDITS.md) */
 const SHELF: ShelfGame[] = [
   {
     id: 'super-boss-gaiden',
@@ -61,6 +62,18 @@ const SHELF: ShelfGame[] = [
       'Steal 255 gold coins out of the Storm Palace maze — every floor needs all its coins before the arrow lets you descend.',
   },
   {
+    id: 'powerfest-94-lost-levels',
+    title: 'PowerFest 94 — The Lost Levels',
+    file: '/roms/powerfest-94-lost-levels.sfc',
+    size: '0.5 MB',
+    author: 'Nintendo · owner cartridge',
+    year: '1994',
+    genre: 'competition cart',
+    players: '1 player',
+    blurb:
+      'The 1994 PowerFest competition cartridge. Its headline event: Super Mario Bros.: The Lost Levels on a points-against-the-clock run — pick the event from the cart\u2019s own menu.',
+  },
+  {
     id: 'jet-pilot-rising',
     title: 'Jet Pilot Rising',
     file: '/roms/jet-pilot-rising.sfc',
@@ -83,6 +96,30 @@ const SHELF: ShelfGame[] = [
     players: '2–8 players (one keyboard)',
     blurb:
       'Eight fighters, one arena, zero mercy. Player 1 vs player 2 on the same keyboard — remap controls in the emulator menu.',
+  },
+  {
+    id: 'yoshis-island-usa',
+    title: 'Yoshi\u2019s Island',
+    file: '/roms/yoshis-island-usa.sfc',
+    size: '2 MB',
+    author: 'Nintendo · owner cartridge',
+    year: '1995',
+    genre: 'platformer',
+    players: '1 player',
+    blurb:
+      'Super Mario World 2: a stork mix-up leaves Baby Mario on Yoshi\u2019s back. Crayon-drawn world, flower-hunting, egg throws and the Super FX2 chip doing the morphing.',
+  },
+  {
+    id: 'aladdin-usa',
+    title: 'Disney\u2019s Aladdin',
+    file: '/roms/aladdin-usa.sfc',
+    size: '1.25 MB',
+    author: 'Disney · Capcom · owner cartridge',
+    year: '1993',
+    genre: 'platformer',
+    players: '1 player',
+    blurb:
+      'Capcom\u2019s take on the film: Agrabah rooftops, apple-throwing, carpet chases and a genie bonus round. Sword-swinging across six stages.',
   },
 ]
 
@@ -108,7 +145,7 @@ export function SnesCabinet() {
     w.EJS_gameUrl = game.file
     w.EJS_gameName = game.title
     w.EJS_pathtodata = '/emulatorjs/data/'
-    w.EJS_startOnLoaded = false
+    w.EJS_startOnLoaded = true // one click: the shelf tap itself starts the game
     // NOTE: upstream reads this as `disableAutoLang !== false` (inverted), so
     // `false` is what actually skips the system-locale JSON fetch (and its 404).
     w.EJS_disableAutoLang = false
@@ -157,8 +194,9 @@ export function SnesCabinet() {
             ))}
           </ul>
           <p className="snes-shelf-note">
-            Every cartridge here is homebrew — released free by its own author.
-            Full credits: /roms/CREDITS.md
+            The homebrew cartridges here are released free by their own authors;
+            PowerFest 94, Yoshi&apos;s Island and Aladdin are the owner&apos;s
+            own cartridges. Full credits: /roms/CREDITS.md
           </p>
         </div>
       )}

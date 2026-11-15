@@ -489,7 +489,7 @@ type Input = {
   jumpEdge: boolean; startEdge: boolean
 }
 
-export function MarioGame() {
+export function MarioGame({ autoStart = false }: { autoStart?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
   const inp = useRef<Input>({ l: false, r: false, run: false, jump: false, jumpEdge: false, startEdge: false })
@@ -1075,6 +1075,10 @@ export function MarioGame() {
     }
     raf = requestAnimationFrame(loop)
 
+    /* one-click boot — the launcher click carries user activation, so audio
+       starts cleanly; the PRESS ENTER title screen is skipped entirely */
+    if (autoStart) { ensureAudio(); startGame() }
+
     /* ---------- input ---------- */
     const GAMEKEYS = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' '])
     function onKey(e: KeyboardEvent) {
@@ -1140,7 +1144,7 @@ export function MarioGame() {
       document.removeEventListener('visibilitychange', onVis)
       api.current = { pause() {}, mute() {}, fs() {} }
     }
-  }, [])
+  }, [autoStart])
 
   // hide the fullscreen button where element fullscreen is unsupported
   // (iOS Safari) — a DOM sync, no state needed

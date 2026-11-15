@@ -3780,6 +3780,50 @@ body[data-route="about"] .bg-video-fallback {
   background: oklch(0.88 0 0);
   border-color: oklch(0.88 0 0);
 }
+/* cabinet 01 launcher — powered off until one click, nothing runs before it */
+.game-launch {
+  display: grid;
+  justify-items: center;
+  gap: 1.2rem;
+  padding: 3.4rem 1.1rem;
+  border: 1px dashed oklch(0.72 0 0 / 0.35);
+}
+.game-launch-head {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: oklch(0.6 0 0);
+  text-align: center;
+}
+.game-launch-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  color: oklch(0.95 0 0);
+  background: oklch(0.88 0 0 / 0.06);
+  border: 2px solid oklch(0.72 0 0 / 0.75);
+  padding: 0.95rem 1.4rem;
+  cursor: pointer;
+  text-shadow: 0 0 12px oklch(0.6 0.19 145 / 0.35);
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+.game-launch-btn:hover,
+.game-launch-btn:focus-visible {
+  color: oklch(0.1 0 0);
+  background: oklch(0.88 0 0);
+  border-color: oklch(0.88 0 0);
+  text-shadow: none;
+}
+/* cabinet 03 — the MultiHero WASM build in its own frame (640×480 native) */
+.game-hero-frame {
+  display: block;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  aspect-ratio: 640 / 480;
+  border: 0;
+  background: #000;
+}
 .game-cab-foot {
   padding: 0.55rem 1.1rem 0.95rem;
   text-align: center;
