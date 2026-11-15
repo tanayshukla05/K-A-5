@@ -633,11 +633,33 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
               </div>
             </>
           ) : (
-            <div className="game-launch">
-              <p className="game-launch-head">GAME INSTALLED — TAP TO POWER ON</p>
-              <button type="button" className="game-launch-btn" onClick={() => setHeroOn(true)}>
-                ▶ INSERT COIN · ONE CLICK PLAY
+            <div className="game-launch game-launch--poster">
+              <button
+                type="button"
+                className="game-launch-poster"
+                onClick={() => setHeroOn(true)}
+                aria-label="Power on MultiHero — Web Edition"
+              >
+                <img
+                  src="/posters/multihero-web-edition.png"
+                  alt="Cabinet 01 poster: MultiHero — Web Edition. Mario vs Bowser under the cabinet marquee, with the cast of all 27 fighters drawn from the game's own gfx."
+                  width={1200}
+                  height={1800}
+                  loading="lazy"
+                  decoding="async"
+                />
               </button>
+              <div className="game-launch-side">
+                <p className="game-launch-head">GAME INSTALLED — TAP TO POWER ON</p>
+                <button type="button" className="game-launch-btn" onClick={() => setHeroOn(true)}>
+                  ▶ INSERT COIN · PLAY
+                </button>
+                <p className="game-launch-blurb">
+                  27 fighters on one cartridge — Ryu, Spider-Man, Bowser, Venom and
+                  the rest, drawn from the game&rsquo;s own gfx. The WASM build
+                  (~13&thinsp;MB) downloads only after you press start.
+                </p>
+              </div>
             </div>
           )}
         </div>
@@ -731,6 +753,14 @@ function ArtifactLink({ link, index }: { link: ArchiveLink; index: number }) {
 
 export function LinksPage({ navigate }: { navigate: NavFn }) {
   const links = LINKS
+  // Two drawers under this menu: .com (the clearnet side) and .onion (Tor
+  // hidden services). Classification is automatic — any row whose host ends
+  // in .onion renders in the .onion drawer, so adding a hidden service to
+  // LINKS needs no extra flag. Rows there always wear the dark onion
+  // material, whatever variant they declare.
+  const isOnion = (l: ArchiveLink) => (/\.onion(\/|$)/i).test(l.url)
+  const comLinks = links.filter(l => !isOnion(l))
+  const onionLinks = links.filter(isOnion)
   return (
     <div className="archive-container">
       <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
@@ -739,18 +769,39 @@ export function LinksPage({ navigate }: { navigate: NavFn }) {
       <div className="archive-eyebrow">DIRECTORY / LINKS</div>
       <h1 className="archive-title">Links</h1>
       <p className="archive-subtitle">
-        Every external link in one directory — each row is its own artifact:
-        a different material, a different behaviour. All open in a new tab.
+        Every external link in one directory, split into two drawers — the
+        clearnet (.com) and the Tor hidden services (.onion). Each row is
+        its own artifact: a different material, a different behaviour. All
+        open in a new tab.
       </p>
-      {links.length === 0 ? (
-        <EmptyState message="No links added yet" />
-      ) : (
-        <div>
-          {links.map((l, i) => (
-            <ArtifactLink key={l.url} link={l} index={i} />
-          ))}
+
+      <div className="links-drawer">
+        <div className="links-drawer-head">
+          <span className="links-drawer-tld">.com</span>
+          <span className="links-drawer-note">the clearnet side · {comLinks.length} LINKS</span>
         </div>
-      )}
+        {comLinks.length === 0 ? (
+          <EmptyState message="No clearnet links yet" />
+        ) : (
+          comLinks.map((l, i) => (
+            <ArtifactLink key={l.url} link={l} index={i} />
+          ))
+        )}
+      </div>
+
+      <div className="links-drawer links-drawer--onion">
+        <div className="links-drawer-head">
+          <span className="links-drawer-tld">.onion</span>
+          <span className="links-drawer-note">tor hidden services · open via tor browser · {onionLinks.length} LINKS</span>
+        </div>
+        {onionLinks.length === 0 ? (
+          <EmptyState message="No onion links yet" />
+        ) : (
+          onionLinks.map((l, i) => (
+            <ArtifactLink key={l.url} link={{ ...l, variant: 'onion' }} index={i} />
+          ))
+        )}
+      </div>
     </div>
   )
 }

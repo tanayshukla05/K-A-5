@@ -19,10 +19,16 @@ export type ArchiveLink = {
     | 'gothic' | 'goodboy' | 'acid' | 'typewriter' | 'holo' | 'arcade'
     | 'wreck' | 'glitch' | 'friendly' | 'prism'
     | 'neural' | 'grimoire' | 'bbs' | 'detonate' | 'apex' | 'modules'
-    | 'signal' | 'specimen' | 'blueprint'
+    | 'signal' | 'specimen' | 'blueprint' | 'onion'
 }
 
 export const LINKS: ArchiveLink[] = [
+  {
+    label: 'Onion Mirror',
+    url: 'https://digdig2nugjpszzmqe5ep2bk7lqfpdlyrkojsx2j6kzalnrqtwedr3id.onion/',
+    note: 'This archive as a Tor hidden service — open via Tor Browser',
+    variant: 'onion',
+  },
   {
     label: 'LinkedIn',
     url: 'https://www.linkedin.com/in/tanay-shukla-23198a334/',

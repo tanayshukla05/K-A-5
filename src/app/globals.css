@@ -3120,6 +3120,166 @@ body[data-route="about"] .bg-video-fallback {
   .artifact--blueprint .artifact-label { font-size: 15px; }
 }
 
+/* --- ONION · the archive's own Tor hidden service — the dark node:
+   near-black card in the archive's own purple hue (Tor's mark),
+   onion-layer rings etched into the corner, Share Tech Mono
+   annotations, and a packet that hops three relay positions —
+   slow and faint at idle, bright and fast on hover. The v3
+   address is shown in full (it wraps) — that string is the point.
+   Zero border-radius (archive rule). --- */
+.artifact--onion {
+  background: oklch(0.17 0.02 310);
+  border: 2px solid oklch(0.62 0.14 310 / 0.75);
+  box-shadow: 4px 4px 0 oklch(0 0 0 / 0.6);
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+/* onion layers: concentric rings etched into the top-right corner */
+.artifact--onion::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-radial-gradient(circle at 88% 18%,
+    transparent 0 9px,
+    oklch(0.7 0.09 310 / 0.07) 9px 10.5px);
+  pointer-events: none;
+}
+/* the packet — hops the three relays, slow and faint at idle */
+.artifact--onion::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 18%;
+  width: 4px;
+  height: 4px;
+  margin-top: -2px;
+  background: oklch(0.68 0.15 310);
+  box-shadow: 0 0 10px oklch(0.6 0.17 310 / 0.8);
+  opacity: 0.3;
+  pointer-events: none;
+  animation: onion-hop 7s ease-in-out infinite;
+}
+@keyframes onion-hop {
+  0%, 24% { left: 18%; opacity: 0.3; }
+  25%, 28% { opacity: 0; }
+  29%, 55% { left: 49%; opacity: 0.3; }
+  56%, 59% { opacity: 0; }
+  60%, 86% { left: 80%; opacity: 0.3; }
+  87%, 90% { opacity: 0; }
+  91%, 99% { left: 18%; opacity: 0; }
+  100% { left: 18%; opacity: 0.3; }
+}
+@keyframes onion-hop-fast {
+  0% { left: 18%; opacity: 1; }
+  33% { left: 49%; opacity: 0.75; }
+  66% { left: 80%; opacity: 1; }
+  100% { left: 18%; opacity: 1; }
+}
+.artifact--onion .artifact-num {
+  color: oklch(0.17 0.02 310);
+  background: oklch(0.62 0.14 310);
+  padding: 0.28rem 0.55rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  opacity: 1;
+}
+.artifact--onion .artifact-label {
+  font-family: 'Michroma', 'Segoe UI', sans-serif;
+  font-size: 19px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: oklch(0.95 0.01 310);
+}
+.artifact--onion .artifact-note {
+  color: oklch(0.72 0.03 310 / 0.8);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.artifact--onion .artifact-url {
+  color: oklch(0.68 0.12 310 / 0.85);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12.5px;
+  letter-spacing: 0.03em;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  opacity: 1;
+}
+.artifact--onion .artifact-go {
+  color: oklch(0.62 0.14 310);
+  transition: color 200ms ease, transform 200ms ease;
+}
+.artifact--onion:hover {
+  border-color: oklch(0.72 0.16 310);
+  box-shadow: 4px 4px 0 oklch(0 0 0 / 0.6), 0 0 22px oklch(0.5 0.14 310 / 0.45);
+}
+.artifact--onion:hover::after {
+  opacity: 1;
+  animation: onion-hop-fast 1.1s linear infinite;
+}
+.artifact--onion:hover .artifact-label {
+  color: oklch(0.88 0.06 310);
+  text-shadow: 0 0 14px oklch(0.6 0.17 310 / 0.6);
+}
+.artifact--onion:hover .artifact-num {
+  background: oklch(0.78 0.16 310);
+  color: oklch(0.13 0.02 310);
+}
+.artifact--onion:hover .artifact-go {
+  color: oklch(0.78 0.16 310);
+  transform: translate(2px, -2px);
+}
+@media (max-width: 700px) {
+  .artifact--onion .artifact-label { font-size: 14px; }
+  .artifact--onion .artifact-url { font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--onion::after { animation: none; left: 49%; opacity: 0.3; }
+}
+
+/* --- LINKS DRAWERS — the Links page splits into two drawers under the
+   menu: .com (clearnet) and .onion (Tor hidden services). Same head
+   grammar as the game cabinets: chip-style tld, dim mono note, hard
+   rule. The .onion head carries the Tor purple of its rows. --- */
+.links-drawer-head {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 2.4rem 0 1.1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid oklch(0.72 0 0 / 0.3);
+}
+.links-drawer:first-of-type .links-drawer-head {
+  margin-top: 1.4rem;
+}
+.links-drawer-tld {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 30px;
+  letter-spacing: 0.06em;
+  color: oklch(0.95 0 0);
+  text-shadow: 0 0 12px oklch(0.72 0 0 / 0.25);
+}
+.links-drawer-note {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: oklch(0.6 0 0);
+  margin-left: auto;
+}
+.links-drawer--onion .links-drawer-tld {
+  color: oklch(0.78 0.16 310);
+  text-shadow: 0 0 14px oklch(0.6 0.17 310 / 0.55);
+}
+.links-drawer--onion .links-drawer-head {
+  border-bottom-color: oklch(0.62 0.14 310 / 0.55);
+}
+.links-drawer--onion .links-drawer-note {
+  color: oklch(0.68 0.09 310 / 0.8);
+}
+
 @media (max-width: 700px) {
   .tag-pill { padding: 0.65rem 0.75rem; }
   .back-link { padding: 0.5rem 0.75rem 0.5rem 0; }
@@ -4488,8 +4648,65 @@ body[data-route="about"] .bg-video-fallback {
   background: oklch(0.1 0 0);
 }
 
+/* — cabinet 01 attract mode: the cartridge's own poster as marquee art — */
+.games-room .game-launch--poster {
+  display: grid;
+  justify-items: center;
+  gap: 1.2rem;
+  padding: 1.6rem 1.4rem;
+}
+.games-room .game-launch-poster {
+  padding: 0;
+  background: none;
+  border: 1px solid oklch(0.72 0 0 / 0.5);
+  box-shadow:
+    8px 8px 0 oklch(0 0 0 / 0.55),
+    0 18px 46px -24px oklch(0.6 0.19 145 / 0.35);
+  cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease;
+}
+.games-room .game-launch-poster img {
+  display: block;
+  height: 560px;
+  width: auto;
+  max-width: 100%;
+}
+.games-room .game-launch-poster:hover,
+.games-room .game-launch-poster:focus-visible {
+  border-color: oklch(0.88 0 0);
+  transform: translateY(-3px);
+}
+.games-room .game-launch-poster:focus-visible {
+  outline: 2px solid oklch(0.88 0 0);
+  outline-offset: 2px;
+}
+.games-room .game-launch-side {
+  display: grid;
+  justify-items: center;
+  gap: 1.2rem;
+  max-width: 350px;
+  text-align: center;
+}
+.games-room .game-launch-head {
+  text-wrap: balance;
+}
+.games-room .game-launch-blurb {
+  font-family: 'VT323', monospace;
+  font-size: 17px;
+  line-height: 1.35;
+  color: oklch(0.6 0 0);
+}
+
 /* — room chrome on small screens — */
 @media (max-width: 700px) {
+  .games-room .game-launch--poster {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  .games-room .game-launch-poster img {
+    width: min(72vw, 290px);
+    height: auto;
+  }
   .games-room .archive-title { font-size: clamp(16px, 4.4vw, 24px); }
   .games-room .game-cab-label { font-size: 10px; }
   .games-room .game-cab-note { font-size: 14px; margin-left: 0; width: 100%; }
