@@ -13,13 +13,20 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline'",
+      // 'wasm-unsafe-eval': the self-hosted EmulatorJS cores compile WebAssembly.
+      // blob: : the core loader runs its extracted script and compression workers
+      // from in-memory blob URLs (never a network origin).
+      "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob:",
       "script-src-attr 'none'",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data:",
       "media-src 'self' data:",
       "font-src 'self'",
-      "connect-src 'self'",
+      // blob: : games are loaded from a local file picker into an object URL;
+      // the emulator fetches the ROM from that blob. Nothing ever leaves the device.
+      "connect-src 'self' blob:",
+      // compression workers (zip/7z) are created from blob URLs
+      "worker-src 'self' blob:",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",

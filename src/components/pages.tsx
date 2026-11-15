@@ -19,6 +19,7 @@ import type { Route } from '@/lib/router'
 import { isCtfEntry, ctfSourceOf, type CtfSource } from '@/lib/entry-group'
 import { LINKS, type ArchiveLink } from '@/lib/links'
 import { MarioGame } from '@/components/mario-game'
+import { SnesCabinet } from '@/components/snes-cabinet'
 import { GiftOverlay } from '@/components/gift-overlay'
 
 type NavFn = (route: Route) => void
@@ -572,8 +573,10 @@ export function FilesPage({ navigate }: { navigate: NavFn }) {
 
 /* ============================================================
    GAMES — playable things built for and hosted by the archive.
-   First cabinet: a complete side-scrolling platformer written
+   Cabinet 01: a complete side-scrolling platformer written
    from scratch (original engine, sprites, and sound — no ROMs).
+   Cabinet 02: a self-hosted Super Nintendo emulator that plays
+   the visitor's own cartridges, entirely in the browser.
    ============================================================ */
 export function GamesPage({ navigate }: { navigate: NavFn }) {
   return (
@@ -584,10 +587,10 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
       <div className="archive-eyebrow">GAMES</div>
       <h1 className="archive-title">Games</h1>
       <p className="archive-subtitle">
-        Playable things from the archive. First cabinet: SUPER ARCHIVE
-        BROS. — a complete side-scrolling platformer built from scratch
-        for this site. Three courses, original sprites, synthesized sound.
-        No ROMs, no emulators — every pixel and every note is code.
+        Playable things from the archive. Cabinet 01: SUPER ARCHIVE BROS. —
+        a complete side-scrolling platformer built from scratch for this
+        site. Cabinet 02: a Super Nintendo with an open cartridge slot —
+        bring your own game, it runs right here in the browser.
       </p>
 
       <div className="game-cabinet">
@@ -601,6 +604,20 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
         </div>
         <div className="game-cab-foot">
           <span className="game-keys">← → MOVE · Z JUMP (HOLD = HIGHER) · X RUN · ENTER PAUSE · M SOUND</span>
+        </div>
+      </div>
+
+      <div className="game-cabinet game-cabinet--snes">
+        <div className="game-cab-head">
+          <span className="game-num">02</span>
+          <span className="game-cab-label">Super Nintendo</span>
+          <span className="game-cab-note">bring your own cartridge · runs in the browser · nothing uploaded</span>
+        </div>
+        <div className="game-screen">
+          <SnesCabinet />
+        </div>
+        <div className="game-cab-foot">
+          <span className="game-keys">ROM FILE FROM YOUR DEVICE · SAVE STATES + TOUCH CONTROLS BUILT IN</span>
         </div>
       </div>
     </div>
