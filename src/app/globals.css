@@ -698,19 +698,24 @@ body[data-route="about"] .bg-video-fallback {
 }
 
 /* ============================================================
-   GOLD LINKS — the Links menu item: metallic gold gradient swept
-   through the letters (background-clip: text), with a soft glow.
-   The sweep ping-pongs 0% → 100% → 0% so the loop is seamless.
+   GOLD LINKS — the Links menu entry is solid gold. The word is
+   filled with a metallic gold gradient (background-clip: text)
+   that sweeps like light travelling across a polished surface,
+   and carries a warm drop-shadow glow. Five four-point star
+   glints pop and spin around it, staggered to the same 2.4s
+   period so word and sparkles breathe as one. The sparkle layer
+   is pointer-events:none. Reduced-motion keeps the gold and
+   drops the sparkle entirely (static word, no particles).
    ============================================================ */
 .archive-sidebar-link--gold > span:first-child {
-  position: relative; /* anchor for the sparkle layer */
+  position: relative; /* anchors the sparkles */
   background: linear-gradient(
     100deg,
     #8a6a1f 0%,
     #c9a227 22%,
-    #ffd700 38%,
+    #ffd700 40%,
     #fff8d0 50%,
-    #ffd700 62%,
+    #ffd700 60%,
     #c9a227 78%,
     #8a6a1f 100%
   );
@@ -721,50 +726,39 @@ body[data-route="about"] .bg-video-fallback {
   animation: gold-glitter 2.4s ease-in-out infinite;
   filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.4));
 }
-
 @keyframes gold-glitter {
-  0%   { background-position: 0% 0; }
-  50%  { background-position: 100% 0; }
-  100% { background-position: 0% 0; }
+  0%, 100% { background-position: 0% 0; }
+  50%      { background-position: 100% 0; }
 }
 
-/* ============================================================
-   GOLD SPARKLES — tiny 4-point star particles that pop, spin and
-   fade around the gold "Links" text. Each particle pops during the
-   first ~35% of a shared 2.4s cycle (synced with the gold sweep)
-   at a staggered delay, so something is always twinkling.
-   ============================================================ */
+/* — gold sparkle glints around the word — */
 .nav-sparkles {
   position: absolute;
-  /* Bleeds slightly past the text so stars land above/below it too */
   inset: -4px -5px;
   pointer-events: none;
 }
 .nav-sparkles i {
   position: absolute;
-  width: 4px;
-  height: 4px;
-  /* 4-point sparkle star */
-  clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
-  background: #fff8d0;
+  width: 5px;
+  height: 5px;
+  background: #ffd700;
+  clip-path: polygon(50% 0, 65% 35%, 100% 50%, 65% 65%, 50% 100%, 35% 65%, 0 50%, 35% 35%);
   opacity: 0;
-  filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.9));
+  transform: scale(0);
+  filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.8));
   animation: nav-sparkle 2.4s ease-in-out infinite;
 }
-.nav-sparkles i:nth-child(even) { background: #ffd700; }
-/* Staggered placements + delays: each star pops at a different
-   moment and spot, sizes alternate small/large. */
-.nav-sparkles i:nth-child(1) { left: 4%;  top: 20%;  width: 5px; height: 5px; animation-delay: 0s;    }
-.nav-sparkles i:nth-child(2) { left: 28%; top: 78%;  width: 3px; height: 3px; animation-delay: 0.5s;  }
-.nav-sparkles i:nth-child(3) { left: 50%; top: -8%;  width: 4px; height: 4px; animation-delay: 1s;    }
-.nav-sparkles i:nth-child(4) { left: 72%; top: 84%;  width: 5px; height: 5px; animation-delay: 1.45s; }
-.nav-sparkles i:nth-child(5) { left: 94%; top: 12%;  width: 3px; height: 3px; animation-delay: 1.9s;  }
-
-/* Pop: invisible → burst open with a spin → shrink away → rest */
+/* five glints, staggered around the word */
+.nav-sparkles i:nth-child(1) { left: -2px;   top: -1px;     animation-delay: 0s; }
+.nav-sparkles i:nth-child(2) { left: 38%;    top: -4px;     animation-delay: 0.48s; }
+.nav-sparkles i:nth-child(3) { right: -1px;  top: 40%;      animation-delay: 0.96s; }
+.nav-sparkles i:nth-child(4) { left: 22%;    bottom: -4px;  animation-delay: 1.44s; }
+.nav-sparkles i:nth-child(5) { right: 18%;   bottom: -2px;  animation-delay: 1.92s; }
 @keyframes nav-sparkle {
-  0%, 10%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
-  18%           { opacity: 1; transform: scale(1) rotate(45deg); }
-  32%           { opacity: 0; transform: scale(0.2) rotate(90deg); }
+  0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+  10%      { opacity: 1;  transform: scale(1) rotate(45deg); }
+  40%      { opacity: 0.85; transform: scale(0.7) rotate(120deg); }
+  55%      { opacity: 0;  transform: scale(0) rotate(180deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -772,6 +766,95 @@ body[data-route="about"] .bg-video-fallback {
     animation: none;
   }
   .nav-sparkles {
+    display: none;
+  }
+}
+
+/* ============================================================
+   ARCADE LINKS — the Games menu item: an 8-bit marquee sign. A
+   HARD-stepped neon ramp (green → cyan, no smooth blend) that
+   color-cycles through the whole spectrum via hue-rotate like an
+   arcade sign, with CRT scanlines burned into the letters, a
+   dying-tube flicker and falling pixel debris that descends in
+   discrete 8-bit jumps.
+   ============================================================ */
+.archive-sidebar-link--arcade > span:first-child {
+  position: relative; /* anchor for the pixel-debris layer */
+  background-image:
+    /* CRT scanlines burned into the letters */
+    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.6) 0 1px, transparent 1px 3px),
+    /* hard-stepped neon ramp — colour blocks, not a metallic fade */
+    linear-gradient(90deg,
+      #39ff14 0%, #39ff14 17%,
+      #00e5ff 17%, #00e5ff 34%,
+      #39ff14 34%, #39ff14 51%,
+      #00e5ff 51%, #00e5ff 68%,
+      #39ff14 68%, #39ff14 85%,
+      #00e5ff 85%, #00e5ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: arcade-cycle 5s linear infinite;
+}
+/* The glow is drawn BEFORE hue-rotate in the filter chain, so text
+   and glow cycle through the spectrum together. The dips mid-cycle
+   are a neon tube flickering before it surges back. */
+@keyframes arcade-cycle {
+  0%   { filter: drop-shadow(0 0 5px rgb(57 255 20 / 0.45)) hue-rotate(0deg); }
+  42%  { filter: drop-shadow(0 0 8px rgb(57 255 20 / 0.6)) hue-rotate(288deg); }
+  /* dying-tube flicker: two quick dips, then the surge */
+  45%  { filter: drop-shadow(0 0 1px rgb(57 255 20 / 0.15)) hue-rotate(288deg); }
+  47%  { filter: drop-shadow(0 0 9px rgb(57 255 20 / 0.7)) hue-rotate(290deg); }
+  49%  { filter: drop-shadow(0 0 2px rgb(57 255 20 / 0.2)) hue-rotate(290deg); }
+  51%  { filter: drop-shadow(0 0 8px rgb(57 255 20 / 0.65)) hue-rotate(292deg); }
+  100% { filter: drop-shadow(0 0 5px rgb(57 255 20 / 0.45)) hue-rotate(360deg); }
+}
+
+/* ============================================================
+   PIXEL DEBRIS — falling 8-bit pixels around the Games label.
+   The Links flames rise; these bits DROP with stepped motion
+   (steps(1) between keyframes = hard jumps, the game-feel
+   opposite of easing) while flickering like exploded sprite
+   chunks. Green / cyan / white, sizes vary.
+   ============================================================ */
+.nav-pixels {
+  position: absolute;
+  inset: -5px -4px -9px;
+  pointer-events: none;
+}
+.nav-pixels i {
+  position: absolute;
+  top: 0;
+  width: 3px;
+  height: 3px;
+  opacity: 0;
+  animation: nav-pixel-fall 3.2s steps(1, end) infinite;
+}
+.nav-pixels i:nth-child(1) { left: 5%;  background: #39ff14; box-shadow: 0 0 4px rgb(57 255 20 / 0.8);  animation-delay: 0s; }
+.nav-pixels i:nth-child(2) { left: 27%; background: #00e5ff; box-shadow: 0 0 4px rgb(0 229 255 / 0.8); animation-delay: 0.6s; }
+.nav-pixels i:nth-child(3) { left: 49%; background: #ffffff; box-shadow: 0 0 4px rgb(255 255 255 / 0.7); animation-delay: 1.2s; }
+.nav-pixels i:nth-child(4) { left: 69%; background: #39ff14; box-shadow: 0 0 4px rgb(57 255 20 / 0.8);  animation-delay: 1.8s; width: 4px; height: 4px; }
+.nav-pixels i:nth-child(5) { left: 88%; background: #00e5ff; box-shadow: 0 0 4px rgb(0 229 255 / 0.8); animation-delay: 2.4s; }
+
+/* Spawn → drop in hard pixel steps with flicker → vanish → rest */
+@keyframes nav-pixel-fall {
+  0%, 7%   { opacity: 0; transform: translateY(0); }
+  9%       { opacity: 1; transform: translateY(-1px); }
+  16%      { opacity: 0.9; transform: translateY(2px); }
+  23%      { opacity: 1;   transform: translateY(4px); }
+  30%      { opacity: 0.35; transform: translateY(7px); }
+  37%      { opacity: 1;   transform: translateY(9px); }
+  44%      { opacity: 0.5; transform: translateY(12px); }
+  51%      { opacity: 1;   transform: translateY(14px); }
+  58%      { opacity: 0;   transform: translateY(17px); }
+  100%     { opacity: 0;   transform: translateY(17px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .archive-sidebar-link--arcade > span:first-child {
+    animation: none;
+  }
+  .nav-pixels {
     display: none;
   }
 }

@@ -29,6 +29,7 @@ type NavItem = {
   route: Route
   count?: number
   gold?: boolean
+  arcade?: boolean
 }
 
 // --- MENU CLICK SOUNDS -----------------------------------------------------
@@ -134,7 +135,7 @@ export function ArchiveShell() {
     { label: 'Research Notes', route: { name: 'research' }, count: researchCount },
     { label: 'Cheat Sheets', route: { name: 'cheatsheets' } },
     { label: 'File Archive', route: { name: 'files' } },
-    { label: 'Games', route: { name: 'games' } },
+    { label: 'Games', route: { name: 'games' }, arcade: true },
     { label: 'Links', route: { name: 'links' }, gold: true },
   ]
 
@@ -285,13 +286,18 @@ function NavLink({ item, active, onClick }: { item: NavItem; active: boolean; on
   return (
     <button
       type="button"
-      className={`archive-sidebar-link ${active ? 'archive-sidebar-link--active' : ''} ${item.gold ? 'archive-sidebar-link--gold' : ''}`}
+      className={`archive-sidebar-link ${active ? 'archive-sidebar-link--active' : ''} ${item.gold ? 'archive-sidebar-link--gold' : ''} ${item.arcade ? 'archive-sidebar-link--arcade' : ''}`}
       onClick={onClick}
     >
       <span>
         {item.label}
         {item.gold && (
           <span className="nav-sparkles" aria-hidden="true">
+            <i /><i /><i /><i /><i />
+          </span>
+        )}
+        {item.arcade && (
+          <span className="nav-pixels" aria-hidden="true">
             <i /><i /><i /><i /><i />
           </span>
         )}
