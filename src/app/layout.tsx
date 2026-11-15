@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Pandit Tanay Shukla Ji Maharaj" }],
   icons: {
-    icon: "/favicon.png",
+    icon: "/logo.png",
     apple: "/logo.png",
   },
   openGraph: {
