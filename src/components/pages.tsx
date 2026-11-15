@@ -580,7 +580,7 @@ export function FilesPage({ navigate }: { navigate: NavFn }) {
    ============================================================ */
 export function GamesPage({ navigate }: { navigate: NavFn }) {
   return (
-    <div className="archive-container">
+    <div className="archive-container games-room">
       <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
         ← Back
       </button>
