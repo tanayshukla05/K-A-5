@@ -60,3 +60,8 @@ local-*
 *.z64
 *.v64
 !public/roms/*.sfc
+
+# fan-game builds with ripped commercial assets (Mario, Ryu, Shredder,
+# Joker, Spider-Man etc.) - never committed, never served. Local play only.
+/MultiHero094/
+*.exe
