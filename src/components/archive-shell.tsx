@@ -31,21 +31,43 @@ type NavItem = {
   gold?: boolean
 }
 
-// --- HOME menu click sound -------------------------------------------------
-// Lazy singleton: created on the first click (a real user gesture, so iOS
-// Safari and Android Chrome both allow playback) and restarted from the top
-// on every further click. Playback rejection (e.g. missing user activation)
-// is swallowed — the click must never break navigation.
-let homeSound: HTMLAudioElement | null = null
+// --- MENU CLICK SOUNDS -----------------------------------------------------
+const HOME_SOUND = '/home-click.mp3'
+const ABOUT_SOUND = '/sounds/about-click.mp3'
+// ABOUT — SAD BONES "GRAVITY" (type beat, 160k). The track opens on a quiet
+// melody intro; the first bass hit lands at ~0:16.3 (found by low-frequency
+// energy analysis of the waveform), so playback starts there instead of the
+// file head. If the track is ever replaced, re-measure or set this back to 0.
+const ABOUT_SOUND_START = 16.2
+// Which menu owns which sound — navigation uses this to stop a sound the
+// moment its menu is no longer on this list. The About beat is allowed to
+// keep playing on Home; it only stops when the visitor enters any other
+// section.
+const SOUND_ROUTE: Record<string, string[]> = {
+  [ABOUT_SOUND]: ['about', 'home'],
+  [HOME_SOUND]: ['home'],
+}
 
-function playHomeSound() {
+// Lazy singletons keyed by source: created on the first click (a real user
+// gesture, so iOS Safari and Android Chrome both allow playback) and
+// restarted from the top on every further click. Playback rejection (e.g.
+// missing user activation) is swallowed — the click must never break
+// navigation.
+const menuSounds = new Map<string, HTMLAudioElement>()
+
+function playMenuSound(src: string, start = 0) {
   if (typeof window === 'undefined') return
-  if (!homeSound) {
-    homeSound = new Audio('/home-click.mp3')
-    homeSound.preload = 'auto'
+  let sound = menuSounds.get(src)
+  if (!sound) {
+    // The media fragment (#t=…) makes the very first load seek straight to
+    // the start point; the currentTime line below re-anchors every later
+    // click to it as well.
+    sound = new Audio(start > 0 ? src + '#t=' + start : src)
+    sound.preload = 'auto'
+    menuSounds.set(src, sound)
   }
-  homeSound.currentTime = 0
-  void homeSound.play().catch(() => {})
+  sound.currentTime = start
+  void sound.play().catch(() => {})
 }
 
 export function ArchiveShell() {
@@ -80,8 +102,16 @@ export function ArchiveShell() {
   // The shell mirrors the active route name onto <body data-route>, and
   // globals.css keys on that to lift the blur only for "about" (both the
   // video and its GIF fallback). Every other page keeps the soft texture.
+  // MENU SOUND CUTOFF — a menu sound stops as soon as the active route is
+  // no longer one of its allowed routes; without this the About beat would
+  // keep playing for another two minutes while the visitor reads other
+  // pages. (Home keeps the beat playing — see SOUND_ROUTE.)
   useEffect(() => {
     document.body.dataset.route = route.name
+    menuSounds.forEach((sound, src) => {
+      const owner = SOUND_ROUTE[src]
+      if (owner && !owner.includes(route.name)) sound.pause()
+    })
   }, [route.name])
 
   const entries = useAllEntries()
@@ -191,7 +221,8 @@ export function ArchiveShell() {
                   // Sound fires synchronously inside the click handler
                   // (before any navigation work) so mobile browsers keep
                   // the user-activation chain intact.
-                  if (item.route.name === 'home') playHomeSound()
+                  if (item.route.name === 'home') playMenuSound(HOME_SOUND)
+                  if (item.route.name === 'about') playMenuSound(ABOUT_SOUND, ABOUT_SOUND_START)
                   navigate(item.route)
                 }}
               />

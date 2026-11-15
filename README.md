@@ -44,7 +44,7 @@ syntax-highlighter bundle.
 │   ├── emulatorjs/          # Self-hosted EmulatorJS runtime (cabinet 03)
 │   ├── multihero/           # MultiHero WASM web build (cabinet 01)
 │   ├── roms/                # SNES cartridges + CREDITS.md attribution
-│   ├── sounds/              # UI + game sounds
+│   ├── sounds/              # UI + game sounds (about-click.mp3 = ABOUT menu beat)
 │   ├── fonts/               # Site fonts
 │   ├── logo.png             # Used by loader + header
 │   ├── bg-boulder.mp4       # Fixed background video (rain-boulder loop)

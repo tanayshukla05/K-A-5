@@ -86,12 +86,13 @@ const gameFrameHeaders = [
 ];
 
 /**
- * Cache rules for immutable static game content. Cartridges and the
- * EmulatorJS runtime never change between deploys (a content change ships
- * with a deploy, which browsers revalidate on HTML), so they are cached
+ * Cache rules for immutable static game content. Cartridges, the
+ * EmulatorJS runtime and the menu sounds never change between deploys (a
+ * content change ships with a deploy — swap the file name too, since
+ * browsers keep immutable entries for a year), so they are cached
  * aggressively: repeat visits — and mobile data — load them from the
  * browser cache instead of re-downloading megabytes. This is the "no lag
- * on repeat visits" guarantee for cabinets 02 and 03.
+ * on repeat visits" guarantee for the Games room and the menu sounds.
  */
 const cacheHeaders = [
   { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
@@ -116,6 +117,10 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/emulatorjs/:path*",
+        headers: cacheHeaders,
+      },
+      {
+        source: "/sounds/:path*",
         headers: cacheHeaders,
       },
     ];
