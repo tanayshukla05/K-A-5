@@ -16,6 +16,12 @@
     //console.log(scriptPath);
     function loadScript(file) {
         return new Promise(function(resolve) {
+            // archive patch: the emulator bundle declares top-level classes, so
+            // re-executing it on a second boot of the same page throws
+            // "EJS_STORAGE has already been declared". loader.js constructs the
+            // EmulatorJS instance itself, so when the bundle is already resident
+            // we can skip re-injection entirely (identical semantics, no error).
+            if (file === "emulator.min.js" && window.EJS_BUNDLE_READY) { resolve(); return; }
             let script = document.createElement("script");
             script.src = function() {
                 if ("undefined" != typeof EJS_paths && typeof EJS_paths[file] === "string") {
@@ -26,7 +32,10 @@
                     return scriptPath + "src/" + file;
                 }
             }();
-            script.onload = resolve;
+            script.onload = function() {
+                if (file === "emulator.min.js") { try { window.EJS_BUNDLE_READY = true; } catch (e) {} }
+                resolve();
+            };
             script.onerror = () => {
                 filesmissing(file).then(e => resolve());
             }

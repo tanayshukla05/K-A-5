@@ -589,8 +589,8 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
       <p className="archive-subtitle">
         Playable things from the archive. Cabinet 01: SUPER ARCHIVE BROS. —
         a complete side-scrolling platformer built from scratch for this
-        site. Cabinet 02: a Super Nintendo with an open cartridge slot —
-        bring your own game, it runs right here in the browser.
+        site. Cabinet 02: a Super Nintendo with its games pre-installed —
+        tap a title on the shelf and it runs right here in the browser.
       </p>
 
       <div className="game-cabinet">
@@ -611,13 +611,13 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
         <div className="game-cab-head">
           <span className="game-num">02</span>
           <span className="game-cab-label">Super Nintendo</span>
-          <span className="game-cab-note">bring your own cartridge · runs in the browser · nothing uploaded</span>
+          <span className="game-cab-note">games pre-installed · tap and play · nothing to bring</span>
         </div>
         <div className="game-screen">
           <SnesCabinet />
         </div>
         <div className="game-cab-foot">
-          <span className="game-keys">ROM FILE FROM YOUR DEVICE · SAVE STATES + TOUCH CONTROLS BUILT IN</span>
+          <span className="game-keys">4 GAMES INSTALLED · SAVE STATES + TOUCH CONTROLS BUILT IN · CREDITS AT /ROMS</span>
         </div>
       </div>
     </div>

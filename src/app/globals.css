@@ -3828,10 +3828,11 @@ body[data-route="about"] .bg-video-fallback {
 
 /* ============================================================
    GAMES — cabinet 02: the Super Nintendo. Same chrome, different
-   material: moulded plastic (fine horizontal grain), a real
-   cartridge slot graphic, and a cartridge label once a game is
-   inserted. EmulatorJS paints its own UI inside .snes-holder;
-   the cabinet only shapes the slot, the plate and the stage.
+   material: moulded plastic (fine horizontal grain) and a game
+   shelf — every cartridge pre-installed, homebrew released free
+   by its author (attribution: public/roms/CREDITS.md). Tap a
+   title, the cabinet powers on. EmulatorJS paints its own UI
+   inside .snes-holder; the cabinet only shapes shelf and stage.
    ============================================================ */
 .game-cabinet--snes .game-cab-head {
   border-bottom-style: double;
@@ -3843,97 +3844,98 @@ body[data-route="about"] .bg-video-fallback {
     repeating-linear-gradient(0deg, oklch(0.14 0 0) 0 2px, oklch(0.115 0 0) 2px 4px),
     radial-gradient(ellipse at 50% 40%, oklch(0.19 0 0) 0%, oklch(0.07 0 0) 100%);
 }
-.snes-file-input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
+/* — the game shelf — */
+.snes-shelf {
+  max-width: 680px;
+  margin: 0 auto;
 }
-.snes-drop {
-  border: 1px dashed oklch(0.72 0 0 / 0.35);
-  outline: 1px solid oklch(0.72 0 0 / 0.14);
-  outline-offset: 4px;
-  min-height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.4rem 1.1rem;
-}
-.snes-drop:has(.snes-live) {
-  border-style: solid;
-  border-color: oklch(0.72 0 0 / 0.14);
-  outline: none;
-  padding: 0.9rem 0.9rem 1rem;
-}
-/* — the empty slot — */
-.snes-empty {
-  text-align: center;
-  max-width: 560px;
-}
-.snes-slot {
-  position: relative;
-  width: min(320px, 78%);
-  height: 30px;
-  margin: 0 auto 1.4rem;
-  background: oklch(0.05 0 0);
-  border: 1px solid oklch(0.72 0 0 / 0.4);
-  box-shadow: inset 0 4px 10px oklch(0 0 0 / 0.9), inset 0 -1px 0 oklch(1 0 0 / 0.06);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.9rem;
-}
-.snes-slot::after {
-  /* the slot mouth */
-  content: '';
-  position: absolute;
-  left: 8%;
-  right: 8%;
-  top: 50%;
-  height: 2px;
-  background: oklch(0.32 0 0);
-  box-shadow: 0 1px 0 oklch(0.02 0 0);
-}
-.snes-slot-label {
-  position: relative;
-  z-index: 1;
+.snes-shelf-head {
   font-family: 'Space Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.3em;
+  font-size: 10px;
+  letter-spacing: 0.28em;
   color: oklch(0.55 0 0);
-  background: oklch(0.05 0 0);
-  padding: 0 0.5rem;
-}
-.snes-slot-mark {
-  display: none;
-}
-.snes-empty-title {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 13px;
-  color: oklch(0.92 0 0);
-  text-shadow: 0 0 14px oklch(0.6 0.19 145 / 0.3);
-  margin-bottom: 0.8rem;
-}
-.snes-empty-copy {
-  font-family: 'VT323', monospace;
-  font-size: 17px;
-  line-height: 1.45;
-  color: oklch(0.62 0 0);
+  text-align: center;
   margin-bottom: 1.1rem;
 }
-.snes-load-btn {
-  font-size: 12px;
-  padding: 0.55rem 1.2rem;
+.snes-shelf-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  display: grid;
+  gap: 0.6rem;
 }
-.snes-empty-note {
-  margin-top: 1rem;
+.snes-shelf-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-align: left;
+  background: oklch(0.17 0 0);
+  border: 1px solid oklch(0.72 0 0 / 0.45);
+  box-shadow: 3px 3px 0 oklch(0 0 0 / 0.5);
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  color: inherit;
+  transition: background 0.12s, border-color 0.12s, box-shadow 0.12s, transform 0.12s;
+}
+.snes-shelf-item:hover,
+.snes-shelf-item:focus-visible {
+  background: oklch(0.2 0 0);
+  border-color: oklch(0.92 0 0 / 0.9);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 oklch(0 0 0 / 0.55);
+  outline: none;
+}
+.snes-shelf-num {
+  flex: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: oklch(0.45 0 0);
+}
+.snes-shelf-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+.snes-shelf-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: oklch(0.93 0 0);
+  text-shadow: 0 0 14px oklch(0.6 0.19 145 / 0.3);
+}
+.snes-shelf-meta {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: oklch(0.55 0 0);
+}
+.snes-shelf-blurb {
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  line-height: 1.35;
+  color: oklch(0.62 0 0);
+}
+.snes-shelf-play {
+  flex: none;
+  margin-left: auto;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: oklch(0.72 0 0);
+}
+.snes-shelf-item:hover .snes-shelf-play,
+.snes-shelf-item:focus-visible .snes-shelf-play {
+  color: oklch(0.92 0 0);
+}
+.snes-shelf-note {
   font-family: 'VT323', monospace;
   font-size: 15px;
   color: oklch(0.42 0 0);
+  text-align: center;
 }
-/* — cartridge inserted — */
+/* — cartridge label while a game runs — */
 .snes-cart {
   display: flex;
   align-items: center;
@@ -4020,7 +4022,9 @@ body[data-route="about"] .bg-video-fallback {
   padding: 0.5rem 0.8rem;
 }
 @media (max-width: 700px) {
-  .snes-drop { min-height: 170px; padding: 1.1rem 0.8rem; }
+  .snes-shelf-item { flex-wrap: wrap; padding: 0.6rem 0.7rem; }
+  .snes-shelf-play { margin-left: 0; width: 100%; }
+  .snes-shelf-blurb { font-size: 15px; }
   .snes-cart { flex-wrap: wrap; }
   .snes-cart-meta { margin-left: 0; width: 100%; }
   .snes-live-ui { flex-wrap: wrap; }

@@ -3,70 +3,98 @@
 /**
  * SNES CABINET — cabinet 02 of the Games room.
  *
- * Plays Super Nintendo games with the self-hosted EmulatorJS runtime
- * (public/emulatorjs/data/ — no CDN, archive law). It runs whatever the
- * VISITOR brings: a ROM file chosen from their own device is read through
- * an object URL in memory and handed to the emulator. It is never
- * uploaded anywhere — there is no upload code in this file, and the
- * Content-Security-Policy forbids it.
+ * A shelf of pre-installed cartridges. Every game here is homebrew released
+ * free by its own author (per-game attribution: public/roms/CREDITS.md), so
+ * the cabinet ships complete — visitors tap a title and it plays. No file
+ * picker, no downloads, nothing to bring.
  *
- * Commercial ROMs are not hosted by the archive; this cabinet only runs
- * files the user already owns. Homebrew and freely-distributable ROMs are
- * always welcome.
+ * The archive never hosts commercial ROMs; this shelf only carries
+ * author-released homebrew. Games run on the self-hosted EmulatorJS runtime
+ * (public/emulatorjs/data/ — no CDN, archive law) and are fetched from
+ * same-origin paths (/roms/…), so the Content-Security-Policy stays narrow.
  *
- * Lifecycle: each ROM selection mounts a fresh <div key=...> so
- * EmulatorJS boots clean; the previous object URL is revoked on change
- * and unmount.
+ * Lifecycle: each selection mounts a fresh .snes-mount so EmulatorJS boots
+ * clean; the loader script is removed on eject and unmount.
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const RUNTIME = '/emulatorjs/data/loader.js'
 
-type SnesRom = {
-  name: string
-  size: number
-  url: string
+type ShelfGame = {
+  id: string
+  title: string
+  /** same-origin path; EmulatorJS fetches this itself */
+  file: string
+  size: string
+  author: string
+  year: string
+  genre: string
+  players: string
+  blurb: string
 }
 
-/** extensions the snes9x core + compression loaders understand */
-const ROM_EXT = /\.(smc|sfc|swc|fig|bin|zip|7z)$/i
-const prettyBytes = (n: number) => (n >= 1048576 ? `${(n / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(n / 1024))} KB`)
+/** author-released homebrew — verified sources in public/roms/CREDITS.md */
+const SHELF: ShelfGame[] = [
+  {
+    id: 'super-boss-gaiden',
+    title: 'Super Boss Gaiden',
+    file: '/roms/super-boss-gaiden.sfc',
+    size: '0.5 MB',
+    author: 'ChronoMoogle & D4S',
+    year: '2016',
+    genre: 'action platformer',
+    players: '1 player',
+    blurb:
+      'A CEO rampages through Sony HQ after the SNES-CD prototype leaks. Tight, hard, funny — three secret characters hidden inside.',
+  },
+  {
+    id: 'uwol-quest-for-money',
+    title: 'UWOL: Quest for Money',
+    file: '/roms/uwol-quest-for-money.sfc',
+    size: '0.25 MB',
+    author: 'Mojon Twins · port: Alekmaul',
+    year: '2015',
+    genre: 'puzzle platformer',
+    players: '1 player',
+    blurb:
+      'Steal 255 gold coins out of the Storm Palace maze — every floor needs all its coins before the arrow lets you descend.',
+  },
+  {
+    id: 'jet-pilot-rising',
+    title: 'Jet Pilot Rising',
+    file: '/roms/jet-pilot-rising.sfc',
+    size: '0.5 MB',
+    author: 'd4s · music: stargazer',
+    year: '2013',
+    genre: 'one-button flyer',
+    players: '1 player',
+    blurb:
+      'A cat riding a rocket, coded in 24 hours for the SNES\u2019s 23rd birthday. Thrust is the only button — the sky does the rest.',
+  },
+  {
+    id: 'n-warp-daisakusen',
+    title: 'N-Warp Daisakusen',
+    file: '/roms/n-warp-daisakusen.sfc',
+    size: '2 MB',
+    author: 'd4s · music: maf',
+    year: '2008',
+    genre: 'arena brawler',
+    players: '2–8 players (one keyboard)',
+    blurb:
+      'Eight fighters, one arena, zero mercy. Player 1 vs player 2 on the same keyboard — remap controls in the emulator menu.',
+  },
+]
 
 export function SnesCabinet() {
-  const [rom, setRom] = useState<SnesRom | null>(null)
+  const [game, setGame] = useState<ShelfGame | null>(null)
   const [booted, setBooted] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
   const holderRef = useRef<HTMLDivElement>(null)
-  const romRef = useRef<SnesRom | null>(null)
-
-  const pick = useCallback((file: File | null) => {
-    if (!file) return
-    if (!ROM_EXT.test(file.name)) {
-      setError(`"${file.name}" is not a SNES ROM. Expected .smc, .sfc, .fig, .bin, .zip or .7z`)
-      return
-    }
-    setError(null)
-    setBooted(false)
-    const prev = romRef.current
-    if (prev) URL.revokeObjectURL(prev.url)
-    const next: SnesRom = { name: file.name, size: file.size, url: URL.createObjectURL(file) }
-    romRef.current = next
-    setRom(next)
-  }, [])
-
-  /* clean up the object URL when the cabinet unmounts */
-  useEffect(() => {
-    return () => {
-      const r = romRef.current
-      if (r) URL.revokeObjectURL(r.url)
-    }
-  }, [])
 
   /* boot the loader exactly once per mounted container */
   useEffect(() => {
-    if (!rom) return
+    if (!game) return
     const holder = holderRef.current
     if (!holder) return
     holder.innerHTML = ''
@@ -77,11 +105,13 @@ export function SnesCabinet() {
     const w = window as unknown as Record<string, unknown>
     w.EJS_player = '.snes-mount'
     w.EJS_core = 'snes'
-    w.EJS_gameUrl = rom.url
-    w.EJS_gameName = rom.name.replace(ROM_EXT, '').replace(/[_-]+/g, ' ').trim()
+    w.EJS_gameUrl = game.file
+    w.EJS_gameName = game.title
     w.EJS_pathtodata = '/emulatorjs/data/'
     w.EJS_startOnLoaded = false
-    w.EJS_disableAutoLang = true // archive is English-only; avoids a 404 for locale JSONs
+    // NOTE: upstream reads this as `disableAutoLang !== false` (inverted), so
+    // `false` is what actually skips the system-locale JSON fetch (and its 404).
+    w.EJS_disableAutoLang = false
     w.EJS_Buttons = { netplay: false } // no third-party netplay server
     w.EJS_ready = () => setBooted(true)
 
@@ -98,83 +128,66 @@ export function SnesCabinet() {
       holder.innerHTML = ''
       setBooted(false)
     }
-  }, [rom])
+  }, [game])
 
   return (
     <div className="snes-cab">
-      <input
-        ref={inputRef}
-        type="file"
-        accept=".smc,.sfc,.swc,.fig,.bin,.zip,.7z"
-        className="snes-file-input"
-        onChange={e => {
-          pick(e.target.files?.[0] ?? null)
-          e.currentTarget.value = '' // allow re-picking the same file
-        }}
-      />
-      <div className="snes-drop"
-        onDragOver={e => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy' }}
-        onDrop={e => { e.preventDefault(); pick(e.dataTransfer.files?.[0] ?? null) }}
-      >
-        {!rom && (
-          <div className="snes-empty">
-            <div className="snes-slot" aria-hidden="true">
-              <span className="snes-slot-label">CARTRIDGE SLOT</span>
-              <span className="snes-slot-mark" aria-hidden="true">▚▚▚</span>
-            </div>
-            <p className="snes-empty-title">Insert your cartridge</p>
-            <p className="snes-empty-copy">
-              Choose a SNES ROM file from this device — .smc · .sfc · .fig · .bin · .zip · .7z.
-              The game runs entirely in your browser. It is never uploaded: this cabinet
-              has no server to send it to.
-            </p>
+      {!game && (
+        <div className="snes-shelf">
+          <p className="snes-shelf-head">GAMES SHIPPED WITH THIS CABINET — TAP ONE, IT PLAYS</p>
+          <ul className="snes-shelf-list">
+            {SHELF.map((g, i) => (
+              <li key={g.id}>
+                <button
+                  type="button"
+                  className="snes-shelf-item"
+                  onClick={() => { setError(null); setBooted(false); setGame(g) }}
+                >
+                  <span className="snes-shelf-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="snes-shelf-body">
+                    <span className="snes-shelf-title">{g.title}</span>
+                    <span className="snes-shelf-meta">
+                      {g.author} · {g.year} · {g.genre} · {g.players} · {g.size}
+                    </span>
+                    <span className="snes-shelf-blurb">{g.blurb}</span>
+                  </span>
+                  <span className="snes-shelf-play" aria-hidden="true">PLAY ▸</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          <p className="snes-shelf-note">
+            Every cartridge here is homebrew — released free by its own author.
+            Full credits: /roms/CREDITS.md
+          </p>
+        </div>
+      )}
+
+      {game && (
+        <div className="snes-live">
+          <div className="snes-cart" aria-hidden="true">
+            <span className="snes-cart-tab" />
+            <span className="snes-cart-title">{game.title}</span>
+            <span className="snes-cart-meta">SUPER NES · {game.size}</span>
+          </div>
+          <div className="snes-stage">
+            <div ref={holderRef} className="snes-holder" />
+            {!booted && <div className="snes-boot">POWERING ON…</div>}
+          </div>
+          <div className="snes-live-ui">
+            <span className="snes-live-note">{game.author} · {game.year} · {game.players}</span>
             <button
               type="button"
-              className="game-btn snes-load-btn"
-              onClick={() => inputRef.current?.click()}
+              className="game-btn"
+              onClick={() => { setGame(null); setBooted(false); setError(null) }}
             >
-              ⇧ LOAD CARTRIDGE
+              ⏏ EJECT
             </button>
-            <p className="snes-empty-note">
-              Bring what you own. The archive hosts no commercial ROMs — homebrew
-              and freely-distributable images play exactly the same way.
-            </p>
           </div>
-        )}
+        </div>
+      )}
 
-        {rom && (
-          <div className="snes-live">
-            <div className="snes-cart" aria-hidden="true">
-              <span className="snes-cart-tab" />
-              <span className="snes-cart-title">{rom.name.replace(ROM_EXT, '').replace(/[_-]+/g, ' ')}</span>
-              <span className="snes-cart-meta">SUPER NES · {prettyBytes(rom.size)}</span>
-            </div>
-            <div className="snes-stage">
-              <div ref={holderRef} className="snes-holder" />
-              {!booted && <div className="snes-boot">POWERING ON…</div>}
-            </div>
-            <div className="snes-live-ui">
-              <span className="snes-live-note">ROM stays on this device — nothing is uploaded.</span>
-              <button
-                type="button"
-                className="game-btn"
-                onClick={() => {
-                  const prev = romRef.current
-                  romRef.current = null
-                  setRom(null)
-                  setBooted(false)
-                  setError(null)
-                  if (prev) URL.revokeObjectURL(prev.url)
-                }}
-              >
-                ⏏ EJECT
-              </button>
-            </div>
-          </div>
-        )}
-
-        {error && <p className="snes-error" role="alert">✕ {error}</p>}
-      </div>
+      {error && <p className="snes-error" role="alert">✕ {error}</p>}
     </div>
   )
 }

@@ -44,7 +44,10 @@ next-env.d.ts
 *.log
 local-*
 
-# game ROMs must never be committed - the archive hosts none (bring-your-own loading only)
+# ROM guard: commercial cartridges must never be committed.
+# The archive hosts no commercial ROMs. Exception: public/roms/ carries
+# homebrew games released free by their own authors and licensed for
+# redistribution - per-game attribution lives in public/roms/CREDITS.md.
 *.sfc
 *.smc
 *.fig
@@ -56,3 +59,4 @@ local-*
 *.fds
 *.z64
 *.v64
+!public/roms/*.sfc
