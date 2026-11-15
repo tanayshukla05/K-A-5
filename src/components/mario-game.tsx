@@ -491,9 +491,11 @@ type Input = {
 
 export function MarioGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const stageRef = useRef<HTMLDivElement>(null)
   const inp = useRef<Input>({ l: false, r: false, run: false, jump: false, jumpEdge: false, startEdge: false })
   const stateRef = useRef<State>('title')
-  const api = useRef<{ pause: () => void; mute: () => void }>({ pause() {}, mute() {} })
+  const api = useRef<{ pause: () => void; mute: () => void; fs: () => void }>({ pause() {}, mute() {}, fs() {} })
+  const fsBtnRef = useRef<HTMLButtonElement>(null)
   const [mutedUI, setMutedUI] = useState(false)
 
   useEffect(() => {
@@ -1106,6 +1108,12 @@ export function MarioGame() {
       else if (stateRef.current === 'pause') { state = 'playing'; stateRef.current = state; sfx('pause') }
     }
     api.current.mute = () => { mutedFlag = !mutedFlag; setMutedUI(mutedFlag) }
+    api.current.fs = () => {
+      const el = stageRef.current
+      if (!el || !document.fullscreenEnabled) return
+      if (document.fullscreenElement) void document.exitFullscreen()
+      else void el.requestFullscreen().catch(() => {})
+    }
 
     return () => {
       cancelAnimationFrame(raf)
@@ -1113,8 +1121,15 @@ export function MarioGame() {
       window.removeEventListener('keyup', onKeyUp)
       window.removeEventListener('blur', onBlur)
       document.removeEventListener('visibilitychange', onVis)
-      api.current = { pause() {}, mute() {} }
+      api.current = { pause() {}, mute() {}, fs() {} }
     }
+  }, [])
+
+  // hide the fullscreen button where element fullscreen is unsupported
+  // (iOS Safari) — a DOM sync, no state needed
+  useEffect(() => {
+    const btn = fsBtnRef.current
+    if (btn && !document.fullscreenEnabled) btn.hidden = true
   }, [])
 
   /* ---------- touch pads ---------- */
@@ -1133,24 +1148,31 @@ export function MarioGame() {
   }
 
   return (
-    <div className="game-stage">
-      <canvas
-        ref={canvasRef}
-        width={VW * SCALE}
-        height={VH * SCALE}
-        className="game-canvas"
-        onContextMenu={e => e.preventDefault()}
-        onPointerDown={() => {
-          ensureAudio()
-          const s = stateRef.current
-          if (s === 'title' || s === 'gameover' || s === 'win') inp.current.startEdge = true
-        }}
-      />
-      <div className="game-crt" aria-hidden="true" />
+    <div className="game-stage" ref={stageRef}>
+      <div className="game-frame">
+        <canvas
+          ref={canvasRef}
+          width={VW * SCALE}
+          height={VH * SCALE}
+          className="game-canvas"
+          onContextMenu={e => e.preventDefault()}
+          onPointerDown={() => {
+            ensureAudio()
+            const s = stateRef.current
+            if (s === 'title' || s === 'gameover' || s === 'win') inp.current.startEdge = true
+          }}
+        />
+        <div className="game-crt" aria-hidden="true" />
+      </div>
       <div className="game-ui">
         <button type="button" className="game-btn" onClick={e => { api.current.pause(); e.currentTarget.blur() }}>
           ⏸ PAUSE
         </button>
+        {(
+          <button ref={fsBtnRef} type="button" className="game-btn" onClick={e => { api.current.fs(); e.currentTarget.blur() }}>
+            ⤢ FULLSCREEN
+          </button>
+        )}
         <button type="button" className="game-btn" onClick={e => { api.current.mute(); e.currentTarget.blur() }}>
           {mutedUI ? '♪ SOUND OFF' : '♪ SOUND ON'}
         </button>

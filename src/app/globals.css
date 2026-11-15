@@ -3711,7 +3711,11 @@ body[data-route="about"] .bg-video-fallback {
 }
 .game-stage {
   position: relative;
-  max-width: 768px;
+}
+.game-frame {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
   margin: 0 auto;
 }
 .game-canvas {
@@ -3730,6 +3734,29 @@ body[data-route="about"] .bg-video-fallback {
   background:
     repeating-linear-gradient(0deg, rgb(0 0 0 / 0.22) 0 1px, transparent 1px 3px),
     radial-gradient(ellipse at center, transparent 62%, rgb(0 0 0 / 0.38) 100%);
+}
+/* fullscreen — a handheld: canvas big on top, pads below */
+.game-stage:fullscreen {
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 8px;
+}
+.game-stage:fullscreen .game-frame { width: auto; max-width: 100%; }
+.game-stage:fullscreen .game-canvas {
+  width: auto;
+  height: min(72vh, 72dvh);
+  max-width: 100%;
+}
+.game-stage:fullscreen .game-crt { inset: 0; }
+.game-stage:fullscreen .game-ui { width: 100%; max-width: 768px; }
+.game-stage:fullscreen .game-pads {
+  display: flex;
+  width: 100%;
+  max-width: 768px;
 }
 .game-ui {
   display: flex;
