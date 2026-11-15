@@ -1,6 +1,6 @@
 # THE SHELF — cartridge attribution
 
-Every cartridge pre-installed on cabinet 02 is **homebrew released free by its
+Every cartridge pre-installed on cabinet 03 is **homebrew released free by its
 own author**, with three exceptions: `powerfest-94-lost-levels.sfc`,
 `yoshis-island-usa.sfc` and `aladdin-usa.sfc` are the site owner's own
 cartridges, placed on the shelf for personal play — they are not freeware and

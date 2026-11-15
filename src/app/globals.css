@@ -3780,7 +3780,7 @@ body[data-route="about"] .bg-video-fallback {
   background: oklch(0.88 0 0);
   border-color: oklch(0.88 0 0);
 }
-/* cabinet 01 launcher — powered off until one click, nothing runs before it */
+/* launcher for cabinets 01+02 — powered off until one click, nothing runs before it */
 .game-launch {
   display: grid;
   justify-items: center;
@@ -3814,7 +3814,7 @@ body[data-route="about"] .bg-video-fallback {
   border-color: oklch(0.88 0 0);
   text-shadow: none;
 }
-/* cabinet 03 — the MultiHero WASM build in its own frame (640×480 native) */
+/* cabinet 01 — the MultiHero WASM build in its own frame (640×480 native) */
 .game-hero-frame {
   display: block;
   width: 100%;
@@ -3871,7 +3871,7 @@ body[data-route="about"] .bg-video-fallback {
 }
 
 /* ============================================================
-   GAMES — cabinet 02: the Super Nintendo. Same chrome, different
+   GAMES — cabinet 03: the Super Nintendo. Same chrome, different
    material: moulded plastic (fine horizontal grain) and a game
    shelf — every cartridge pre-installed, homebrew released free
    by its author (attribution: public/roms/CREDITS.md). Tap a
@@ -4203,7 +4203,7 @@ body[data-route="about"] .bg-video-fallback {
   font-size: 16px;
   color: oklch(0.58 0 0);
 }
-/* cabinet 02 keeps its double-rule marquee */
+/* cabinet 03 keeps its double-rule marquee */
 .games-room .game-cabinet--snes .game-cab-head {
   border-bottom-style: double;
   border-bottom-width: 3px;
@@ -4221,7 +4221,7 @@ body[data-route="about"] .bg-video-fallback {
     inset 0 20px 44px oklch(0 0 0 / 0.5),
     inset 0 -16px 34px oklch(0 0 0 / 0.45);
 }
-/* cabinet 01 gets its own grain: vertical (moulded) vs 02's horizontal */
+/* non-SNES cabinets get their own grain: vertical (moulded) vs the Super Nintendo's horizontal */
 .games-room .game-cabinet:not(.game-cabinet--snes) .game-screen {
   background:
     repeating-linear-gradient(90deg, oklch(0.15 0 0) 0 3px, oklch(0.125 0 0) 3px 6px),
@@ -4239,12 +4239,12 @@ body[data-route="about"] .bg-video-fallback {
   pointer-events: none;
   transition: background 300ms, box-shadow 300ms;
 }
-/* cabinet 01 is always powered */
+/* cabinets 01+02 are always powered */
 .games-room .game-cabinet:not(.game-cabinet--snes) .game-screen::before {
   background: oklch(0.78 0.19 145);
   box-shadow: 0 0 10px oklch(0.6 0.19 145 / 0.85), 0 0 0 1px oklch(0 0 0 / 0.8);
 }
-/* cabinet 02 lights up when a cartridge runs */
+/* cabinet 03 lights up when a cartridge runs */
 .games-room .game-cabinet--snes .game-screen:has(canvas)::before {
   background: oklch(0.78 0.19 145);
   box-shadow: 0 0 10px oklch(0.6 0.19 145 / 0.85), 0 0 0 1px oklch(0 0 0 / 0.8);
@@ -4459,7 +4459,7 @@ body[data-route="about"] .bg-video-fallback {
     inset 0 0 30px oklch(0 0 0 / 0.75),
     0 0 34px -8px oklch(0.6 0.19 145 / 0.22);
 }
-/* CRT overlay over the live stage — cabinet 02 has none of its own */
+/* CRT overlay over the live stage — cabinet 03 has none of its own */
 .games-room .game-cabinet--snes .snes-stage::after {
   content: '';
   position: absolute;

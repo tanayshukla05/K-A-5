@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1800" viewBox="0 0 1200 1800">
+  <!--
+    MULTIHERO — WEB EDITION · cabinet 01 poster
+    Drawn in the archive's own design language: dark monochrome, hard
+    edges, no rounded corners, Press Start 2P chips, cabinet offset shadow.
+    Fonts are the site's own woff2 files (same-origin /fonts/).
+    Original freeware game by mhman · WASM web port by richardyusan (MIT).
+  -->
+  <style>
+    @font-face { font-family: 'Bungee'; src: url('/fonts/bungee-latin.woff2') format('woff2'); }
+    @font-face { font-family: 'Bebas Neue'; src: url('/fonts/bebas-neue-latin.woff2') format('woff2'); }
+    @font-face { font-family: 'Black Ops One'; src: url('/fonts/black-ops-one-latin.woff2') format('woff2'); }
+    @font-face { font-family: 'Press Start 2P'; src: url('/fonts/press-start-2p-latin.woff2') format('woff2'); }
+    @font-face { font-family: 'Space Mono'; src: url('/fonts/space-mono-latin.woff2') format('woff2'); }
+    @font-face { font-family: 'VT323'; src: url('/fonts/vt323-latin.woff2') format('woff2'); }
+    @font-face { font-family: 'Libre Barcode 39 Text'; src: url('/fonts/libre-barcode-39-text-latin.woff2') format('woff2'); }
+    text { -webkit-font-smoothing: antialiased; }
+  </style>
+
+  <defs>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#3aa664" stop-opacity="0.17"/>
+      <stop offset="1" stop-color="#3aa664" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="stage" cx="0.5" cy="0.42" r="0.85">
+      <stop offset="0" stop-color="#1d1d1d"/>
+      <stop offset="1" stop-color="#111111"/>
+    </radialGradient>
+    <radialGradient id="vig" cx="0.5" cy="0.44" r="0.78">
+      <stop offset="0" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="0.66" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0.5"/>
+    </radialGradient>
+    <pattern id="scan" patternUnits="userSpaceOnUse" width="3" height="3">
+      <rect width="3" height="1" fill="#000000" opacity="0.16"/>
+    </pattern>
+    <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6">
+      <path d="M0 6 L6 0" stroke="#111111" stroke-width="1.6" opacity="0.55"/>
+    </pattern>
+  </defs>
+
+  <!-- ground -->
+  <rect width="1200" height="1800" fill="url(#stage)"/>
+
+  <!-- cabinet shadow block + frame, exactly like .game-cabinet -->
+  <rect x="34" y="34" width="1144" height="1744" fill="#000000" opacity="0.5"/>
+  <rect x="28" y="28" width="1144" height="1744" fill="none" stroke="#a8a8a8" stroke-opacity="0.75" stroke-width="2"/>
+
+  <!-- corner registration crosses -->
+  <g stroke="#4a4a4a" stroke-width="2">
+    <path d="M64 56 v16 M56 64 h16"/>
+    <path d="M1136 56 v16 M1128 64 h16"/>
+    <path d="M64 1728 v16 M56 1736 h16"/>
+    <path d="M1136 1728 v16 M1128 1736 h16"/>
+  </g>
+
+  <!-- masthead -->
+  <text x="64" y="96" font-family="Space Mono, 'Courier New', monospace" font-size="21" letter-spacing="6" fill="#9a9a9a">THE KNOWLEDGE ARCHIVE</text>
+  <rect x="950" y="62" width="186" height="44" fill="#e2e2e2"/>
+  <text x="1043" y="92" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="15" fill="#141414">CABINET 01</text>
+  <line x1="64" y1="132" x2="1136" y2="132" stroke="#3a3a3a" stroke-width="2"/>
+
+  <!-- fighting-game health bars -->
+  <text x="64" y="180" font-family="'Press Start 2P', monospace" font-size="11" fill="#d9d9d9">P1 - YOU</text>
+  <rect x="64" y="192" width="440" height="26" fill="#1c1c1c" stroke="#8a8a8a" stroke-width="2"/>
+  <rect x="67" y="195" width="380" height="20" fill="#e8e8e8"/>
+
+  <text x="1136" y="180" text-anchor="end" font-family="'Press Start 2P', monospace" font-size="11" fill="#d9d9d9">P2 - RIVAL</text>
+  <rect x="696" y="192" width="440" height="26" fill="#1c1c1c" stroke="#8a8a8a" stroke-width="2"/>
+  <rect x="893" y="195" width="240" height="20" fill="#b5b5b5"/>
+  <rect x="893" y="195" width="240" height="20" fill="url(#hatch)"/>
+
+  <text x="600" y="219" text-anchor="middle" font-family="'Black Ops One', 'Arial Black', sans-serif" font-size="44" fill="#f2f2f2">VS</text>
+
+  <!-- impact burst -->
+  <ellipse cx="600" cy="700" rx="330" ry="245" fill="url(#glow)"/>
+  <polygon points="600.0,370.0 645.8,469.5 726.3,395.1 730.6,504.6 833.3,466.7 795.4,569.4 904.9,573.7 830.5,654.2 930.0,700.0 830.5,745.8 904.9,826.3 795.4,830.6 833.3,933.3 730.6,895.4 726.3,1004.9 645.8,930.5 600.0,1030.0 554.2,930.5 473.7,1004.9 469.4,895.4 366.7,933.3 404.6,830.6 295.1,826.3 369.5,745.8 270.0,700.0 369.5,654.2 295.1,573.7 404.6,569.4 366.7,466.7 469.4,504.6 473.7,395.1 554.2,469.5" fill="#161616" stroke="#7a7a7a" stroke-width="2.5"/>
+  <g transform="translate(600,700) scale(0.62) translate(-600,-700)">
+    <polygon points="600.0,370.0 645.8,469.5 726.3,395.1 730.6,504.6 833.3,466.7 795.4,569.4 904.9,573.7 830.5,654.2 930.0,700.0 830.5,745.8 904.9,826.3 795.4,830.6 833.3,933.3 730.6,895.4 726.3,1004.9 645.8,930.5 600.0,1030.0 554.2,930.5 473.7,1004.9 469.4,895.4 366.7,933.3 404.6,830.6 295.1,826.3 369.5,745.8 270.0,700.0 369.5,654.2 295.1,573.7 404.6,569.4 366.7,466.7 469.4,504.6 473.7,395.1 554.2,469.5" fill="#151515" stroke="#464646" stroke-width="3"/>
+  </g>
+
+  <!-- title: solid line, then outline line -->
+  <g transform="translate(8,8)" opacity="0.55" aria-hidden="true">
+    <text x="600" y="642" text-anchor="middle" textLength="660" lengthAdjust="spacingAndGlyphs" font-family="Bungee, 'Arial Black', sans-serif" font-size="190" fill="#000000">MULTI</text>
+    <text x="600" y="826" text-anchor="middle" textLength="660" lengthAdjust="spacingAndGlyphs" font-family="Bungee, 'Arial Black', sans-serif" font-size="190" fill="#000000" stroke="#000000" stroke-width="3.5">HERO</text>
+  </g>
+  <text x="600" y="642" text-anchor="middle" textLength="660" lengthAdjust="spacingAndGlyphs" font-family="Bungee, 'Arial Black', sans-serif" font-size="190" fill="#f2f2f2">MULTI</text>
+  <text x="600" y="826" text-anchor="middle" textLength="660" lengthAdjust="spacingAndGlyphs" font-family="Bungee, 'Arial Black', sans-serif" font-size="190" fill="#151515" stroke="#f2f2f2" stroke-width="3.5">HERO</text>
+
+  <!-- subtitle -->
+  <line x1="64" y1="947" x2="290" y2="947" stroke="#3a3a3a" stroke-width="2"/>
+  <line x1="910" y1="947" x2="1136" y2="947" stroke="#3a3a3a" stroke-width="2"/>
+  <text x="600" y="968" text-anchor="middle" textLength="560" lengthAdjust="spacingAndGlyphs" font-family="'Bebas Neue', 'Arial Narrow', sans-serif" font-size="60" letter-spacing="12" fill="#9a9a9a">WEB EDITION — V0.96</text>
+
+  <!-- tagline -->
+  <text x="600" y="1035" text-anchor="middle" font-family="VT323, 'Courier New', monospace" font-size="30" fill="#7f7f7f">A FREEWARE PLATFORM-FIGHTER · THE FULL GAME RUNS IN YOUR BROWSER</text>
+
+  <!-- feature chips -->
+  <g font-family="'Press Start 2P', monospace" font-size="13">
+    <rect x="164" y="1076" width="156" height="52" fill="#e2e2e2"/>
+    <text x="242" y="1108" text-anchor="middle" fill="#141414">ONE CLICK</text>
+
+    <rect x="344" y="1076" width="232" height="52" fill="#171717" stroke="#8a8a8a" stroke-width="2"/>
+    <text x="460" y="1108" text-anchor="middle" fill="#d9d9d9">TOUCH ON MOBILE</text>
+
+    <rect x="600" y="1076" width="232" height="52" fill="#171717" stroke="#3aa664" stroke-width="2"/>
+    <text x="716" y="1108" text-anchor="middle" fill="#d9d9d9">4-PLAYER ONLINE</text>
+
+    <rect x="856" y="1076" width="180" height="52" fill="#171717" stroke="#8a8a8a" stroke-width="2"/>
+    <text x="946" y="1108" text-anchor="middle" fill="#d9d9d9">SAVE STATES</text>
+  </g>
+
+  <!-- controls strip -->
+  <text x="64" y="1178" font-family="'Press Start 2P', monospace" font-size="11" fill="#6f6f6f">CONTROLS</text>
+  <line x1="64" y1="1194" x2="1136" y2="1194" stroke="#3a3a3a" stroke-width="2"/>
+  <text x="600" y="1258" text-anchor="middle" font-family="VT323, 'Courier New', monospace" font-size="32" fill="#b5b5b5">WASD MOVE · N ATTACK · M JUMP · H SPECIAL · SPACE BLOCK · J THROW</text>
+  <line x1="64" y1="1300" x2="1136" y2="1300" stroke="#3a3a3a" stroke-width="2"/>
+
+  <!-- cartridge barcode -->
+  <text x="600" y="1428" text-anchor="middle" font-family="'Libre Barcode 39 Text', monospace" font-size="84" fill="#d9d9d9">MULTIHERO</text>
+  <text x="600" y="1468" text-anchor="middle" font-family="Space Mono, 'Courier New', monospace" font-size="14" letter-spacing="2" fill="#6f6f6f">CARTRIDGE ID MH-01 · WEB BUILD 0.96 · CODE 39</text>
+
+  <!-- credits -->
+  <g text-anchor="middle" font-family="Space Mono, 'Courier New', monospace" font-size="16" letter-spacing="1" fill="#8a8a8a">
+    <text x="600" y="1555">ORIGINAL FREEWARE GAME BY MHMAN</text>
+    <text x="600" y="1587">WASM WEB PORT BY RICHARDYUSAN - MIT LICENSE - NOTICE AT /MULTIHERO</text>
+    <text x="600" y="1619">GAME CHARACTERS REMAIN PROPERTY OF THEIR RESPECTIVE OWNERS</text>
+  </g>
+
+  <!-- call to action -->
+  <line x1="64" y1="1685" x2="290" y2="1685" stroke="#3a3a3a" stroke-width="2"/>
+  <line x1="910" y1="1685" x2="1136" y2="1685" stroke="#3a3a3a" stroke-width="2"/>
+  <text x="600" y="1694" text-anchor="middle" font-family="'Press Start 2P', monospace" font-size="14" fill="#d9d9d9">INSERT COIN AT /GAMES</text>
+
+  <!-- CRT scanlines + vignette, like .game-crt -->
+  <rect width="1200" height="1800" fill="url(#scan)"/>
+  <rect width="1200" height="1800" fill="url(#vig)"/>
+</svg>

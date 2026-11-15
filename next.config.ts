@@ -51,7 +51,7 @@ const securityHeaders = [
 ];
 
 /**
- * Cabinet 03 (MultiHero) runs the game shell document in a same-origin
+ * Cabinet 01 (MultiHero) runs the game shell document in a same-origin
  * iframe on the Games page, so that one path must be allowed to be framed
  * by its own origin. The game's own networking (online multiplayer over
  * WebSocket, region checks, pings) connects to endpoints the WASM build

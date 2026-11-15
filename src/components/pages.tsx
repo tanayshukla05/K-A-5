@@ -573,19 +573,20 @@ export function FilesPage({ navigate }: { navigate: NavFn }) {
 
 /* ============================================================
    GAMES — playable things built for and hosted by the archive.
-   Cabinet 01: a complete side-scrolling platformer written
+   Cabinet 01: MultiHero — the freeware fan game's official
+   WASM build, self-hosted and embedded same-origin.
+   Cabinet 02: a complete side-scrolling platformer written
    from scratch (original engine, sprites, and sound — no ROMs).
-   Cabinet 02: a self-hosted Super Nintendo whose shelf of
+   Cabinet 03: a self-hosted Super Nintendo whose shelf of
    cartridges runs in the browser on the self-hosted
    EmulatorJS runtime.
-   Cabinet 03: MultiHero — the freeware fan game's official
-   WASM build, self-hosted and embedded same-origin.
    ============================================================ */
 export function GamesPage({ navigate }: { navigate: NavFn }) {
-  /* cabinet 01 stays powered off until the visitor clicks — no auto-start */
-  const [marioOn, setMarioOn] = useState(false)
-  /* cabinet 03 same deal — the WASM build only downloads on click (~13 MB) */
+  /* cabinet 01 (MultiHero) stays powered off until the visitor clicks —
+     the WASM build only downloads on click (~13 MB) */
   const [heroOn, setHeroOn] = useState(false)
+  /* cabinet 02 stays powered off until the visitor clicks — no auto-start */
+  const [marioOn, setMarioOn] = useState(false)
   return (
     <div className="archive-container games-room">
       <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
@@ -594,60 +595,16 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
       <div className="archive-eyebrow">GAMES</div>
       <h1 className="archive-title">Games</h1>
       <p className="archive-subtitle">
-        Playable things from the archive. Cabinet 01: SUPER ARCHIVE BROS. —
-        a complete side-scrolling platformer built from scratch for this
-        site. Cabinet 02: a Super Nintendo with its games pre-installed —
-        tap a title on the shelf and it runs right here in the browser.
-        Cabinet 03: MultiHero — a freeware browser beat-&rsquo;em-up,
-        solo or with up to four players online.
+        Playable things from the archive. Cabinet 01: MultiHero — a
+        freeware browser beat-&rsquo;em-up, solo or with up to four players
+        online. Cabinet 02: SUPER ARCHIVE BROS. — a complete
+        side-scrolling platformer built from scratch for this site.
+        Cabinet 03: a Super Nintendo with its games pre-installed — tap a
+        title on the shelf and it runs right here in the browser.
       </p>
 
-      <div className="game-cabinet">
-        <div className="game-cab-head">
-          <span className="game-num">01</span>
-          <span className="game-cab-label">Super Archive Bros.</span>
-          <span className="game-cab-note">side-scrolling platformer · 3 courses · one click to play</span>
-        </div>
-        <div className="game-screen">
-          {marioOn ? (
-            <>
-              <MarioGame autoStart />
-              <div className="game-ui">
-                <button type="button" className="game-btn" onClick={() => setMarioOn(false)}>
-                  ⏏ EJECT
-                </button>
-              </div>
-            </>
-          ) : (
-            <div className="game-launch">
-              <p className="game-launch-head">CARTRIDGE INSTALLED — TAP TO POWER ON</p>
-              <button type="button" className="game-launch-btn" onClick={() => setMarioOn(true)}>
-                ▶ INSERT COIN · ONE CLICK PLAY
-              </button>
-            </div>
-          )}
-        </div>
-        <div className="game-cab-foot">
-          <span className="game-keys">← → MOVE · Z JUMP (HOLD = HIGHER) · X RUN · ENTER PAUSE · M SOUND</span>
-        </div>
-      </div>
-
-      <div className="game-cabinet game-cabinet--snes">
-        <div className="game-cab-head">
-          <span className="game-num">02</span>
-          <span className="game-cab-label">Super Nintendo</span>
-          <span className="game-cab-note">games pre-installed · tap and play · nothing to bring</span>
-        </div>
-        <div className="game-screen">
-          <SnesCabinet />
-        </div>
-        <div className="game-cab-foot">
-          <span className="game-keys">7 GAMES INSTALLED · SAVE STATES + TOUCH CONTROLS BUILT IN · CREDITS AT /ROMS</span>
-        </div>
-      </div>
-
       {/* ============================================================
-          CABINET 03 — MultiHero, Web Edition. The port author ships a
+          CABINET 01 — MultiHero, Web Edition. The port author ships a
           complete self-hostable WASM build (public/multihero/multihero-web,
           MIT; original freeware game by mhman — see NOTICE.md). The
           loader fetches its ~13 MB data package the moment it runs, so
@@ -655,7 +612,7 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
           ============================================================ */}
       <div className="game-cabinet game-cabinet--hero">
         <div className="game-cab-head">
-          <span className="game-num">03</span>
+          <span className="game-num">01</span>
           <span className="game-cab-label">MultiHero — Web Edition</span>
           <span className="game-cab-note">browser beat-&rsquo;em-up · touch + gamepad · up to 4 players online</span>
         </div>
@@ -686,6 +643,60 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
         </div>
         <div className="game-cab-foot">
           <span className="game-keys">WASD MOVE · N ATTACK · M JUMP · H SPECIAL · SPACE BLOCK · J THROW · ONLINE PLAY IN MENU · TOUCH PADS ON MOBILE · CREDITS AT /MULTIHERO</span>
+        </div>
+      </div>
+
+      {/* ============================================================
+          CABINET 02 — Super Archive Bros., written from scratch for the
+          archive (original engine, sprites, sound — no ROMs). The INSERT
+          COIN tap boots the game via autoStart.
+          ============================================================ */}
+      <div className="game-cabinet">
+        <div className="game-cab-head">
+          <span className="game-num">02</span>
+          <span className="game-cab-label">Super Archive Bros.</span>
+          <span className="game-cab-note">side-scrolling platformer · 3 courses · one click to play</span>
+        </div>
+        <div className="game-screen">
+          {marioOn ? (
+            <>
+              <MarioGame autoStart />
+              <div className="game-ui">
+                <button type="button" className="game-btn" onClick={() => setMarioOn(false)}>
+                  ⏏ EJECT
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="game-launch">
+              <p className="game-launch-head">CARTRIDGE INSTALLED — TAP TO POWER ON</p>
+              <button type="button" className="game-launch-btn" onClick={() => setMarioOn(true)}>
+                ▶ INSERT COIN · ONE CLICK PLAY
+              </button>
+            </div>
+          )}
+        </div>
+        <div className="game-cab-foot">
+          <span className="game-keys">← → MOVE · Z JUMP (HOLD = HIGHER) · X RUN · ENTER PAUSE · M SOUND</span>
+        </div>
+      </div>
+
+      {/* ============================================================
+          CABINET 03 — Super Nintendo. Pre-installed cartridges running on
+          the self-hosted EmulatorJS runtime; per-game attribution at
+          public/roms/CREDITS.md.
+          ============================================================ */}
+      <div className="game-cabinet game-cabinet--snes">
+        <div className="game-cab-head">
+          <span className="game-num">03</span>
+          <span className="game-cab-label">Super Nintendo</span>
+          <span className="game-cab-note">games pre-installed · tap and play · nothing to bring</span>
+        </div>
+        <div className="game-screen">
+          <SnesCabinet />
+        </div>
+        <div className="game-cab-foot">
+          <span className="game-keys">7 GAMES INSTALLED · SAVE STATES + TOUCH CONTROLS BUILT IN · CREDITS AT /ROMS</span>
         </div>
       </div>
     </div>
