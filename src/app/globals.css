@@ -4591,6 +4591,482 @@ body[data-route="about"] .bg-video-fallback {
   .artifact--portal::after { animation: none; transform: translateY(-13px); }
 }
 
+/* --- ARTIFACT SET 05 — four more materials for the new .onion rows.
+   One behaviour primitive each that no other row uses: a hinged
+   flap that opens, a staggered cascade, a pendulum swing, and a
+   zipper that slides. No colour, font, texture or silhouette is
+   shared with any other row. --- */
+
+@font-face {
+  font-family: 'Kanit';
+  src: url('/fonts/kanit-latin.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Cabin';
+  src: url('/fonts/cabin-latin.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Marcellus';
+  src: url('/fonts/marcellus-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Teko';
+  src: url('/fonts/teko-latin.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- TRAPDOOR · Klskg hidden service — the floor hatch: a rusted
+   plank hatch set at the right, breathing faint amber light up
+   through its seams. Hover: the hatch flips open on its left
+   hinge and the light beneath floods out — the only row that
+   opens on a hinge. Kanit sturdy caps.
+   Zero border-radius (archive rule). --- */
+.artifact--trapdoor {
+  background:
+    radial-gradient(110% 140% at 15% 0%, oklch(0.26 0.05 38 / 0.4) 0%, transparent 55%),
+    linear-gradient(180deg, oklch(0.14 0.022 38), oklch(0.10 0.016 38));
+  border: 1px solid oklch(0.44 0.07 38 / 0.55);
+  transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+/* the light beneath, breathing through the seams */
+.artifact--trapdoor::before {
+  content: '';
+  position: absolute;
+  right: 9%;
+  top: 50%;
+  width: 56px;
+  height: 42px;
+  margin-top: -21px;
+  background:
+    linear-gradient(180deg, oklch(0.78 0.12 45 / 0.9), oklch(0.55 0.12 40 / 0.9));
+  box-shadow: 0 0 18px oklch(0.55 0.12 40 / 0.6);
+  opacity: 0.15;
+  pointer-events: none;
+  animation: trapdoor-breathe 5s ease-in-out infinite;
+  transition: opacity 400ms ease, box-shadow 400ms ease;
+}
+@keyframes trapdoor-breathe {
+  0%, 100% { opacity: 0.13; }
+  50%      { opacity: 0.32; }
+}
+/* the hatch: planked iron, ring handle — flips open on its hinge */
+.artifact--trapdoor::after {
+  content: '';
+  position: absolute;
+  right: 9%;
+  top: 50%;
+  width: 56px;
+  height: 42px;
+  margin-top: -21px;
+  background:
+    radial-gradient(7px 7px at 50% 50%, oklch(0.12 0.02 38) 45%, transparent 50%),
+    repeating-linear-gradient(90deg, oklch(0.30 0.045 40) 0 12px, oklch(0.24 0.04 38) 12px 14px);
+  border: 2px solid oklch(0.18 0.03 38 / 0.95);
+  box-shadow: inset 0 1px 0 oklch(0.50 0.06 42 / 0.5);
+  transform-origin: left center;
+  pointer-events: none;
+  transition: transform 420ms cubic-bezier(0.34, 1.2, 0.4, 1), box-shadow 300ms ease;
+}
+.artifact--trapdoor .artifact-num {
+  color: oklch(0.62 0.06 40);
+  font-family: 'Share Tech Mono', monospace;
+}
+.artifact--trapdoor .artifact-label {
+  font-family: 'Kanit', 'Segoe UI', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: oklch(0.80 0.08 42);
+  text-shadow: 2px 2px 0 oklch(0.12 0.02 38 / 0.9);
+  transition: color 200ms ease, text-shadow 200ms ease;
+}
+.artifact--trapdoor .artifact-note {
+  color: oklch(0.62 0.04 40 / 0.85);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.artifact--trapdoor .artifact-url {
+  color: oklch(0.56 0.03 40 / 0.6);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+.artifact--trapdoor .artifact-go {
+  color: oklch(0.62 0.06 40);
+  transition: color 200ms ease, transform 200ms ease;
+}
+@media (hover: hover) {
+  .artifact--trapdoor:hover {
+    border-color: oklch(0.62 0.08 42 / 0.9);
+    box-shadow: inset 0 0 22px oklch(0.24 0.05 38 / 0.45), 0 0 16px oklch(0.38 0.08 40 / 0.3);
+  }
+  /* the hatch flips open, the light floods out */
+  .artifact--trapdoor:hover::after { transform: rotate(-76deg); }
+  .artifact--trapdoor:hover::before {
+    animation: none;
+    opacity: 1;
+    box-shadow: 0 0 26px oklch(0.62 0.14 42 / 0.8);
+  }
+  .artifact--trapdoor:hover .artifact-label {
+    color: oklch(0.88 0.09 44);
+    text-shadow: 2px 2px 0 oklch(0.12 0.02 38 / 0.9), 0 0 12px oklch(0.45 0.10 40 / 0.5);
+  }
+  .artifact--trapdoor:hover .artifact-go { color: oklch(0.84 0.08 44); }
+}
+@media (max-width: 700px) {
+  .artifact--trapdoor .artifact-label { font-size: 14px; }
+  .artifact--trapdoor::before { width: 44px; height: 34px; margin-top: -17px; }
+  .artifact--trapdoor::after { width: 44px; height: 34px; margin-top: -17px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--trapdoor::before { animation: none; opacity: 0.28; }
+}
+
+/* --- FORUM · Jaat board — the thread index: nested reply bars
+   stacking one after another, endlessly re-cascading like a
+   refreshed thread list, with a sticky pin set at the top right.
+   Hover: the replies cascade in fast and the pin burns bright.
+   A per-layer background-size stagger — no other row staggers.
+   Cabin humanist caps. Zero border-radius (archive rule). --- */
+.artifact--forum {
+  background:
+    radial-gradient(110% 140% at 15% 0%, oklch(0.24 0.05 275 / 0.4) 0%, transparent 55%),
+    linear-gradient(180deg, oklch(0.14 0.026 275), oklch(0.10 0.02 275));
+  border: 1px solid oklch(0.46 0.08 275 / 0.55);
+  box-shadow: inset 0 3px 0 oklch(0.30 0.05 275 / 0.5); /* the board rail */
+  transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+/* the reply bars, cascading in one after another */
+.artifact--forum::before {
+  content: '';
+  position: absolute;
+  right: 8%;
+  bottom: 16px;
+  width: 122px;
+  height: 27px;
+  background:
+    linear-gradient(90deg, oklch(0.74 0.10 278), oklch(0.60 0.11 275)) 0 0 / 92px 3px no-repeat,
+    linear-gradient(90deg, oklch(0.66 0.09 278), oklch(0.52 0.10 275)) 10px 8px / 82px 3px no-repeat,
+    linear-gradient(90deg, oklch(0.60 0.09 276), oklch(0.46 0.09 274)) 20px 16px / 70px 3px no-repeat,
+    linear-gradient(90deg, oklch(0.54 0.08 274), oklch(0.42 0.08 273)) 30px 24px / 58px 3px no-repeat;
+  pointer-events: none;
+  animation: forum-cascade 8s linear infinite;
+}
+@keyframes forum-cascade {
+  0%, 4%    { background-size: 0px 3px, 0px 3px, 0px 3px, 0px 3px; }
+  14%       { background-size: 92px 3px, 0px 3px, 0px 3px, 0px 3px; }
+  30%       { background-size: 92px 3px, 82px 3px, 0px 3px, 0px 3px; }
+  46%       { background-size: 92px 3px, 82px 3px, 70px 3px, 0px 3px; }
+  62%, 92%  { background-size: 92px 3px, 82px 3px, 70px 3px, 58px 3px; }
+  100%      { background-size: 0px 3px, 0px 3px, 0px 3px, 0px 3px; }
+}
+/* the sticky pin */
+.artifact--forum::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  width: 8px;
+  height: 8px;
+  background: oklch(0.68 0.11 278);
+  box-shadow:
+    inset -2px -2px 0 oklch(0.30 0.06 275 / 0.8),
+    0 0 6px oklch(0.50 0.12 275 / 0.5);
+  opacity: 0.75;
+  pointer-events: none;
+  transition: opacity 300ms ease, box-shadow 300ms ease;
+}
+.artifact--forum .artifact-num {
+  color: oklch(0.60 0.07 275);
+  font-family: 'Share Tech Mono', monospace;
+}
+.artifact--forum .artifact-label {
+  font-family: 'Cabin', 'Segoe UI', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: oklch(0.79 0.07 278);
+  transition: color 200ms ease;
+}
+.artifact--forum .artifact-note {
+  color: oklch(0.62 0.04 275 / 0.85);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.artifact--forum .artifact-url {
+  color: oklch(0.55 0.035 275 / 0.6);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+.artifact--forum .artifact-go {
+  color: oklch(0.60 0.07 275);
+  transition: color 200ms ease, transform 200ms ease;
+}
+@media (hover: hover) {
+  .artifact--forum:hover {
+    border-color: oklch(0.64 0.10 278 / 0.9);
+    box-shadow: inset 0 3px 0 oklch(0.40 0.08 277 / 0.7), inset 0 0 20px oklch(0.24 0.06 275 / 0.4);
+  }
+  /* the thread list refreshes fast */
+  .artifact--forum:hover::before { animation-duration: 3.5s; }
+  /* the pin burns */
+  .artifact--forum:hover::after {
+    opacity: 1;
+    box-shadow:
+      inset -2px -2px 0 oklch(0.30 0.06 275 / 0.8),
+      0 0 10px oklch(0.60 0.14 278 / 0.8);
+  }
+  .artifact--forum:hover .artifact-label { color: oklch(0.86 0.08 280); }
+  .artifact--forum:hover .artifact-go { color: oklch(0.82 0.08 280); }
+}
+@media (max-width: 700px) {
+  .artifact--forum .artifact-label { font-size: 13px; }
+  .artifact--forum::before { transform: scale(0.8); transform-origin: bottom right; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--forum::before { animation: none; }
+}
+
+/* --- LANTERN · Swamws hidden service — the lamplit entrance: a
+   small framed lantern hanging from a chain at the right, its
+   pool of light breathing on the floor beneath. The lantern
+   swings on a pendulum at idle — the only row that swings —
+   and on hover it swings wide while the pool blazes.
+   Marcellus engraved caps. Zero border-radius (archive rule). --- */
+.artifact--lantern {
+  background:
+    radial-gradient(100% 130% at 70% 100%, oklch(0.20 0.03 190 / 0.5) 0%, transparent 55%),
+    linear-gradient(180deg, oklch(0.12 0.02 190), oklch(0.08 0.015 190));
+  border: 1px solid oklch(0.42 0.07 190 / 0.5);
+  transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+/* the chain and the pool of light beneath */
+.artifact--lantern::before {
+  content: '';
+  position: absolute;
+  right: calc(14% - 7px);
+  top: 0;
+  bottom: 0;
+  width: 14px;
+  background:
+    /* the pool on the floor */
+    radial-gradient(46px 16px at 50% 100%, oklch(0.65 0.10 190 / 0.4) 0%, transparent 70%) 50% 100% / 100% 30px no-repeat,
+    /* the chain */
+    linear-gradient(180deg, oklch(0.55 0.06 190 / 0.6), oklch(0.55 0.06 190 / 0.25)) 50% 0 / 2px 58% no-repeat;
+  opacity: 0.65;
+  pointer-events: none;
+  animation: lantern-pool 5.5s ease-in-out infinite;
+  transition: opacity 400ms ease;
+}
+@keyframes lantern-pool {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 0.85; }
+}
+/* the lantern itself, swinging from the chain */
+.artifact--lantern::after {
+  content: '';
+  position: absolute;
+  right: calc(14% - 7px);
+  top: 58%;
+  width: 14px;
+  height: 20px;
+  margin-top: -3px;
+  background: linear-gradient(180deg, oklch(0.85 0.10 192 / 0.95), oklch(0.50 0.08 190 / 0.95) 60%);
+  border: 2px solid oklch(0.40 0.05 190 / 0.9);
+  box-shadow: 0 0 12px oklch(0.60 0.10 192 / 0.55);
+  transform-origin: 50% 0;
+  pointer-events: none;
+  animation: lantern-swing 4.5s ease-in-out infinite;
+  transition: box-shadow 300ms ease;
+}
+@keyframes lantern-swing {
+  0%, 100% { transform: rotate(-5deg); }
+  50%      { transform: rotate(5deg); }
+}
+.artifact--lantern .artifact-num {
+  color: oklch(0.58 0.05 190);
+  font-family: 'Share Tech Mono', monospace;
+}
+.artifact--lantern .artifact-label {
+  font-family: 'Marcellus', 'Georgia', serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: oklch(0.80 0.05 192);
+  text-shadow: 0 0 10px oklch(0.55 0.09 190 / 0.35);
+  transition: color 200ms ease, text-shadow 200ms ease;
+}
+.artifact--lantern .artifact-note {
+  color: oklch(0.61 0.035 190 / 0.85);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.artifact--lantern .artifact-url {
+  color: oklch(0.54 0.03 190 / 0.6);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+.artifact--lantern .artifact-go {
+  color: oklch(0.58 0.05 190);
+  transition: color 200ms ease, transform 200ms ease;
+}
+@media (hover: hover) {
+  .artifact--lantern:hover {
+    border-color: oklch(0.60 0.08 192 / 0.9);
+    box-shadow: inset 0 0 22px oklch(0.20 0.05 190 / 0.4);
+  }
+  /* the pool blazes */
+  .artifact--lantern:hover::before { animation: none; opacity: 1; }
+  /* the lantern swings wide */
+  .artifact--lantern:hover::after {
+    animation-duration: 1.8s;
+    box-shadow: 0 0 18px oklch(0.70 0.12 192 / 0.8);
+  }
+  .artifact--lantern:hover .artifact-label {
+    color: oklch(0.88 0.06 194);
+    text-shadow: 0 0 14px oklch(0.62 0.12 192 / 0.6);
+  }
+  .artifact--lantern:hover .artifact-go { color: oklch(0.80 0.06 194); }
+}
+@media (max-width: 700px) {
+  .artifact--lantern .artifact-label { font-size: 15px; }
+  .artifact--lantern::before { right: calc(10% - 7px); }
+  .artifact--lantern::after { right: calc(10% - 7px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--lantern::before { animation: none; opacity: 0.7; }
+  .artifact--lantern::after { animation: none; transform: rotate(3deg); }
+}
+
+/* --- ZIPPER · Orealm hidden service — the seam: a steel zipper
+   set into the right side of the row, two columns of teeth with a
+   faint glow bleeding through the gap. Its slider crawls down the
+   seam at idle, sealing it; hover yanks the slider back up and
+   the seam blazes open. The slider travel is the only one on the
+   page. Teko tall condensed caps. Zero border-radius (archive
+   rule). --- */
+.artifact--zipper {
+  background:
+    /* the two columns of teeth */
+    repeating-linear-gradient(0deg, oklch(0.58 0.07 320) 0 3px, transparent 3px 7px) right 26% top 0 / 3px 100% no-repeat,
+    repeating-linear-gradient(0deg, oklch(0.58 0.07 320) 0 3px, transparent 3px 7px) right calc(26% + 7px) top 0 / 3px 100% no-repeat,
+    linear-gradient(180deg, oklch(0.13 0.022 320), oklch(0.09 0.016 320));
+  border: 1px solid oklch(0.46 0.08 320 / 0.55);
+  transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+/* the glow bleeding through the seam */
+.artifact--zipper::before {
+  content: '';
+  position: absolute;
+  right: calc(26% + 3px);
+  top: 6%;
+  bottom: 6%;
+  width: 4px;
+  background: linear-gradient(180deg, transparent, oklch(0.78 0.13 322) 30%, oklch(0.78 0.13 322) 70%, transparent);
+  box-shadow: 0 0 9px oklch(0.60 0.14 320 / 0.7);
+  opacity: 0.22;
+  pointer-events: none;
+  animation: zipper-seam 4s ease-in-out infinite;
+  transition: opacity 300ms ease, box-shadow 300ms ease;
+}
+@keyframes zipper-seam {
+  0%, 100% { opacity: 0.18; }
+  50%      { opacity: 0.4; }
+}
+/* the slider, crawling down and re-gripping at the top */
+.artifact--zipper::after {
+  content: '';
+  position: absolute;
+  right: calc(26% - 2px);
+  top: 12%;
+  width: 12px;
+  height: 15px;
+  background:
+    repeating-linear-gradient(90deg, oklch(0.20 0.03 320) 0 1px, transparent 1px 3px) 2px 4px / 8px 7px no-repeat,
+    linear-gradient(180deg, oklch(0.74 0.10 324), oklch(0.58 0.10 320));
+  border: 1px solid oklch(0.22 0.03 320 / 0.95);
+  box-shadow: 0 2px 0 oklch(0.12 0.02 320 / 0.9);
+  pointer-events: none;
+  animation: zipper-slide 9s ease-in-out infinite;
+  transition: transform 350ms cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+@keyframes zipper-slide {
+  0%, 18%  { transform: translateY(0); }
+  72%, 84% { transform: translateY(46px); }
+  100%     { transform: translateY(0); }
+}
+.artifact--zipper .artifact-num {
+  color: oklch(0.60 0.07 320);
+  font-family: 'Share Tech Mono', monospace;
+}
+.artifact--zipper .artifact-label {
+  font-family: 'Teko', 'Arial Narrow', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: oklch(0.80 0.08 322);
+  transition: color 200ms ease;
+}
+.artifact--zipper .artifact-note {
+  color: oklch(0.62 0.04 320 / 0.85);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.artifact--zipper .artifact-url {
+  color: oklch(0.55 0.035 320 / 0.6);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+.artifact--zipper .artifact-go {
+  color: oklch(0.60 0.07 320);
+  transition: color 200ms ease, transform 200ms ease;
+}
+@media (hover: hover) {
+  .artifact--zipper:hover {
+    border-color: oklch(0.64 0.09 322 / 0.9);
+    box-shadow: inset 0 0 22px oklch(0.24 0.06 320 / 0.4);
+  }
+  /* the seam blazes open */
+  .artifact--zipper:hover::before {
+    animation: none;
+    opacity: 1;
+    box-shadow: 0 0 14px oklch(0.70 0.15 322 / 0.9);
+  }
+  /* the slider yanks back up */
+  .artifact--zipper:hover::after { animation: none; transform: translateY(0); }
+  .artifact--zipper:hover .artifact-label { color: oklch(0.87 0.09 324); }
+  .artifact--zipper:hover .artifact-go { color: oklch(0.82 0.08 324); }
+}
+@media (max-width: 700px) {
+  .artifact--zipper .artifact-label { font-size: 15px; }
+  .artifact--zipper {
+    background:
+      repeating-linear-gradient(0deg, oklch(0.58 0.07 320) 0 3px, transparent 3px 7px) right 20% top 0 / 3px 100% no-repeat,
+      repeating-linear-gradient(0deg, oklch(0.58 0.07 320) 0 3px, transparent 3px 7px) right calc(20% + 7px) top 0 / 3px 100% no-repeat,
+      linear-gradient(180deg, oklch(0.13 0.022 320), oklch(0.09 0.016 320));
+  }
+  .artifact--zipper::before { right: calc(20% + 3px); }
+  .artifact--zipper::after { right: calc(20% - 2px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--zipper::before { animation: none; opacity: 0.3; }
+  .artifact--zipper::after { animation: none; }
+}
+
 /* --- LINKS DRAWERS — the Links page splits into two drawers under the
    menu: .com (clearnet) and .onion (Tor hidden services). Same head
    grammar as the game cabinets: chip-style tld, dim mono note, hard

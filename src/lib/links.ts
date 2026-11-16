@@ -23,6 +23,7 @@ export type ArchiveLink = {
     | 'drive' | 'beacon'
     | 'subvault' | 'crate' | 'void' | 'darkroom' | 'catalog'
     | 'cipher' | 'relay' | 'shelf' | 'portal'
+    | 'trapdoor' | 'forum' | 'lantern' | 'zipper'
 }
 
 export const LINKS: ArchiveLink[] = [
@@ -235,5 +236,29 @@ export const LINKS: ArchiveLink[] = [
     url: 'https://elhacker.info/',
     note: 'Classic Spanish hacker portal — tools, docs & community',
     variant: 'portal',
+  },
+  {
+    label: 'Klskg',
+    url: 'http://klskg4ypyrdfgkquqpwx53xjk5upkto3elmcakcvdxggyzpb4lxwl2qd.onion/',
+    note: 'Hidden service — open via Tor Browser',
+    variant: 'trapdoor',
+  },
+  {
+    label: 'Jaat Forum',
+    url: 'http://jaat7efxnopgxe7ypxzqpb46qmbaca36r7shexsowofexbfqp6p7xaad.onion/viewforum.php?f=47',
+    note: 'Tor forum — open via Tor Browser',
+    variant: 'forum',
+  },
+  {
+    label: 'Swamws',
+    url: 'http://swamws6z5ftw6cyfhtqdv36zv6h52vttutls4exxj77ltvtlch2wdcid.onion/',
+    note: 'Hidden service — open via Tor Browser',
+    variant: 'lantern',
+  },
+  {
+    label: 'Orealm',
+    url: 'http://orealmvxooetglfeguv2vp65a3rig2baq2ljc7jxxs4hsqsrcemkxcad.onion',
+    note: 'Hidden service — open via Tor Browser',
+    variant: 'zipper',
   },
 ]
