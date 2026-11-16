@@ -756,8 +756,8 @@ export function LinksPage({ navigate }: { navigate: NavFn }) {
   // Two drawers under this menu: .com (the clearnet side) and .onion (Tor
   // hidden services). Classification is automatic — any row whose host ends
   // in .onion renders in the .onion drawer, so adding a hidden service to
-  // LINKS needs no extra flag. Rows there always wear the dark onion
-  // material, whatever variant they declare.
+  // LINKS needs no extra flag. Rows keep whichever unique material they
+  // declare — every link is its own artifact, in both drawers.
   const isOnion = (l: ArchiveLink) => (/\.onion(\/|$)/i).test(l.url)
   const comLinks = links.filter(l => !isOnion(l))
   const onionLinks = links.filter(isOnion)
@@ -798,7 +798,7 @@ export function LinksPage({ navigate }: { navigate: NavFn }) {
           <EmptyState message="No onion links yet" />
         ) : (
           onionLinks.map((l, i) => (
-            <ArtifactLink key={l.url} link={{ ...l, variant: 'onion' }} index={i} />
+            <ArtifactLink key={l.url} link={l} index={i} />
           ))
         )}
       </div>

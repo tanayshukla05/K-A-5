@@ -20,6 +20,9 @@ export type ArchiveLink = {
     | 'wreck' | 'glitch' | 'friendly' | 'prism'
     | 'neural' | 'grimoire' | 'bbs' | 'detonate' | 'apex' | 'modules'
     | 'signal' | 'specimen' | 'blueprint' | 'onion'
+    | 'drive' | 'beacon'
+    | 'subvault' | 'crate' | 'void' | 'darkroom' | 'catalog'
+    | 'cipher' | 'relay' | 'shelf' | 'portal'
 }
 
 export const LINKS: ArchiveLink[] = [
@@ -166,5 +169,71 @@ export const LINKS: ArchiveLink[] = [
     url: 'https://cocomelonc.github.io/',
     note: 'Malware dev research blog — injection, evasion, crypto, Linux hacking',
     variant: 'blueprint',
+  },
+  {
+    label: 'Google Drive',
+    url: 'https://drive.google.com/drive/folders/12Mvq6kE2HJDwN2CZhEGWizyWt87YunkU',
+    note: 'Shared Drive folder — files & resources',
+    variant: 'drive',
+  },
+  {
+    label: 'xbz0n.sh',
+    url: 'https://xbz0n.sh/blog/mythic-c2-early-bird-defender-evasion',
+    note: 'Mythic C2 + EarlyBird APC injection — full Defender evasion walkthrough',
+    variant: 'beacon',
+  },
+  {
+    label: 'MEGA Subvault',
+    url: 'https://mega.nz/folder/HldHkSJD#jYRQtC67Ibsg36J4yOdwVA/folder/C4VwQTob',
+    note: 'MEGA folder — nested subfolder inside',
+    variant: 'subvault',
+  },
+  {
+    label: 'MEGA Crate',
+    url: 'https://mega.nz/folder/BX5SBKrY#Qw4AcfRRYMwheNDdrRlkkw',
+    note: 'MEGA folder — shared files',
+    variant: 'crate',
+  },
+  {
+    label: 'Damaga',
+    url: 'http://damaga377vyvydeqeuigxvl6g5sbmipoxb5nne6gpj3sisbnslbhvrqd.onion',
+    note: 'Hidden service — open via Tor Browser',
+    variant: 'void',
+  },
+  {
+    label: 'Darko',
+    url: 'http://darkoxfbjibhbb65wtvdnjygyi46a4xrjcakqkrzuw7ch6o7xgxhxmid.onion/',
+    note: 'Hidden service — open via Tor Browser',
+    variant: 'darkroom',
+  },
+  {
+    label: 'Deep Index',
+    url: 'http://q3o3hdjbf6vwxdnpskyhxw7w7rnmnfhz2szbuala4q24x6csbp7adiad.onion/links',
+    note: 'Hidden links directory — open via Tor Browser',
+    variant: 'catalog',
+  },
+  {
+    label: 'MEGA Drop',
+    url: 'https://mega.nz/file/4z9nCIYL#LNH3WaJa36tkMcL6D6tPLt5EZ_WvNNpz8X3dEU9hQCk',
+    note: 'MEGA single file — direct download',
+    variant: 'cipher',
+  },
+  {
+    label: 'Drive Locker',
+    url: 'https://drive.google.com/drive/folders/1pt305LLTt83xbyyEFlZkLsSaxsSOlfBY',
+    note: 'Google Drive folder — shared files',
+    variant: 'relay',
+  },
+  {
+    label: 'Drive Shelf',
+    url: 'https://drive.google.com/drive/folders/1CgN7DE3pNRNh_4BA_zrrMLqWz6KquwuD',
+    note: 'Google Drive folder — shared files',
+    variant: 'shelf',
+  },
+  {
+    label: 'elhacker.info',
+    url: 'https://elhacker.info/',
+    note: 'Classic Spanish hacker portal — tools, docs & community',
+    variant: 'portal',
   },
 ]

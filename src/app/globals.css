@@ -3321,6 +3321,1276 @@ body[data-route="about"] .bg-video-fallback {
   .artifact--onion::after { animation: none; left: 49%; opacity: 0.3; }
 }
 
+/* --- VAULT · Google Drive — the manila folder. The one row in the
+   directory made of actual paper: warm manila card with printed
+   fiber grain, dark ink instead of glow, an index tab with a
+   punched label window, and a stack of filed papers peeking out
+   of the right edge. Idle, someone rifling the folder nudges the
+   stack every few seconds; hover pulls the file out wider, stamps
+   the tab label dark and lifts the card. Staatliches stamped-caps
+   label. Zero border-radius (archive rule). --- */
+@font-face {
+  font-family: 'Staatliches';
+  src: url('/fonts/staatliches-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+.artifact--drive {
+  background:
+    repeating-linear-gradient(0deg, oklch(0.25 0.03 75 / 0.05) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(90deg, oklch(0.25 0.03 75 / 0.04) 0 1px, transparent 1px 7px),
+    linear-gradient(180deg, oklch(0.76 0.075 95) 0%, oklch(0.70 0.068 90) 100%);
+  border: 1px solid oklch(0.30 0.04 75 / 0.8);
+  box-shadow: inset 0 0 0 3px oklch(0.62 0.06 90 / 0.35); /* printed inner rule */
+  transition: border-color 300ms ease, box-shadow 300ms ease, filter 300ms ease;
+}
+/* the index tab, with its punched label window */
+.artifact--drive::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 26px;
+  width: 150px;
+  height: 13px;
+  background:
+    linear-gradient(180deg, oklch(0.97 0.012 95) 0 100%) no-repeat 8px 3px / 86px 7px,
+    linear-gradient(180deg, oklch(0.64 0.065 88), oklch(0.58 0.06 85));
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 6px 100%, 0 5px);
+  transition: background 300ms ease;
+  pointer-events: none;
+}
+/* the filed-paper stack peeking out of the right edge */
+.artifact--drive::after {
+  content: '';
+  position: absolute;
+  top: 14px;
+  bottom: 14px;
+  right: 0;
+  width: 12px;
+  background: linear-gradient(90deg,
+    transparent 0 2px,
+    oklch(0.92 0.02 95) 2px 5px,
+    oklch(0.30 0.04 75 / 0.55) 5px 6px,
+    oklch(0.88 0.02 92) 6px 9px,
+    oklch(0.30 0.04 75 / 0.55) 9px 10px,
+    oklch(0.96 0.015 98) 10px 13px);
+  opacity: 0.85;
+  pointer-events: none;
+  transition: width 350ms cubic-bezier(0.2, 0.9, 0.25, 1), opacity 250ms ease;
+  animation: drive-rifle 8s ease-in-out infinite;
+}
+@keyframes drive-rifle {
+  0%, 74%, 100% { width: 12px; }
+  82% { width: 17px; }
+  88% { width: 14px; }
+  93% { width: 18px; }
+}
+.artifact--drive .artifact-num {
+  color: oklch(0.26 0.035 70);
+  border: 1px solid oklch(0.30 0.04 75 / 0.7); /* stamped corner number */
+  padding: 0.15rem 0.45rem;
+  font-family: 'Staatliches', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  opacity: 0.9;
+}
+.artifact--drive .artifact-label {
+  font-family: 'Staatliches', 'Arial Narrow', sans-serif;
+  font-size: 21px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: oklch(0.24 0.035 70); /* dark ink */
+  text-shadow: 0 1px 0 oklch(1 0 0 / 0.35); /* pressed into the paper */
+}
+.artifact--drive .artifact-note {
+  color: oklch(0.34 0.045 70);
+  font-family: 'Special Elite', monospace;
+  font-size: 12px;
+}
+.artifact--drive .artifact-url {
+  color: oklch(0.36 0.04 70);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+.artifact--drive .artifact-go {
+  color: oklch(0.26 0.035 70);
+  transition: color 200ms ease, transform 200ms ease;
+}
+@media (hover: hover) {
+  .artifact--drive:hover {
+    border-color: oklch(0.24 0.04 70 / 0.95);
+    filter: brightness(1.06);
+    box-shadow: inset 0 0 0 3px oklch(0.62 0.06 90 / 0.35), 0 6px 16px oklch(0.30 0.05 70 / 0.35);
+  }
+  /* tab label stamps dark */
+  .artifact--drive:hover::before {
+    background:
+      linear-gradient(180deg, oklch(0.28 0.04 75) 0 100%) no-repeat 8px 3px / 86px 7px,
+      linear-gradient(180deg, oklch(0.58 0.065 85), oklch(0.52 0.06 82));
+  }
+  /* the file pulls out */
+  .artifact--drive:hover::after {
+    width: 22px;
+    opacity: 1;
+    animation: none;
+  }
+  .artifact--drive:hover .artifact-label {
+    color: oklch(0.19 0.04 65);
+    letter-spacing: 0.18em;
+  }
+  .artifact--drive:hover .artifact-note { color: oklch(0.28 0.045 68); }
+  .artifact--drive:hover .artifact-go { color: oklch(0.19 0.04 65); transform: translate(3px, -3px); }
+}
+@media (max-width: 700px) {
+  .artifact--drive .artifact-label { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--drive::after { animation: none; width: 12px; }
+}
+
+/* --- BEACON · xbz0n.sh Mythic C2 write-up — the intercept. The row
+   is a listening post: near-black receiver panel in electric teal
+   (a hue no other row uses), a faint scope ruler along its lower
+   edge, and a live signal pulse — a bright streak gliding the full
+   width of the baseline. Hover goes hot: the pulse sprints, packet
+   dots stream along the trace like callbacks flowing to the C2, and
+   the panel glows like a receiver locking on. Iceland display,
+   Share Tech Mono readouts. Zero border-radius (archive rule). --- */
+@font-face {
+  font-family: 'Iceland';
+  src: url('/fonts/iceland-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+.artifact--beacon {
+  background:
+    radial-gradient(120% 90% at 50% -20%, oklch(0.22 0.04 180 / 0.5) 0%, transparent 60%),
+    linear-gradient(180deg, oklch(0.13 0.02 180), oklch(0.10 0.015 180));
+  border: 1px solid oklch(0.55 0.10 180 / 0.55);
+  box-shadow: inset 0 0 18px oklch(0.35 0.08 180 / 0.25);
+  transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+/* the scope ruler: baseline + tick marks */
+.artifact--beacon::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 72%;
+  height: 7px;
+  background:
+    repeating-linear-gradient(90deg, oklch(0.55 0.10 180 / 0.35) 0 1px, transparent 1px 26px),
+    linear-gradient(180deg, transparent 0 3px, oklch(0.55 0.10 180 / 0.4) 3px 4px, transparent 4px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+/* the signal pulse — one bright streak gliding the baseline */
+.artifact--beacon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 72%;
+  height: 7px;
+  background: radial-gradient(60px 5px at center, oklch(0.85 0.14 180 / 0.95) 0 30%, transparent 65%);
+  background-size: 30% 100%;
+  background-repeat: no-repeat;
+  opacity: 0.4;
+  pointer-events: none;
+  animation: beacon-pulse 6s linear infinite;
+}
+@keyframes beacon-pulse {
+  0%        { background-position-x: -34%; opacity: 0.15; }
+  8%, 92%   { opacity: 0.65; }
+  100%      { background-position-x: 134%; opacity: 0.15; }
+}
+.artifact--beacon .artifact-num {
+  color: oklch(0.62 0.10 180);
+  font-family: 'Share Tech Mono', monospace;
+}
+.artifact--beacon .artifact-label {
+  font-family: 'Iceland', 'Share Tech Mono', monospace;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: oklch(0.78 0.11 180);
+  text-shadow: 0 0 8px oklch(0.6 0.13 180 / 0.35);
+}
+.artifact--beacon .artifact-note {
+  color: oklch(0.60 0.05 180 / 0.85);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.artifact--beacon .artifact-url {
+  color: oklch(0.56 0.05 180 / 0.6);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+.artifact--beacon .artifact-go {
+  color: oklch(0.62 0.10 180);
+  transition: color 200ms ease, transform 200ms ease;
+}
+@media (hover: hover) {
+  .artifact--beacon:hover {
+    border-color: oklch(0.72 0.13 180 / 0.9);
+    box-shadow: inset 0 0 22px oklch(0.40 0.10 180 / 0.4), 0 0 20px oklch(0.45 0.12 180 / 0.3);
+  }
+  /* intercept goes hot: sprinting pulse + streaming callbacks */
+  .artifact--beacon:hover::after {
+    opacity: 1;
+    background:
+      radial-gradient(60px 5px at center, oklch(0.92 0.15 180) 0 30%, transparent 65%) 0 0 / 22% 100% no-repeat,
+      repeating-radial-gradient(circle at 2px 3.5px, oklch(0.80 0.13 180 / 0.9) 0 1.6px, transparent 1.6px 13px) 0 0 / 13px 7px;
+    animation: beacon-hot 1.15s linear infinite;
+  }
+  .artifact--beacon:hover .artifact-label {
+    color: oklch(0.88 0.12 180);
+    letter-spacing: 0.26em;
+    text-shadow: 0 0 12px oklch(0.70 0.14 180 / 0.75);
+  }
+  .artifact--beacon:hover .artifact-note { color: oklch(0.72 0.08 180 / 0.95); }
+  .artifact--beacon:hover .artifact-url { color: oklch(0.68 0.08 180 / 0.8); }
+  .artifact--beacon:hover .artifact-go { color: oklch(0.80 0.12 180); transform: translate(3px, -3px); }
+}
+@keyframes beacon-hot {
+  0%   { background-position-x: -30%, 0; }
+  100% { background-position-x: 130%, 13px; }
+}
+@media (max-width: 700px) {
+  .artifact--beacon .artifact-label { font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--beacon::after { animation: none; background-position-x: 8%; opacity: 0.3; }
+}
+
+/* --- ARTIFACT SET 04 — eight more materials, one per new row.
+   No colour, font, texture or behaviour is shared with any other
+   row — each link is its own object. --- */
+
+@font-face {
+  font-family: 'Nova Square';
+  src: url('/fonts/nova-square-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Anton';
+  src: url('/fonts/anton-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Wallpoet';
+  src: url('/fonts/wallpoet-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Major Mono Display';
+  src: url('/fonts/major-mono-display-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Oswald';
+  src: url('/fonts/oswald-latin.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Six Caps';
+  src: url('/fonts/six-caps-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Oxanium';
+  src: url('/fonts/oxanium-latin.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Alfa Slab One';
+  src: url('/fonts/alfa-slab-one-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- SUBVAULT · MEGA nested folder — the bank vault: a steel door
+   with a seam splitting it down the middle, and a four-spoke
+   closing wheel turning slow on the right. Hover spins the wheel
+   fast and floods the door with emerald light. Nova Square display.
+   Zero border-radius (archive rule). --- */
+.artifact--subvault {
+  background: linear-gradient(180deg, oklch(0.16 0.03 165), oklch(0.12 0.025 165));
+  border: 1px solid oklch(0.50 0.09 165 / 0.55);
+  box-shadow: inset 0 0 16px oklch(0.30 0.07 165 / 0.3);
+  transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+/* the door: inset frame + seam down the middle */
+.artifact--subvault::before {
+  content: '';
+  position: absolute;
+  top: 12%;
+  bottom: 12%;
+  left: 12%;
+  right: 12%;
+  border: 1px solid oklch(0.45 0.08 165 / 0.45);
+  background: linear-gradient(90deg,
+    transparent calc(50% - 0.5px),
+    oklch(0.45 0.08 165 / 0.55) calc(50% - 0.5px),
+    oklch(0.45 0.08 165 / 0.55) calc(50% + 0.5px),
+    transparent calc(50% + 0.5px));
+  transition: border-color 300ms ease;
+  pointer-events: none;
+}
+/* the closing wheel: square rim, four spokes — always turning */
+.artifact--subvault::after {
+  content: '';
+  position: absolute;
+  right: 16%;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  margin-top: -11px;
+  border: 1px solid oklch(0.60 0.11 165 / 0.8);
+  background:
+    repeating-conic-gradient(from 8deg, oklch(0.60 0.11 165 / 0.85) 0 10deg, transparent 10deg 90deg),
+    oklch(0.20 0.04 165);
+  opacity: 0.8;
+  pointer-events: none;
+  animation: subvault-spin 12s linear infinite;
+}
+@keyframes subvault-spin {
+  to { transform: rotate(360deg); }
+}
+.artifact--subvault .artifact-num {
+  color: oklch(0.55 0.09 165);
+  font-family: 'Share Tech Mono', monospace;
+}
+.artifact--subvault .artifact-label {
+  font-family: 'Nova Square', 'Segoe UI', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: oklch(0.78 0.10 165);
+  text-shadow: 0 0 10px oklch(0.55 0.12 165 / 0.35);
+}
+.artifact--subvault .artifact-note {
+  color: oklch(0.60 0.05 165 / 0.85);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.artifact--subvault .artifact-url {
+  color: oklch(0.55 0.05 165 / 0.6);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+.artifact--subvault .artifact-go {
+  color: oklch(0.55 0.09 165);
+  transition: color 200ms ease, transform 200ms ease;
+}
+@media (hover: hover) {
+  .artifact--subvault:hover {
+    border-color: oklch(0.70 0.12 165 / 0.9);
+    box-shadow: inset 0 0 24px oklch(0.38 0.09 165 / 0.45), 0 0 20px oklch(0.42 0.11 165 / 0.3);
+  }
+  .artifact--subvault:hover::before { border-color: oklch(0.60 0.10 165 / 0.7); }
+  .artifact--subvault:hover::after {
+    opacity: 1;
+    animation-duration: 1.4s;
+    box-shadow: 0 0 14px oklch(0.60 0.13 165 / 0.7);
+  }
+  .artifact--subvault:hover .artifact-label {
+    color: oklch(0.86 0.12 165);
+    text-shadow: 0 0 14px oklch(0.62 0.14 165 / 0.6);
+  }
+  .artifact--subvault:hover .artifact-go { color: oklch(0.78 0.12 165); transform: translate(3px, -3px); }
+}
+@media (max-width: 700px) {
+  .artifact--subvault .artifact-label { font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--subvault::after { animation: none; }
+}
+
+/* --- CRATE · MEGA folder — the cargo crate: dark plank wood with
+   groove lines, a riveted steel strap down the left edge, and a
+   hazard-stripe strip along the bottom that marches right — slow
+   at idle, quick on hover. Anton heavy caps.
+   Zero border-radius (archive rule). --- */
+.artifact--crate {
+  background:
+    linear-gradient(180deg, oklch(0.10 0.02 55 / 0.35), transparent 30%, transparent 70%, oklch(0.10 0.02 55 / 0.35)),
+    repeating-linear-gradient(180deg, oklch(0.29 0.05 62) 0 13px, oklch(0.24 0.045 58) 13px 14px);
+  border: 1px solid oklch(0.16 0.03 55 / 0.9);
+  box-shadow: inset 0 0 12px oklch(0.10 0.02 55 / 0.6);
+  transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+/* riveted steel strap */
+.artifact--crate::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 42px;
+  width: 10px;
+  background:
+    radial-gradient(3px 3px at 5px 8px, oklch(0.75 0.01 60) 45%, transparent 50%),
+    radial-gradient(3px 3px at 5px calc(100% - 8px), oklch(0.75 0.01 60) 45%, transparent 50%),
+    linear-gradient(90deg, oklch(0.42 0.015 60), oklch(0.55 0.02 60) 45%, oklch(0.38 0.015 60));
+  opacity: 0.85;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+/* hazard stripes marching right along the bottom edge */
+.artifact--crate::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 9px;
+  background: repeating-linear-gradient(45deg,
+    oklch(0.80 0.09 75 / 0.85) 0 8px,
+    oklch(0.16 0.03 55 / 0.9) 8px 16px);
+  background-size: 22.627px 100%;
+  opacity: 0.5;
+  pointer-events: none;
+  animation: crate-march 3.2s linear infinite;
+}
+@keyframes crate-march {
+  to { background-position-x: 22.627px; }
+}
+.artifact--crate .artifact-num {
+  color: oklch(0.72 0.06 70);
+  font-family: 'Anton', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+.artifact--crate .artifact-label {
+  font-family: 'Anton', 'Arial Narrow', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: oklch(0.82 0.09 78);
+  text-shadow: 2px 2px 0 oklch(0.12 0.03 55 / 0.9); /* stamped into the wood */
+}
+.artifact--crate .artifact-note {
+  color: oklch(0.70 0.04 70);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.artifact--crate .artifact-url {
+  color: oklch(0.62 0.035 68);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+.artifact--crate .artifact-go {
+  color: oklch(0.72 0.06 70);
+  transition: color 200ms ease, transform 200ms ease;
+}
+@media (hover: hover) {
+  .artifact--crate:hover {
+    border-color: oklch(0.70 0.08 70 / 0.8);
+    box-shadow: inset 0 0 18px oklch(0.16 0.03 55 / 0.7), 0 0 16px oklch(0.40 0.06 68 / 0.25);
+  }
+  .artifact--crate:hover::before { opacity: 1; }
+  .artifact--crate:hover::after {
+    opacity: 0.95;
+    animation-duration: 0.9s;
+  }
+  .artifact--crate:hover .artifact-label {
+    color: oklch(0.90 0.10 80);
+    letter-spacing: 0.14em;
+  }
+  .artifact--crate:hover .artifact-go { color: oklch(0.85 0.09 78); transform: translate(3px, -3px); }
+}
+@media (max-width: 700px) {
+  .artifact--crate .artifact-label { font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--crate::after { animation: none; }
+}
+
+/* --- CIPHER · MEGA single file — the encrypted file: a wall of
+   redacted ciphertext (rows of glyph blocks) under chartreuse
+   light. A decode caret sweeps one line at idle; hover decodes
+   the whole wall — the blocks come up bright and legible — and
+   the caret sprints. Wallpoet stencil glyphs.
+   Zero border-radius (archive rule). --- */
+.artifact--cipher {
+  background: linear-gradient(180deg, oklch(0.13 0.03 110), oklch(0.10 0.025 110));
+  border: 1px solid oklch(0.50 0.12 110 / 0.5);
+  transition: border-color 300ms ease;
+}
+/* the ciphertext wall: vertical gaps × line rows = glyph blocks */
+.artifact--cipher::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.55;
+  transition: opacity 400ms ease, filter 400ms ease;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 6px, oklch(0.55 0.12 110 / 0.30) 6px 7px, transparent 7px 12px),
+    repeating-linear-gradient(0deg, transparent 0 5px, oklch(0.55 0.12 110 / 0.24) 5px 6px, transparent 6px 12px);
+  pointer-events: none;
+}
+/* the decode caret sweeping the wall */
+.artifact--cipher::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  bottom: 10%;
+  left: 2%;
+  width: 2px;
+  background: oklch(0.85 0.17 110);
+  box-shadow: 0 0 10px oklch(0.70 0.16 110 / 0.8);
+  opacity: 0.5;
+  pointer-events: none;
+  animation: cipher-scan 5.5s linear infinite;
+}
+@keyframes cipher-scan {
+  0%   { left: 2%; opacity: 0; }
+  10%  { opacity: 0.55; }
+  90%  { opacity: 0.55; }
+  100% { left: calc(98% - 2px); opacity: 0; }
+}
+.artifact--cipher .artifact-num {
+  color: oklch(0.60 0.11 110);
+  font-family: 'Share Tech Mono', monospace;
+}
+.artifact--cipher .artifact-label {
+  font-family: 'Wallpoet', 'Share Tech Mono', monospace;
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: oklch(0.80 0.13 110);
+  text-shadow: 0 0 10px oklch(0.60 0.15 110 / 0.4);
+}
+.artifact--cipher .artifact-note {
+  color: oklch(0.62 0.06 110 / 0.85);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.artifact--cipher .artifact-url {
+  color: oklch(0.55 0.05 110 / 0.6);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+.artifact--cipher .artifact-go {
+  color: oklch(0.60 0.11 110);
+  transition: color 200ms ease, transform 200ms ease;
+}
+@media (hover: hover) {
+  .artifact--cipher:hover {
+    border-color: oklch(0.68 0.14 110 / 0.9);
+    box-shadow: inset 0 0 20px oklch(0.25 0.07 110 / 0.4), 0 0 18px oklch(0.40 0.13 110 / 0.3);
+  }
+  /* the wall decodes */
+  .artifact--cipher:hover::before {
+    opacity: 1;
+    filter: drop-shadow(0 0 4px oklch(0.60 0.14 110 / 0.5));
+  }
+  .artifact--cipher:hover::after { animation-duration: 1.2s; opacity: 1; }
+  .artifact--cipher:hover .artifact-label {
+    color: oklch(0.88 0.15 112);
+    text-shadow: 0 0 14px oklch(0.65 0.17 110 / 0.65);
+  }
+  .artifact--cipher:hover .artifact-go { color: oklch(0.85 0.14 112); transform: translate(3px, -3px); }
+}
+@media (max-width: 700px) {
+  .artifact--cipher .artifact-label { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--cipher::after { animation: none; left: 12%; }
+}
+
+/* --- VOID · Damaga hidden service — the void entry: pure
+   monochrome, the only row with no colour at all. Concentric
+   iris rings etched at the right, a shutter wedge slowly circling
+   like an eye deciding whether to open. Hover: the iris dilates —
+   rings brighten and the wedge sweeps faster. Major Mono Display,
+   never uppercased — its half-caps are the identity.
+   Zero border-radius (archive rule). --- */
+.artifact--void {
+  background: linear-gradient(180deg, oklch(0.10 0.004 0), oklch(0.07 0.004 0));
+  border: 1px solid oklch(0.72 0 0 / 0.28);
+  box-shadow: inset 0 0 20px oklch(0 0 0 / 0.8);
+  transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+/* the iris: concentric rings */
+.artifact--void::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.7;
+  transition: opacity 400ms ease;
+  background: repeating-radial-gradient(circle at 86% 50%,
+    transparent 0 7px,
+    oklch(0.85 0 0 / 0.05) 7px 8px,
+    transparent 8px 16px);
+  pointer-events: none;
+}
+/* the shutter wedge circling the iris */
+.artifact--void::after {
+  content: '';
+  position: absolute;
+  right: calc(14% - 30px);
+  top: 50%;
+  width: 60px;
+  height: 60px;
+  margin-top: -30px;
+  background: conic-gradient(from 0deg,
+    transparent 0deg,
+    oklch(0.90 0 0 / 0.22) 40deg,
+    transparent 80deg);
+  opacity: 0.8;
+  pointer-events: none;
+  animation: void-sweep 9s linear infinite;
+}
+@keyframes void-sweep {
+  to { transform: rotate(360deg); }
+}
+.artifact--void .artifact-num {
+  color: oklch(0.70 0 0);
+  font-family: 'Major Mono Display', monospace;
+  font-size: 10px;
+}
+.artifact--void .artifact-label {
+  font-family: 'Major Mono Display', monospace;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: oklch(0.88 0 0); /* deliberately no uppercase transform */
+  text-shadow: 0 0 12px oklch(0.85 0 0 / 0.25);
+}
+.artifact--void .artifact-note {
+  color: oklch(0.62 0 0);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.artifact--void .artifact-url {
+  color: oklch(0.50 0 0);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+.artifact--void .artifact-go {
+  color: oklch(0.70 0 0);
+  transition: color 200ms ease, transform 200ms ease;
+}
+@media (hover: hover) {
+  .artifact--void:hover {
+    border-color: oklch(0.85 0 0 / 0.5);
+    box-shadow: inset 0 0 26px oklch(0.20 0 0 / 0.6), 0 0 18px oklch(0.70 0 0 / 0.12);
+  }
+  .artifact--void:hover::before { opacity: 1; }
+  .artifact--void:hover::after {
+    opacity: 1;
+    animation-duration: 2.4s;
+    background: conic-gradient(from 0deg,
+      transparent 0deg,
+      oklch(0.95 0 0 / 0.4) 55deg,
+      transparent 110deg);
+  }
+  .artifact--void:hover .artifact-label {
+    color: oklch(0.97 0 0);
+    letter-spacing: 0.14em;
+    text-shadow: 0 0 14px oklch(0.90 0 0 / 0.4);
+  }
+  .artifact--void:hover .artifact-go { color: oklch(0.90 0 0); transform: translate(3px, -3px); }
+}
+@media (max-width: 700px) {
+  .artifact--void .artifact-label { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--void::after { animation: none; transform: rotate(40deg); }
+}
+
+/* --- DARKROOM · Darko hidden service — the film darkroom: a
+   near-black maroon bath under a dim safelight, film sprocket
+   holes along the top and bottom edges, and a print developing
+   in the tray — a pale ghost at idle that surfaces fully on
+   hover. Oswald condensed, warm bone-white.
+   Zero border-radius (archive rule). --- */
+.artifact--darkroom {
+  background:
+    radial-gradient(90% 120% at 18% 0%, oklch(0.35 0.09 20 / 0.4) 0%, transparent 55%),
+    linear-gradient(180deg, oklch(0.13 0.028 15), oklch(0.09 0.02 15));
+  border: 1px solid oklch(0.42 0.08 18 / 0.5);
+  transition: border-color 300ms ease;
+}
+/* film edges: sprocket holes along top and bottom */
+.artifact--darkroom::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(90deg, oklch(0.85 0.03 15 / 0.3) 0 5px, transparent 5px 13px) 0 0 / 100% 5px no-repeat,
+    repeating-linear-gradient(90deg, oklch(0.85 0.03 15 / 0.3) 0 5px, transparent 5px 13px) 0 100% / 100% 5px no-repeat;
+  pointer-events: none;
+}
+/* the print developing in the tray */
+.artifact--darkroom::after {
+  content: '';
+  position: absolute;
+  right: 8%;
+  bottom: 16%;
+  width: 44px;
+  height: 26px;
+  background: linear-gradient(180deg, oklch(0.82 0.02 25 / 0.9), oklch(0.55 0.06 22 / 0.9));
+  box-shadow: 0 0 0 2px oklch(0.20 0.02 15 / 0.9), 0 0 16px oklch(0.50 0.10 20 / 0.4);
+  opacity: 0.1;
+  pointer-events: none;
+  animation: darkroom-develop 7s ease-in-out infinite;
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+@keyframes darkroom-develop {
+  0%, 100% { opacity: 0.1; }
+  50%      { opacity: 0.3; }
+}
+.artifact--darkroom .artifact-num {
+  color: oklch(0.60 0.05 20);
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+}
+.artifact--darkroom .artifact-label {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: oklch(0.82 0.02 25);
+}
+.artifact--darkroom .artifact-note {
+  color: oklch(0.66 0.03 20 / 0.85);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.artifact--darkroom .artifact-url {
+  color: oklch(0.58 0.03 20 / 0.6);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+.artifact--darkroom .artifact-go {
+  color: oklch(0.60 0.05 20);
+  transition: color 200ms ease, transform 200ms ease;
+}
+@media (hover: hover) {
+  .artifact--darkroom:hover {
+    border-color: oklch(0.55 0.10 20 / 0.85);
+    box-shadow: inset 0 0 22px oklch(0.28 0.06 18 / 0.45), 0 0 18px oklch(0.40 0.10 20 / 0.25);
+  }
+  /* the print surfaces */
+  .artifact--darkroom:hover::after {
+    opacity: 0.95;
+    transform: translateY(-3px);
+    animation: none;
+  }
+  .artifact--darkroom:hover .artifact-label {
+    color: oklch(0.90 0.03 20);
+    text-shadow: 0 0 12px oklch(0.45 0.12 20 / 0.5);
+  }
+  .artifact--darkroom:hover .artifact-go { color: oklch(0.80 0.04 22); transform: translate(3px, -3px); }
+}
+@media (max-width: 700px) {
+  .artifact--darkroom .artifact-label { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--darkroom::after { animation: none; opacity: 0.35; }
+}
+
+/* --- CATALOG · Deep Index hidden directory — the card-catalog
+   drawer: a dark oak drawer face with a brass label frame, and a
+   drawer of index cards that slides open on hover, spilling pale
+   card edges from the seam. Six Caps towering condensed caps.
+   Zero border-radius (archive rule). --- */
+.artifact--catalog {
+  background:
+    repeating-linear-gradient(90deg, oklch(0.22 0.02 48) 0 26px, oklch(0.19 0.02 46) 26px 27px),
+    linear-gradient(180deg, oklch(0.24 0.025 50), oklch(0.17 0.02 44));
+  border: 1px solid oklch(0.45 0.08 48 / 0.55);
+  box-shadow: inset 0 3px 0 oklch(0.55 0.09 50 / 0.35); /* brass rail on top */
+  transition: border-color 300ms ease;
+}
+/* the brass label frame */
+.artifact--catalog::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 18%;
+  width: 92px;
+  height: 15px;
+  transform: translateX(-50%);
+  background:
+    linear-gradient(180deg, oklch(0.30 0.03 48) 0 100%) 6px 4px / 80px 7px no-repeat,
+    linear-gradient(180deg, oklch(0.62 0.10 55), oklch(0.48 0.09 48));
+  box-shadow: 0 1px 0 oklch(0.70 0.10 58 / 0.4), inset 0 0 0 1px oklch(0.35 0.05 48 / 0.6);
+  transition: background 300ms ease;
+  pointer-events: none;
+}
+/* the drawer of cards — seeps light at idle, slides open on hover */
+.artifact--catalog::after {
+  content: '';
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 0;
+  height: 10px;
+  background: repeating-linear-gradient(90deg,
+    oklch(0.88 0.02 60 / 0.9) 0 3px,
+    oklch(0.30 0.03 48) 3px 5px,
+    oklch(0.80 0.02 58 / 0.9) 5px 8px,
+    oklch(0.30 0.03 48) 8px 10px);
+  opacity: 0.22;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition: opacity 400ms ease, transform 400ms cubic-bezier(0.2, 0.9, 0.25, 1);
+  animation: catalog-seep 6s ease-in-out infinite;
+}
+@keyframes catalog-seep {
+  0%, 100% { opacity: 0.2; }
+  50%      { opacity: 0.38; }
+}
+.artifact--catalog .artifact-num {
+  color: oklch(0.70 0.07 55);
+  font-family: 'Share Tech Mono', monospace;
+}
+.artifact--catalog .artifact-label {
+  font-family: 'Six Caps', 'Arial Narrow', sans-serif;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: oklch(0.80 0.10 60);
+  text-shadow: 0 1px 0 oklch(0.20 0.03 45 / 0.8);
+}
+.artifact--catalog .artifact-note {
+  color: oklch(0.66 0.04 52 / 0.85);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.artifact--catalog .artifact-url {
+  color: oklch(0.58 0.035 50 / 0.6);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+.artifact--catalog .artifact-go {
+  color: oklch(0.70 0.07 55);
+  transition: color 200ms ease, transform 200ms ease;
+}
+@media (hover: hover) {
+  .artifact--catalog:hover {
+    border-color: oklch(0.62 0.10 55 / 0.9);
+    box-shadow: inset 0 3px 0 oklch(0.62 0.10 55 / 0.5), 0 0 18px oklch(0.45 0.09 52 / 0.3);
+  }
+  /* the brass frame lights up */
+  .artifact--catalog:hover::before {
+    background:
+      linear-gradient(180deg, oklch(0.88 0.03 60) 0 100%) 6px 4px / 80px 7px no-repeat,
+      linear-gradient(180deg, oklch(0.68 0.11 58), oklch(0.55 0.10 52));
+  }
+  /* the drawer slides open */
+  .artifact--catalog:hover::after {
+    opacity: 1;
+    transform: translateY(0);
+    animation: none;
+  }
+  .artifact--catalog:hover .artifact-label { color: oklch(0.88 0.11 62); }
+  .artifact--catalog:hover .artifact-go { color: oklch(0.88 0.11 62); transform: translate(3px, -3px); }
+}
+@media (max-width: 700px) {
+  .artifact--catalog .artifact-label { font-size: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--catalog::after { animation: none; opacity: 0.3; }
+}
+
+/* --- RELAY · Drive locker — the file-transfer console: a near-black
+   violet console with a chunked transfer bar that fills square by
+   square, forever syncing at idle, and a download chevron bobbing
+   down above it. Hover: the transfer floods in and the chevron
+   bounces quicker. Animated clip-path with steps() — no other row
+   fills, and nothing else on the page bounces. Oxanium squared caps.
+   Zero border-radius (archive rule). --- */
+.artifact--relay {
+  background:
+    /* the dim track the chunks fill into */
+    linear-gradient(180deg, oklch(0.20 0.04 300 / 0.55), oklch(0.13 0.03 300 / 0.55)) right 16px bottom 11px / 120px 9px no-repeat,
+    radial-gradient(120% 140% at 12% 0%, oklch(0.28 0.06 300 / 0.35) 0%, transparent 55%),
+    linear-gradient(180deg, oklch(0.15 0.03 300), oklch(0.10 0.022 300));
+  border: 1px solid oklch(0.48 0.09 300 / 0.55);
+  transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+/* the transfer bar: ten chunks revealed one by one — steps(10) over
+   a clip-path inset, so each step lights exactly one chunk */
+.artifact--relay::before {
+  content: '';
+  position: absolute;
+  right: 16px;
+  bottom: 11px;
+  width: 120px;
+  height: 9px;
+  background:
+    linear-gradient(180deg, oklch(0.88 0.10 302 / 0.5) 0 2px, transparent 2px),
+    repeating-linear-gradient(90deg, oklch(0.72 0.14 300) 0 8px, transparent 8px 12px);
+  pointer-events: none;
+  clip-path: inset(0 100% 0 0);
+  animation: relay-fill 5.6s steps(10) infinite;
+}
+@keyframes relay-fill {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+/* the download chevron, bobbing under gravity */
+.artifact--relay::after {
+  content: '';
+  position: absolute;
+  top: 9px;
+  right: 14px;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid oklch(0.72 0.12 300 / 0.8);
+  border-bottom: 2px solid oklch(0.72 0.12 300 / 0.8);
+  pointer-events: none;
+  animation: relay-bob 1.9s ease-in-out infinite;
+}
+@keyframes relay-bob {
+  0%, 100% { transform: translate(0, -2px) rotate(45deg); }
+  50%      { transform: translate(0, 3px) rotate(45deg); }
+}
+.artifact--relay .artifact-num {
+  color: oklch(0.62 0.08 300);
+  font-family: 'Share Tech Mono', monospace;
+}
+.artifact--relay .artifact-label {
+  font-family: 'Oxanium', 'Segoe UI', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: oklch(0.80 0.09 300);
+  text-shadow: 0 0 9px oklch(0.55 0.14 300 / 0.4);
+  transition: color 200ms ease, letter-spacing 300ms ease, text-shadow 200ms ease;
+}
+.artifact--relay .artifact-note {
+  color: oklch(0.63 0.04 300 / 0.85);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.artifact--relay .artifact-url {
+  color: oklch(0.56 0.035 300 / 0.6);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+.artifact--relay .artifact-go {
+  color: oklch(0.62 0.08 300);
+  transition: color 200ms ease, transform 200ms ease;
+}
+@media (hover: hover) {
+  .artifact--relay:hover {
+    border-color: oklch(0.66 0.10 300 / 0.9);
+    box-shadow: inset 0 0 22px oklch(0.26 0.07 300 / 0.4);
+  }
+  /* the transfer floods in */
+  .artifact--relay:hover::before { animation-duration: 1.3s; }
+  /* the chevron bounces quicker */
+  .artifact--relay:hover::after {
+    animation-duration: 0.8s;
+    border-color: oklch(0.86 0.13 302 / 0.95);
+  }
+  .artifact--relay:hover .artifact-label {
+    color: oklch(0.87 0.10 302);
+    letter-spacing: 0.14em;
+    text-shadow: 0 0 12px oklch(0.60 0.16 300 / 0.55);
+  }
+  .artifact--relay:hover .artifact-go { color: oklch(0.84 0.10 302); }
+}
+@media (max-width: 700px) {
+  .artifact--relay .artifact-label { font-size: 14px; }
+  .artifact--relay {
+    background:
+      linear-gradient(180deg, oklch(0.20 0.04 300 / 0.55), oklch(0.13 0.03 300 / 0.55)) right 12px bottom 9px / 90px 8px no-repeat,
+      radial-gradient(120% 140% at 12% 0%, oklch(0.28 0.06 300 / 0.35) 0%, transparent 55%),
+      linear-gradient(180deg, oklch(0.15 0.03 300), oklch(0.10 0.022 300));
+  }
+  .artifact--relay::before { right: 12px; bottom: 9px; width: 90px; height: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--relay::before { animation: none; clip-path: inset(0 0 0 0); }
+  .artifact--relay::after { animation: none; }
+}
+
+/* --- SHELF · Drive shelf — the library shelf: six book spines of
+   different heights standing on a warm plank at the right, one of
+   them loose. Idle, the loose book leans and rights itself; hover
+   pulls it out and it tumbles off the shelf with a gravity ease —
+   the only row on the page where anything falls. Alfa Slab One,
+   stamped like a spine. Zero border-radius (archive rule). --- */
+.artifact--shelf {
+  background:
+    radial-gradient(110% 130% at 20% 0%, oklch(0.30 0.05 340 / 0.4) 0%, transparent 55%),
+    linear-gradient(180deg, oklch(0.15 0.025 340), oklch(0.10 0.018 340));
+  border: 1px solid oklch(0.46 0.08 340 / 0.5);
+  transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+/* the book spines on the plank — slot 4 left open for the loose one */
+.artifact--shelf::before {
+  content: '';
+  position: absolute;
+  right: 9%;
+  bottom: 12px;
+  width: 88px;
+  height: 40px;
+  background:
+    /* the plank */
+    linear-gradient(180deg, oklch(0.55 0.05 345) 0 1px, oklch(0.30 0.03 342) 1px 4px, oklch(0.20 0.02 340) 4px) 0 100% / 100% 5px no-repeat,
+    /* spines, left to right, varied heights */
+    linear-gradient(180deg, oklch(0.72 0.09 348) 0 2px, oklch(0.60 0.11 340) 2px) 0 100% / 10px 36px no-repeat,
+    linear-gradient(180deg, oklch(0.70 0.08 335) 0 2px, oklch(0.54 0.10 336) 2px) 13px 100% / 9px 30px no-repeat,
+    linear-gradient(180deg, oklch(0.74 0.08 342) 0 2px, oklch(0.62 0.12 338) 2px) 25px 100% / 11px 38px no-repeat,
+    linear-gradient(180deg, oklch(0.68 0.09 344) 0 2px, oklch(0.56 0.10 341) 2px) 52px 100% / 10px 33px no-repeat,
+    linear-gradient(180deg, oklch(0.71 0.08 346) 0 2px, oklch(0.58 0.11 337) 2px) 65px 100% / 9px 29px no-repeat,
+    linear-gradient(180deg, oklch(0.66 0.10 339) 0 2px, oklch(0.52 0.09 343) 2px) 77px 100% / 10px 35px no-repeat;
+  pointer-events: none;
+}
+/* the loose book: leans at idle, tumbles off on hover */
+.artifact--shelf::after {
+  content: '';
+  position: absolute;
+  right: calc(9% + 39px);
+  bottom: 17px;
+  width: 10px;
+  height: 31px;
+  background:
+    linear-gradient(180deg, oklch(0.80 0.09 350) 0 2px, oklch(0.66 0.13 344) 2px);
+  box-shadow: inset -2px 0 0 oklch(0.30 0.05 340 / 0.6); /* the spine groove */
+  transform-origin: 50% 100%;
+  pointer-events: none;
+  animation: shelf-lean 7s ease-in-out infinite;
+  transition: transform 450ms cubic-bezier(0.55, 0, 1, 0.45);
+}
+@keyframes shelf-lean {
+  0%, 80%, 100% { transform: rotate(0deg); }
+  35%           { transform: rotate(5deg); }
+  55%           { transform: rotate(2.5deg); }
+}
+.artifact--shelf .artifact-num {
+  color: oklch(0.60 0.06 340);
+  font-family: 'Share Tech Mono', monospace;
+}
+.artifact--shelf .artifact-label {
+  font-family: 'Alfa Slab One', 'Georgia', serif;
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: oklch(0.80 0.05 345);
+  text-shadow: 0 2px 0 oklch(0.16 0.02 340 / 0.9); /* stamped into the spine */
+  transition: color 200ms ease, text-shadow 200ms ease;
+}
+.artifact--shelf .artifact-note {
+  color: oklch(0.62 0.035 340 / 0.85);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.artifact--shelf .artifact-url {
+  color: oklch(0.55 0.03 340 / 0.6);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+.artifact--shelf .artifact-go {
+  color: oklch(0.60 0.06 340);
+  transition: color 200ms ease, transform 200ms ease;
+}
+@media (hover: hover) {
+  .artifact--shelf:hover {
+    border-color: oklch(0.64 0.09 340 / 0.9);
+    box-shadow: inset 0 -14px 24px oklch(0.30 0.07 340 / 0.35);
+  }
+  /* the book slides out and falls */
+  .artifact--shelf:hover::after {
+    transform: translate(3px, 9px) rotate(14deg);
+  }
+  .artifact--shelf:hover .artifact-label {
+    color: oklch(0.86 0.06 345);
+    text-shadow: 0 2px 0 oklch(0.16 0.02 340 / 0.9), 0 0 12px oklch(0.50 0.10 340 / 0.4);
+  }
+  .artifact--shelf:hover .artifact-go { color: oklch(0.82 0.06 345); }
+}
+@media (max-width: 700px) {
+  .artifact--shelf .artifact-label { font-size: 12px; }
+  .artifact--shelf::before { transform: scale(0.72); transform-origin: bottom right; }
+  .artifact--shelf::after { right: calc(9% + 28px); width: 7px; height: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--shelf::after { animation: none; transform: rotate(4deg); }
+}
+
+/* --- PORTAL · elhacker.info — the old web, rebuilt from zero: a
+   2000s portal front page. Tiled checkerboard wallpaper under the
+   era's hard bevel; a vertical news ticker of scrolling text runs
+   down the left edge — and pauses so you can read it on hover;
+   top-right, a mechanical hit-counter odometer ticks digits up in
+   its little green window, spinning fast when a "visitor" arrives.
+   Hover: the bevel presses in and the title takes the era's lime
+   text-selection. No other row scrolls text, ticks digits, pauses
+   on hover or highlights its label. Electrolize display.
+   Zero border-radius (archive rule). --- */
+@font-face {
+  font-family: 'Electrolize';
+  src: url('/fonts/electrolize-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+.artifact--portal {
+  background:
+    repeating-conic-gradient(oklch(0.15 0.025 135) 0% 25%, oklch(0.115 0.02 135) 0% 50%) 0 0 / 6px 6px,
+    linear-gradient(180deg, oklch(0.13 0.02 135), oklch(0.10 0.015 135));
+  border: 1px solid oklch(0.40 0.05 135 / 0.7);
+  /* the 2000s bevel: hard light top-left, hard dark bottom-right */
+  box-shadow:
+    inset 1px 1px 0 oklch(0.70 0.03 135 / 0.5),
+    inset -1px -1px 0 oklch(0 0 0 / 0.8);
+  transition: box-shadow 200ms steps(2), border-color 300ms ease;
+}
+/* the news ticker: doubled text scrolling seamlessly up the left
+   edge. The string is two identical halves, so translateY(-50%) of
+   its own height is a perfect loop at any font metric. */
+.artifact--portal::before {
+  content: 'ELHACKER.INFO /// NOTICIAS /// TOOLS /// DOCUMENTOS /// FORO /// EXPLOITS /// HACKING /// '
+           'ELHACKER.INFO /// NOTICIAS /// TOOLS /// DOCUMENTOS /// FORO /// EXPLOITS /// HACKING /// ';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 13px;
+  writing-mode: vertical-rl;
+  white-space: pre;
+  font-family: 'Electrolize', monospace;
+  font-size: 9px;
+  line-height: 13px;
+  letter-spacing: 0.22em;
+  color: oklch(0.72 0.12 132 / 0.5);
+  background: linear-gradient(180deg, oklch(0.07 0.012 135), oklch(0.05 0.008 135));
+  border-right: 1px solid oklch(0.45 0.07 135 / 0.55);
+  box-shadow: inset -1px 0 0 oklch(0 0 0 / 0.6);
+  pointer-events: none;
+  animation: portal-ticker 16s linear infinite;
+  transition: color 300ms ease;
+}
+@keyframes portal-ticker {
+  to { transform: translateY(-50%); }
+}
+/* the hit-counter odometer: a reel of digits ticking up in a tiny
+   green window — steps(10) over 130px = exactly one digit per tick,
+   and the doubled reel wraps seamlessly at 0. */
+.artifact--portal::after {
+  content: '0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A '
+           '0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9\A ';
+  position: absolute;
+  top: 7px;
+  right: 10px;
+  width: 14px;
+  height: 13px;
+  overflow: hidden;
+  white-space: pre;
+  font-family: 'Electrolize', monospace;
+  font-size: 10px;
+  line-height: 13px;
+  text-align: center;
+  color: oklch(0.85 0.15 130 / 0.9);
+  background: oklch(0.04 0.006 135);
+  box-shadow:
+    inset 0 0 0 1px oklch(0.42 0.07 135 / 0.85),
+    inset 0 -3px 5px oklch(0 0 0 / 0.65),
+    0 0 0 1px oklch(0 0 0 / 0.6);
+  pointer-events: none;
+  animation: portal-odometer 4s steps(10) infinite;
+}
+@keyframes portal-odometer {
+  to { transform: translateY(-130px); }
+}
+.artifact--portal .artifact-num {
+  color: oklch(0.62 0.07 135);
+  font-family: 'Share Tech Mono', monospace;
+}
+.artifact--portal .artifact-label {
+  font-family: 'Electrolize', 'Segoe UI', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: oklch(0.82 0.12 135);
+  text-shadow: 1px 1px 0 oklch(0 0 0 / 0.85); /* the era's hard drop shadow */
+  transition: color 200ms ease, text-shadow 200ms ease, background-color 200ms ease, padding 200ms ease, margin 200ms ease;
+}
+.artifact--portal .artifact-note {
+  color: oklch(0.64 0.04 135 / 0.85);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.artifact--portal .artifact-url {
+  color: oklch(0.56 0.035 135 / 0.6);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+.artifact--portal .artifact-go {
+  color: oklch(0.62 0.07 135);
+  transition: color 200ms ease, transform 200ms ease;
+}
+@media (hover: hover) {
+  .artifact--portal:hover {
+    border-color: oklch(0.60 0.08 135 / 0.85);
+    /* pressed in: the bevel inverts */
+    box-shadow:
+      inset 1px 1px 0 oklch(0 0 0 / 0.85),
+      inset -1px -1px 0 oklch(0.70 0.03 135 / 0.55);
+  }
+  /* the ticker stops so you can read it */
+  .artifact--portal:hover::before {
+    animation-play-state: paused;
+    color: oklch(0.85 0.14 132 / 0.9);
+  }
+  /* the counter spins up — visitors incoming */
+  .artifact--portal:hover::after { animation-duration: 0.7s; }
+  /* the era's text selection, on the title itself */
+  .artifact--portal:hover .artifact-label {
+    background-color: oklch(0.78 0.15 132);
+    color: oklch(0.10 0.02 135);
+    text-shadow: none;
+    padding: 0 4px;
+    margin: 0 -4px;
+  }
+  .artifact--portal:hover .artifact-go { color: oklch(0.88 0.13 138); }
+}
+@media (max-width: 700px) {
+  .artifact--portal .artifact-label { font-size: 14px; }
+  .artifact--portal::before { width: 11px; font-size: 8px; line-height: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--portal::before { animation: none; }
+  .artifact--portal::after { animation: none; transform: translateY(-13px); }
+}
+
 /* --- LINKS DRAWERS — the Links page splits into two drawers under the
    menu: .com (clearnet) and .onion (Tor hidden services). Same head
    grammar as the game cabinets: chip-style tld, dim mono note, hard
