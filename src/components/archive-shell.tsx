@@ -15,6 +15,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, type Route } from '@/lib/router'
 import { SearchPanel } from '@/components/search-panel'
+import { InstallAppButton } from '@/components/pwa'
 import {
   HomePage, AboutPage, ArchivePage, StagePage, CtfPage,
   ResearchPage, ResearchEntryPage, CheatsheetsPage, FilesPage,
@@ -251,6 +252,8 @@ export function ArchiveShell() {
               />
             ))}
           </NavSection>
+
+          <InstallAppButton />
         </aside>
 
         <main className="archive-main">

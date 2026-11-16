@@ -98,33 +98,46 @@ const cacheHeaders = [
   { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
 ];
 
+/**
+ * STATIC_EXPORT=1 builds the archive as pure static files into out/ for
+ * the Android APK shell (Capacitor). Export mode cannot ship custom
+ * response headers, so the header layers above are skipped entirely —
+ * the WebView shell needs none of them (no server, same-origin assets
+ * only), and the deployed site keeps every header exactly as before.
+ */
+const STATIC_EXPORT = process.env.STATIC_EXPORT === "1";
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  async headers() {
-    return [
-      {
-        source: "/:path*",
-        headers: securityHeaders,
-      },
-      {
-        source: "/multihero/multihero-web/:path*",
-        headers: gameFrameHeaders,
-      },
-      {
-        source: "/roms/:path*",
-        headers: cacheHeaders,
-      },
-      {
-        source: "/emulatorjs/:path*",
-        headers: cacheHeaders,
-      },
-      {
-        source: "/sounds/:path*",
-        headers: cacheHeaders,
-      },
-    ];
-  },
+  ...(STATIC_EXPORT
+    ? { output: "export" as const }
+    : {
+        async headers() {
+          return [
+            {
+              source: "/:path*",
+              headers: securityHeaders,
+            },
+            {
+              source: "/multihero/multihero-web/:path*",
+              headers: gameFrameHeaders,
+            },
+            {
+              source: "/roms/:path*",
+              headers: cacheHeaders,
+            },
+            {
+              source: "/emulatorjs/:path*",
+              headers: cacheHeaders,
+            },
+            {
+              source: "/sounds/:path*",
+              headers: cacheHeaders,
+            },
+          ];
+        },
+      }),
   // The archive reads /content/learning-paths/*.md with node:fs using a
   // dynamic readdir, which Next's file tracing cannot see. Explicitly
   // include them so any server execution of these routes (e.g. on-demand

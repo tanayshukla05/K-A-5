@@ -1,0 +1,95 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace "com.tanayshukla.knowledgearchive"
+    compileSdk rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "com.tanayshukla.knowledgearchive"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        aaptOptions {
+             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
+            ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }
+    }
+    signingConfigs {
+        release {
+            // Personal signing key for the archive APK. The keystore lives
+            // in android/keystore/ — keep it (and this password) to sign
+            // every future update: Android refuses updates signed by any
+            // other key once this one ships.
+            storeFile file('../keystore/release.keystore')
+            storePassword 'knowledge-archive-2026'
+            keyAlias 'knowledgearchive'
+            keyPassword 'knowledge-archive-2026'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+repositories {
+    flatDir{
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation project(':capacitor-android')
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+    implementation project(':capacitor-cordova-android-plugins')
+}
+
+apply from: 'capacitor.build.gradle'
+
+// Ships a self-update: copies the signed release APK into the site's
+// public/ folder and writes app-update.json with the current version.
+// Committing + deploying both files makes every installed app offer the
+// update on its next launch (Android shows the one-tap Update prompt).
+//
+// Usage: bump versionCode / versionName above, then run:
+//     $env:JAVA_HOME='C:\Users\tanay\jdks\jdk-21.0.13+9'; cmd /c "gradlew.bat shipUpdate"
+tasks.register('shipUpdate') {
+    dependsOn 'assembleRelease'
+    doLast {
+        def apk = file('build/outputs/apk/release/app-release.apk')
+        if (!apk.exists()) throw new GradleException("Release APK not found at ${apk}")
+        def pubRoot = file('../../public')
+        copy {
+            from apk
+            into pubRoot
+            rename { 'knowledge-archive.apk' }
+        }
+        def updateManifest = file("${pubRoot}/app-update.json")
+        updateManifest.text = new groovy.json.JsonBuilder([
+            versionCode: android.defaultConfig.versionCode,
+            versionName: android.defaultConfig.versionName,
+            url        : '/knowledge-archive.apk'
+        ]).toPrettyString()
+        println "Archive update shipped: v${android.defaultConfig.versionName} (versionCode ${android.defaultConfig.versionCode}) -> public/knowledge-archive.apk"
+    }
+}
+
+try {
+    def servicesJSON = file('google-services.json')
+    if (servicesJSON.text) {
+        apply plugin: 'com.google.gms.google-services'
+    }
+} catch(Exception e) {
+    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+}

@@ -686,6 +686,51 @@ body[data-route="about"] .bg-video-fallback {
   background: var(--accent);
 }
 
+/* --- PWA INSTALL — the "Install app" block at the foot of the
+   sidebar (the myinstants.com-style install). Rendered only while
+   the browser is actually offering an install, so most visitors
+   never see it. Styles ride the sidebar's own grammar: letterspaced
+   caps, left-edge accent, zero radius (archive rule). --- */
+.install-app-block {
+  padding: 0.4rem 0 0.4rem;
+  margin-top: 0.5rem;
+}
+.install-app {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.55rem 0.75rem;
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  background: transparent;
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+  border-left: 1px solid var(--border);
+  border-radius: 0;
+  cursor: pointer;
+  transition: color 120ms, background 120ms, border-color 120ms;
+}
+.install-app-sub {
+  display: block;
+  margin-top: 3px;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--muted-foreground);
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+@media (hover: hover) {
+  .install-app:hover {
+    color: var(--foreground);
+    background: var(--accent);
+    border-left-color: var(--foreground);
+  }
+}
+
 /* Touch: bigger tap targets once the sidebar stacks on top (mobile).
    Lives AFTER the base rule so it wins the cascade. */
 @media (max-width: 900px) {

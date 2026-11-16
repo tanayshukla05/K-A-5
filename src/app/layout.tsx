@@ -30,7 +30,13 @@ export const metadata: Metadata = {
   authors: [{ name: "Pandit Tanay Shukla Ji Maharaj" }],
   icons: {
     icon: "/logo.png",
-    apple: "/logo.png",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "Knowledge Archive",
+    statusBarStyle: "black-translucent",
   },
   openGraph: {
     title: "Pandit Tanay Shukla Ji Maharaj — Knowledge Archive",
