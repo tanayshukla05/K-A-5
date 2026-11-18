@@ -20,41 +20,28 @@ import { isCtfEntry, ctfSourceOf, type CtfSource } from '@/lib/entry-group'
 import { LINKS, type ArchiveLink } from '@/lib/links'
 import { MarioGame } from '@/components/mario-game'
 import { SnesCabinet } from '@/components/snes-cabinet'
-import { GiftOverlay } from '@/components/gift-overlay'
-
 type NavFn = (route: Route) => void
 
 /* ============================================================
-   HOME — intentionally minimal: brand block + the quote. The
-   stats / latest-entries / tag sections were removed on request.
+   HOME — intentionally minimal: the poster card is the page.
    ============================================================ */
 export function HomePage() {
   return (
     <div className="archive-container">
-      {/*
-        THE GREETING — opens by itself after the loader, once per
-        session. The static card below stays as the permanent
-        touchpoint for visitors who closed the greeting.
-      */}
-      <GiftOverlay />
       <div className="archive-eyebrow">7TH WARD</div>
-      <h1 className="archive-title">
-        Pandit Tanay Shukla<br />Ji Maharaj
-      </h1>
       {/*
-        THE GIFT — every visitor is offered a take-home file. The `download`
-        attribute makes the browser save it directly on click (browsers block
-        any download that fires without a user gesture, so this is the
-        consent-respecting way). The small preview keeps the page light —
-        the full 2 MB animation only transfers when someone actually claims
-        the gift. On older iOS the visible <img> is the long-press-save
-        fallback.
+        THE POSTER — the whole archive in one image (every section,
+        the LINKS drawer, the games cabinet) and the home page's
+        one-click download: clicking it saves the signed
+        knowledge-archive.apk. The `download` attribute keeps the
+        save a user-gesture action; the light JPG preview keeps the
+        page fast.
       */}
-      <a className="gift-card" href="/app-debug.apk" download="app-debug.apk">
-        <img src="/gift-preview.jpg" alt="The archive gift — a snarling wolf" className="gift-image" />
-        <span className="gift-label">
-          <span className="gift-eyebrow">A GIFT FOR VISITING</span>
-          <span className="gift-cta">CLICK TO TAKE IT WITH YOU</span>
+      <a className="apk-card" href="/knowledge-archive.apk" download="knowledge-archive.apk">
+        <img src="/apk-poster-card.jpg" alt="The Knowledge Archive poster — every section in one image" className="apk-poster" width={1080} height={1920} decoding="async" />
+        <span className="apk-label">
+          <span className="apk-eyebrow">THE POSTER · ONE-CLICK DOWNLOAD</span>
+          <span className="apk-cta">CLICK TO TAKE THE APK WITH YOU</span>
         </span>
       </a>
     </div>
@@ -745,6 +732,27 @@ function ArtifactLink({ link, index }: { link: ArchiveLink; index: number }) {
         <span className="artifact-label">{link.label}</span>
         {link.note && <span className="artifact-note">{link.note}</span>}
         <span className="artifact-url">{link.url.replace(/^https?:\/\//, '')}</span>
+        {link.variant === 'redacted' && (
+          <span className="redact-line" aria-hidden="true">
+            CVE-2024-31317 · ZYGOTE INJECTION · UID 1000
+            <i className="redact redact--1" aria-hidden="true"></i>
+            <i className="redact redact--2" aria-hidden="true"></i>
+            <i className="redact redact--3" aria-hidden="true"></i>
+          </span>
+        )}
+        {link.variant === 'spectrum' && (
+          <span className="spec-strip" aria-hidden="true">
+            <i className="spec-bar spec-bar--1"></i>
+            <i className="spec-bar spec-bar--2"></i>
+            <i className="spec-bar spec-bar--3"></i>
+            <i className="spec-bar spec-bar--4"></i>
+            <i className="spec-bar spec-bar--5"></i>
+            <i className="spec-bar spec-bar--6"></i>
+            <i className="spec-bar spec-bar--7"></i>
+            <i className="spec-bar spec-bar--8"></i>
+            <i className="spec-bar spec-bar--9"></i>
+          </span>
+        )}
       </span>
       <span className="artifact-go" aria-hidden="true">↗</span>
     </a>

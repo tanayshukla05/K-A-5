@@ -17,8 +17,8 @@
  *   - cross-origin requests (the link rows' Google Drive / onion targets)
  *   - video/audio: the background boulder loop issues Range requests,
  *     which a full-response cache would break — it streams untouched
- *   - /knowledge-archive.apk and /app-debug.apk (36 MB binaries the
- *     visitor explicitly downloads, not assets to cache)
+ *   - /knowledge-archive.apk (the 36 MB signed binary the visitor
+ *     explicitly downloads from the poster card — not an asset to cache)
  *   - /app-update.json (the Android shell's own update manifest)
  */
 const CACHE = 'knowledge-archive-v1';

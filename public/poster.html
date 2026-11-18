@@ -1,0 +1,254 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Knowledge Archive — APK Poster</title>
+<style>
+  /* ===== the archive's own fonts, from /fonts ===== */
+  @font-face { font-family: 'Marcellus'; src: url('/fonts/marcellus-latin.woff2') format('woff2'); font-weight: 400; }
+  @font-face { font-family: 'Teko'; src: url('/fonts/teko-latin.woff2') format('woff2'); font-weight: 600; }
+  @font-face { font-family: 'Share Tech Mono'; src: url('/fonts/share-tech-mono-latin.woff2') format('woff2'); font-weight: 400; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  /* The capture window renders at devicePixelRatio ~0.41, so the poster is
+     zoomed 2.5x here: layout grows with the visual (unlike transform, which
+     gets clipped), and the capture lands at ~1114px wide for a sharp
+     downscale to 1080x1920 in the normalizer.
+     magenta body = capture-aid: the normalizer finds the poster edges by
+     scanning for the first non-magenta column/row. */
+  html { background: #ff00ff; }
+  body { width: 2700px; height: 4800px; background: #ff00ff; }
+
+  .poster {
+    position: relative;
+    zoom: 2.5;
+    width: 1080px; height: 1920px;
+    background: #050507;
+    font-family: 'Share Tech Mono', monospace;
+    color: #eceae6;
+    overflow: hidden;
+  }
+
+  /* ===== backdrop — the sisyphus artwork ===== */
+  .backdrop {
+    position: absolute; inset: 0;
+    background: url('/bg-poster.jpg') center 22% / cover no-repeat;
+  }
+  .backdrop-tint {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(5,5,7,0.92) 0%, rgba(5,5,7,0.66) 20%, rgba(5,5,7,0.58) 46%, rgba(5,5,7,0.88) 76%, rgba(5,5,7,0.97) 93%, #050507 100%),
+      radial-gradient(90% 55% at 50% 0%, rgba(179,18,31,0.10) 0%, transparent 60%);
+  }
+  .beast {
+    position: absolute;
+    top: -30px; left: 50%;
+    width: 600px; height: 600px;
+    transform: translateX(-50%);
+    background: url('/gift-preview.jpg') center / cover no-repeat;
+    opacity: 0.10;
+    -webkit-mask-image: radial-gradient(56% 56% at 50% 46%, #000 40%, transparent 78%);
+    mask-image: radial-gradient(56% 56% at 50% 46%, #000 40%, transparent 78%);
+  }
+  .scanlines {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(0deg, rgba(255,255,255,0.013) 0 1px, transparent 1px 4px);
+    pointer-events: none;
+  }
+  .vignette {
+    position: absolute; inset: 0;
+    background: radial-gradient(130% 100% at 50% 45%, transparent 55%, rgba(0,0,0,0.55) 100%);
+  }
+
+  /* ===== header ===== */
+  .presents {
+    position: absolute; top: 40px; left: 0; right: 0;
+    text-align: center;
+    font-size: 17px; letter-spacing: 0.42em; text-indent: 0.42em;
+    color: #8f8c95;
+  }
+  .mark {
+    position: absolute; top: 84px; left: 50%;
+    width: 200px; height: 200px;
+    transform: translateX(-50%);
+    background: url('/logo.png') center / contain no-repeat;
+  }
+  .title {
+    position: absolute; top: 318px; left: 0; right: 0;
+    text-align: center;
+    font-family: 'Marcellus', serif;
+    font-size: 64px; letter-spacing: 0.14em; text-indent: 0.14em;
+    white-space: nowrap;
+    color: #eceae6;
+    text-shadow: 0 0 30px rgba(179,18,31,0.25);
+  }
+  .titlerule {
+    position: absolute; top: 414px; left: 50%;
+    width: 240px; height: 2px;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, transparent, #b3121f 18%, #e5383b 50%, #b3121f 82%, transparent);
+  }
+  .subtitle {
+    position: absolute; top: 430px; left: 0; right: 0;
+    text-align: center;
+    font-size: 16px; letter-spacing: 0.22em; text-indent: 0.22em;
+    color: #9a97a0;
+  }
+
+  /* ===== stage: LINKS phone (left) + MultiHero cabinet (right) ===== */
+  .phone {
+    position: absolute; top: 490px; left: 36px;
+    width: 476px; height: 960px;
+    border: 2px solid #2c2b31;
+    background: #0a0a0d;
+    box-shadow:
+      0 0 0 1px #000,
+      0 0 60px rgba(179,18,31,0.14),
+      0 26px 70px rgba(0,0,0,0.7);
+  }
+  .phone .screen {
+    position: absolute; inset: 16px 0;
+    background: url('/poster-assets/phone.png') top center / 100% auto no-repeat;
+    background-color: #0a0a0d;
+    overflow: hidden;
+  }
+  .phone .notch {
+    position: absolute; top: 7px; left: 50%;
+    width: 96px; height: 6px;
+    transform: translateX(-50%);
+    background: #1c1b21;
+  }
+  .phone .homebar {
+    position: absolute; bottom: 6px; left: 50%;
+    width: 100px; height: 5px;
+    transform: translateX(-50%);
+    background: #1c1b21;
+  }
+  .cab {
+    position: absolute; top: 490px; left: 568px;
+    width: 476px; height: 760px;
+    border: 2px solid #2c2b31;
+    background: #0b0b0e url('/posters/multihero-web-edition.png') center / cover no-repeat;
+    box-shadow: 0 0 0 1px #000, 0 24px 60px rgba(0,0,0,0.65);
+  }
+  .strip-home {
+    position: absolute; top: 1270px; left: 568px;
+    width: 476px; height: 180px;
+    border: 1px solid #2c2b31;
+    background: #0b0b0e url('/poster-assets/t-home.png') 50% 60% / cover no-repeat;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.5);
+  }
+
+  /* ===== band A — five section tiles ===== */
+  .tile {
+    position: absolute;
+    width: 192px; height: 170px;
+    top: 1470px;
+    border: 1px solid #2c2b31;
+    background-color: #0b0b0e;
+    background-size: cover;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    box-shadow: 0 12px 34px rgba(0,0,0,0.5);
+  }
+  .tile--ctf          { left: 36px;  background-image: url('/poster-assets/t-ctf.png'); }
+  .tile--research     { left: 240px; background-image: url('/poster-assets/t-research.png'); }
+  .tile--cheatsheets  { left: 444px; background-image: url('/poster-assets/t-cheatsheets.png'); }
+  .tile--files        { left: 648px; background-image: url('/poster-assets/t-files.png'); }
+  .tile--about        { left: 852px; background-image: url('/poster-assets/t-about.png'); }
+
+  /* ===== band B — two tall tiles + the install block ===== */
+  .tile--games   { position: absolute; top: 1660px; left: 36px;  width: 244px; height: 170px; border: 1px solid #2c2b31; background: #0b0b0e url('/poster-assets/t-games.png') 50% 0 / cover no-repeat; box-shadow: 0 12px 34px rgba(0,0,0,0.5); }
+  .tile--archive { position: absolute; top: 1660px; left: 292px; width: 244px; height: 170px; border: 1px solid #2c2b31; background: #0b0b0e url('/poster-assets/t-archive.png') 50% 0 / cover no-repeat; box-shadow: 0 12px 34px rgba(0,0,0,0.5); }
+
+  .qr {
+    position: absolute; left: 568px; top: 1660px;
+    width: 170px; height: 170px;
+    background: #fff url('/poster-assets/qr.png') center / 160px auto no-repeat;
+    border: 1px solid #35343b;
+    box-shadow: 0 0 26px rgba(0,0,0,0.5);
+  }
+  .apkline {
+    position: absolute; left: 748px; top: 1652px;
+    font-family: 'Teko', sans-serif;
+    font-weight: 600;
+    font-size: 46px; line-height: 1;
+    letter-spacing: 0.05em;
+    color: #e5383b;
+    text-shadow: 0 0 22px rgba(229,56,59,0.35);
+  }
+  .scanline-txt {
+    position: absolute; left: 750px; top: 1726px;
+    font-size: 15px; letter-spacing: 0.30em;
+    color: #eceae6;
+  }
+  .apkurl {
+    position: absolute; left: 750px; top: 1754px;
+    font-size: 12px; letter-spacing: 0.05em;
+    color: #8f8c95;
+  }
+  .feats {
+    position: absolute; left: 750px; top: 1780px;
+    font-size: 11px; letter-spacing: 0.10em;
+    color: #6f6c76;
+    line-height: 1.7;
+  }
+  .feats b { color: #a7e59b; font-weight: 400; }
+
+  /* ===== footer ===== */
+  .footrule {
+    position: absolute; top: 1856px; left: 36px; right: 36px; height: 1px;
+    background: linear-gradient(90deg, transparent, #2c2b31 20%, #2c2b31 80%, transparent);
+  }
+  .footer {
+    position: absolute; top: 1868px; left: 0; right: 0;
+    text-align: center;
+    font-size: 13px; letter-spacing: 0.30em; text-indent: 0.30em;
+    color: #6f6c76;
+  }
+</style>
+</head>
+<body>
+  <div class="poster" id="poster">
+    <div class="backdrop"></div>
+    <div class="backdrop-tint"></div>
+    <div class="beast"></div>
+
+    <div class="presents">PANDIT TANAY SHUKLA JI MAHARAJ</div>
+    <div class="mark"></div>
+    <div class="title">KNOWLEDGE ARCHIVE</div>
+    <div class="titlerule"></div>
+    <div class="subtitle">ARCHIVE · CTF · RESEARCH · CHEAT SHEETS · FILES · GAMES · LINKS</div>
+
+    <div class="phone">
+      <div class="screen"></div>
+      <div class="notch"></div>
+      <div class="homebar"></div>
+    </div>
+
+    <div class="cab"></div>
+    <div class="strip-home"></div>
+
+    <div class="tile tile--ctf"></div>
+    <div class="tile tile--research"></div>
+    <div class="tile tile--cheatsheets"></div>
+    <div class="tile tile--files"></div>
+    <div class="tile tile--about"></div>
+
+    <div class="tile--games"></div>
+    <div class="tile--archive"></div>
+
+    <div class="qr"></div>
+    <div class="apkline">ANDROID · APK</div>
+    <div class="scanline-txt">SCAN · DOWNLOAD · INSTALL</div>
+    <div class="apkurl">k-a-5.vercel.app/knowledge-archive.apk</div>
+    <div class="feats">OFFLINE · SELF-UPDATING<br><b>42 LINK ROWS · 42 MATERIALS</b><br>9 SECTIONS · GAMES PLAY IN THE BROWSER</div>
+
+    <div class="footrule"></div>
+    <div class="footer">© 2003 · KNOWLEDGE ARCHIVE</div>
+
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+  </div>
+</body>
+</html>

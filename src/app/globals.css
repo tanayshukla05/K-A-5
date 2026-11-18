@@ -447,11 +447,6 @@ body[data-route="about"] .bg-video-fallback {
   100% { opacity: 1; }
 }
 
-@keyframes loader-fade-out {
-  0%   { opacity: 1; }
-  100% { opacity: 0; }
-}
-
 @keyframes loader-logo-in {
   0% {
     opacity: 0;
@@ -925,12 +920,14 @@ body[data-route="about"] .bg-video-fallback {
 }
 
 /* ============================================================
-   GIFT — a take-home file offered to every visitor. Clicking the
-   card downloads app-debug.apk via the download attribute; the
-   label row explains it in the archive's voice. Fits the
-   monochrome theme; the wolf's red eyes carry the only color.
+   APK CARD — the home page's one-click download. The card shows
+   the full-archive poster (every section in one image) and
+   clicking it saves the signed knowledge-archive.apk via the
+   download attribute — a user-gesture action, the only kind of
+   download browsers allow without prompting. The light JPG
+   preview keeps the home page fast.
    ============================================================ */
-.gift-card {
+.apk-card {
   display: block;
   margin-top: 2.5rem;
   max-width: 340px;
@@ -940,18 +937,18 @@ body[data-route="about"] .bg-video-fallback {
   text-decoration: none;
   transition: border-color 120ms, background 120ms;
 }
-.gift-image {
+.apk-poster {
   display: block;
   width: 100%;
   height: auto;
-  filter: saturate(0.92);
+  filter: saturate(0.96);
 }
-.gift-label {
+.apk-label {
   display: block;
   padding: 0.75rem 1rem;
   border-top: 1px solid var(--border);
 }
-.gift-eyebrow {
+.apk-eyebrow {
   display: block;
   font-size: 9px;
   letter-spacing: 0.32em;
@@ -959,129 +956,22 @@ body[data-route="about"] .bg-video-fallback {
   color: var(--muted-foreground);
   margin-bottom: 0.3rem;
 }
-.gift-cta {
+.apk-cta {
   display: block;
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 @media (hover: hover) {
-  .gift-card:hover {
+  .apk-card:hover {
     border-color: var(--muted-foreground);
     background: var(--accent);
   }
-  .gift-card:hover .gift-cta { color: #ff0050; }
+  .apk-card:hover .apk-cta { color: #ff0050; }
 }
 @media (max-width: 700px) {
-  .gift-card { max-width: 100%; }
-  .gift-label { padding: 0.85rem 1rem; }
-}
-
-/* ============================================================
-   GIFT OVERLAY — the auto-greeting: opens by itself right after
-   the rhyme loader finishes, once per browsing session. z-index
-   90: above the header (40), below search (100) and the loader
-   (100) so it never covers either.
-
-   Deliberately NO entrance animation on the container/card: an
-   animation parked at `from { opacity: 0 }` (background tab with
-   a suspended timeline) would keep the greeting invisible. The
-   gift must appear the moment it opens, in every environment —
-   the hard cut suits the terminal voice. The webp crossfade is
-   the only transition, and it degrades to the static frame.
-   ============================================================ */
-.gift-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  background: oklch(0.02 0 0 / 0.85);
-  -webkit-backdrop-filter: blur(6px); /* iOS Safari */
-  backdrop-filter: blur(6px);
-}
-.gift-overlay-card {
-  width: min(86vw, 400px);
-  border: 1px solid var(--border);
-  background: oklch(0.07 0 0 / 0.97);
-}
-.gift-overlay-frame { position: relative; }
-.gift-overlay-image {
-  display: block;
-  width: 100%;
-  height: auto;
-  filter: saturate(0.92);
-}
-/* The animation crossfades in over the static first frame — the
-   greeting paints instantly while the 2 MB WebP decodes behind it. */
-.gift-overlay-animated {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 240ms;
-}
-.gift-overlay-animated--live { opacity: 1; }
-.gift-overlay-label {
-  display: block;
-  padding: 0.85rem 1rem 0.5rem;
-  border-top: 1px solid var(--border);
-}
-.gift-overlay-title {
-  display: block;
-  font-size: 13px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-.gift-overlay-actions {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0.6rem;
-  padding: 0.5rem 1rem 1rem;
-}
-.gift-overlay-save {
-  display: block;
-  border: 1px solid var(--muted-foreground);
-  padding: 0.75rem 1rem;
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--foreground);
-  text-decoration: none;
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.gift-overlay-close {
-  border: 1px solid var(--border);
-  background: transparent;
-  padding: 0.75rem 0.9rem;
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--muted-foreground);
-  font-family: inherit;
-  cursor: pointer;
-}
-@media (hover: hover) {
-  .gift-overlay-save:hover { color: #ff0050; border-color: #ff0050; }
-  .gift-overlay-close:hover { color: var(--foreground); border-color: var(--muted-foreground); }
-}
-
-.archive-footer {
-  border-top: 1px solid var(--border);
-  padding: 1.5rem 1.25rem;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--muted-foreground);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+  .apk-card { max-width: 100%; }
+  .apk-label { padding: 0.85rem 1rem; }
 }
 
 /* ============================================================
@@ -5112,6 +5002,123 @@ body[data-route="about"] .bg-video-fallback {
   .artifact--zipper::after { animation: none; }
 }
 
+@font-face {
+  font-family: 'Electrolize';
+  src: url('/fonts/electrolize-latin.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- CHRONICLE · Sploitony blog — the gazette: the row reads as a
+   clipped newsprint column. Warm sepia paper in a hue family no
+   other row touches, two faint column rules dividing the right
+   edge like folded newsprint. A rubber stamp rests at the right,
+   breathing at idle; hover slams it down in fresh red ink and
+   brightens the headline. Electrolize squared caps — the only row
+   using it. Zero border-radius (archive rule). --- */
+.artifact--chronicle {
+  background: linear-gradient(180deg, oklch(0.145 0.02 95), oklch(0.10 0.015 95));
+  border: 1px solid oklch(0.45 0.06 95 / 0.55);
+  transition: border-color 300ms ease, box-shadow 300ms ease;
+}
+/* the newsprint column rules */
+.artifact--chronicle::before {
+  content: '';
+  position: absolute;
+  right: 20%;
+  top: 0;
+  bottom: 0;
+  width: 34px;
+  background:
+    linear-gradient(180deg, transparent 0 8%, oklch(0.30 0.035 95) 8% 92%, transparent 92%) left 0 top 0 / 1px 100% no-repeat,
+    linear-gradient(180deg, transparent 0 8%, oklch(0.30 0.035 95) 8% 92%, transparent 92%) right 0 top 0 / 1px 100% no-repeat;
+  opacity: 0.55;
+  pointer-events: none;
+  transition: opacity 250ms ease;
+}
+/* the rubber stamp, resting — breathing tilt at idle */
+.artifact--chronicle::after {
+  content: 'READ';
+  position: absolute;
+  right: 3.5%;
+  top: 50%;
+  transform: translateY(-50%) rotate(-7deg) scale(0.92);
+  font-family: 'Electrolize', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-indent: 0.22em;
+  color: oklch(0.55 0.09 25 / 0.8);
+  border: 1px solid oklch(0.50 0.10 25 / 0.7);
+  padding: 3px 7px 2px;
+  opacity: 0.3;
+  pointer-events: none;
+  animation: chronicle-stamp 5s ease-in-out infinite;
+  transition: opacity 250ms ease, transform 250ms cubic-bezier(0.2, 0.9, 0.25, 1),
+    color 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
+}
+@keyframes chronicle-stamp {
+  0%, 100% { transform: translateY(-50%) rotate(-7deg) scale(0.92); }
+  50%      { transform: translateY(-50%) rotate(-5deg) scale(0.95); }
+}
+.artifact--chronicle .artifact-num {
+  color: oklch(0.55 0.05 95);
+  font-family: 'Share Tech Mono', monospace;
+}
+.artifact--chronicle .artifact-label {
+  font-family: 'Electrolize', 'Segoe UI', sans-serif;
+  font-size: 19px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: oklch(0.80 0.05 95);
+  transition: color 200ms ease, text-shadow 200ms ease;
+}
+.artifact--chronicle .artifact-note {
+  color: oklch(0.60 0.03 95 / 0.85);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.artifact--chronicle .artifact-url {
+  color: oklch(0.52 0.03 95 / 0.6);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+}
+.artifact--chronicle .artifact-go {
+  color: oklch(0.55 0.05 95);
+  transition: color 200ms ease, transform 200ms ease;
+}
+@media (hover: hover) {
+  .artifact--chronicle:hover {
+    border-color: oklch(0.55 0.07 95 / 0.9);
+    box-shadow: inset 0 0 22px oklch(0.22 0.04 95 / 0.45);
+  }
+  /* the rules ink darker */
+  .artifact--chronicle:hover::before { opacity: 1; }
+  /* the stamp slams down in fresh ink */
+  .artifact--chronicle:hover::after {
+    animation: none;
+    opacity: 1;
+    transform: translateY(-50%) rotate(-7deg) scale(1.08);
+    color: oklch(0.60 0.14 25 / 0.95);
+    border-color: oklch(0.56 0.14 25 / 0.9);
+    box-shadow: 0 0 10px oklch(0.48 0.10 25 / 0.4);
+  }
+  .artifact--chronicle:hover .artifact-label {
+    color: oklch(0.87 0.06 95);
+    text-shadow: 0 0 12px oklch(0.60 0.08 95 / 0.5);
+  }
+  .artifact--chronicle:hover .artifact-go { color: oklch(0.80 0.06 95); }
+}
+@media (max-width: 700px) {
+  .artifact--chronicle .artifact-label { font-size: 15px; }
+  .artifact--chronicle::before { right: 13%; width: 26px; }
+  .artifact--chronicle::after { font-size: 8px; padding: 2px 5px 1px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--chronicle::after { animation: none; opacity: 0.55; }
+}
+
 /* --- LINKS DRAWERS — the Links page splits into two drawers under the
    menu: .com (clearnet) and .onion (Tor hidden services). Same head
    grammar as the game cabinets: chip-style tld, dim mono note, hard
@@ -6599,4 +6606,194 @@ body[data-route="about"] .bg-video-fallback {
   .games-room .snes-cart { flex-wrap: wrap; }
   .games-room .snes-cart-meta { margin-left: 0; width: 100%; }
   .games-room .snes-live-ui { flex-wrap: wrap; }
+}
+
+/* ============================================================
+   ARTIFACT -- REDACTED · FreeXR/exploits — a classified dossier.
+   Manila paper with ruled lines and a margin rule; under the url
+   sits a decorative CVE dossier line (aria-hidden — the real row
+   content stays readable) kept covered by three black redaction
+   bars that each slip ajar on their own clock. On hover the bars
+   slide aside and the row stamps DECLASSIFIED. The only material
+   on the site built from redaction bars. Zero border-radius.
+   ============================================================ */
+.artifact--redacted {
+  background:
+    repeating-linear-gradient(180deg, transparent 0 21px, oklch(0.62 0.05 45 / 0.06) 21px 22px),
+    linear-gradient(90deg, oklch(0.62 0.09 35 / 0.14), oklch(0.62 0.09 35 / 0.14)) 30px 0 / 1px 100% no-repeat,
+    linear-gradient(180deg, oklch(0.125 0.018 45) 0%, oklch(0.10 0.015 45) 100%);
+  border: 1px solid oklch(0.52 0.10 45 / 0.55);
+  transition: border-color 200ms ease;
+}
+.artifact--redacted .artifact-label {
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  color: oklch(0.87 0.03 45);
+}
+.artifact--redacted .artifact-num { color: oklch(0.56 0.10 35); }
+.artifact--redacted .artifact-note,
+.artifact--redacted .artifact-url { color: oklch(0.62 0.04 45); }
+.artifact--redacted .artifact-go { color: oklch(0.56 0.10 35); }
+.artifact--redacted .artifact-body::before {
+  content: 'CLASSIFIED · EXPLOIT DOSSIER · EYES ONLY';
+  display: block;
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  color: oklch(0.50 0.08 45);
+  margin-bottom: 5px;
+}
+/* the dossier line — the row's secret, written under the url */
+.redact-line {
+  position: relative;
+  display: block;
+  width: fit-content;
+  margin-top: 6px;
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: oklch(0.70 0.07 45);
+  pointer-events: none;
+}
+/* the bars — each slips ajar on its own clock, then closes */
+.redact {
+  position: absolute;
+  top: -0.3em;
+  height: 1.55em;
+  background: linear-gradient(180deg, oklch(0.10 0 0) 0%, oklch(0.17 0.012 45) 100%);
+  box-shadow: inset 0 0 0 1px oklch(0.32 0.02 45 / 0.55);
+  transform-origin: right center;
+  animation: redact-slip 10s ease-in-out infinite;
+  pointer-events: none;
+}
+.redact--1 { left: -0.5%; width: 32%; animation-delay: -2s; }
+.redact--2 { left: 33.5%; width: 38%; animation-delay: -6.5s; animation-duration: 12.5s; }
+.redact--3 { left: 72.5%; width: 21%; animation-delay: -9s; animation-duration: 11s; }
+@keyframes redact-slip {
+  0%, 60%, 100% { transform: translateX(0) scaleX(1); }
+  68% { transform: translateX(4%) scaleX(0.6); }
+  82% { transform: translateX(3%) scaleX(0.72); }
+  91% { transform: translateX(0) scaleX(1); }
+}
+/* the DECLASSIFIED stamp, waiting in the corner */
+.artifact--redacted::before {
+  content: 'DECLASSIFIED';
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  padding: 2px 8px;
+  border: 1px solid oklch(0.70 0.12 35 / 0.8);
+  color: oklch(0.78 0.11 35);
+  font-size: 8px;
+  letter-spacing: 0.28em;
+  opacity: 0;
+  transform: translateY(-3px);
+  transition: opacity 260ms ease, transform 260ms ease;
+  pointer-events: none;
+  z-index: 2;
+}
+@media (hover: hover) {
+  .artifact--redacted:hover { border-color: oklch(0.72 0.12 35 / 0.85); }
+  .artifact--redacted:hover::before { opacity: 1; transform: translateY(0); }
+  /* the bars slide aside — animation released so the transition runs */
+  .artifact--redacted:hover .redact { animation: none; transform: translateX(5%) scaleX(0.05); }
+  .artifact--redacted:hover .redact-line { color: oklch(0.82 0.08 45); }
+  .artifact--redacted:hover .artifact-label { color: oklch(0.84 0.09 45); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--redacted .redact { animation: none; }
+}
+@media (max-width: 700px) {
+  .redact-line { font-size: 9.5px; margin-top: 5px; }
+  .artifact--redacted .artifact-body::before { letter-spacing: 0.22em; }
+}
+
+/* ============================================================
+   ARTIFACT -- SPECTRUM · google/security-research — a live
+   research channel. Deep scope panel, Iceland label; along the
+   bottom edge runs a nine-bar spectrum (aria-hidden) whose bars
+   each breathe on their own phase. On hover the channel spikes:
+   the animation swaps to a wilder, faster keyframe. The only
+   material on the site built from spectrum bars. Teal 170 (free
+   hue). Zero border-radius.
+   ============================================================ */
+.artifact--spectrum {
+  background:
+    radial-gradient(120% 130% at 50% 0%, oklch(0.16 0.05 170 / 0.5) 0%, transparent 62%),
+    linear-gradient(180deg, oklch(0.10 0.035 170) 0%, oklch(0.075 0.03 170) 100%);
+  border: 1px solid oklch(0.45 0.10 170 / 0.6);
+  transition: border-color 220ms ease;
+}
+.artifact--spectrum .artifact-label {
+  font-family: 'Iceland', 'Share Tech Mono', monospace;
+  font-size: 21px;
+  letter-spacing: 0.1em;
+  color: oklch(0.86 0.07 170);
+  text-shadow: 0 0 12px oklch(0.60 0.12 170 / 0.45);
+}
+.artifact--spectrum .artifact-num { color: oklch(0.55 0.10 170); }
+.artifact--spectrum .artifact-note,
+.artifact--spectrum .artifact-url { color: oklch(0.60 0.07 170); }
+.artifact--spectrum .artifact-go { color: oklch(0.55 0.10 170); }
+/* the channel strip — nine bars on the scope floor */
+.spec-strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 22px;
+  pointer-events: none;
+}
+.spec-strip::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, oklch(0.55 0.10 170 / 0.5) 20%, oklch(0.55 0.10 170 / 0.5) 80%, transparent);
+}
+.spec-bar {
+  position: absolute;
+  bottom: 1px;
+  width: 3px;
+  height: 15px;
+  background: linear-gradient(180deg, oklch(0.80 0.13 170) 0%, oklch(0.55 0.12 170) 55%, oklch(0.30 0.06 170) 100%);
+  transform-origin: bottom;
+  animation: spectrum-wave 2.4s ease-in-out infinite;
+  box-shadow: 0 0 6px oklch(0.60 0.13 170 / 0.5);
+}
+.spec-bar--1 { left: 3%;  animation-delay: -0.15s; }
+.spec-bar--2 { left: 13%; animation-delay: -0.55s; animation-duration: 2.15s; }
+.spec-bar--3 { left: 23%; animation-delay: -0.95s; }
+.spec-bar--4 { left: 33%; animation-delay: -1.3s; animation-duration: 2.6s; }
+.spec-bar--5 { left: 43%; animation-delay: -0.4s; }
+.spec-bar--6 { left: 53%; animation-delay: -1.6s; animation-duration: 2.25s; }
+.spec-bar--7 { left: 63%; animation-delay: -0.75s; }
+.spec-bar--8 { left: 73%; animation-delay: -1.05s; animation-duration: 2.5s; }
+.spec-bar--9 { left: 83%; animation-delay: -0.3s; }
+@keyframes spectrum-wave {
+  0%, 100% { transform: scaleY(0.28); }
+  50% { transform: scaleY(1); }
+}
+/* the spike — hover swaps the channel to a wilder keyframe */
+@keyframes spectrum-hot {
+  0% { transform: scaleY(0.15); }
+  38% { transform: scaleY(1.25); }
+  61% { transform: scaleY(0.45); }
+  80% { transform: scaleY(1.05); }
+  100% { transform: scaleY(0.2); }
+}
+@media (hover: hover) {
+  .artifact--spectrum:hover { border-color: oklch(0.68 0.13 170 / 0.9); }
+  .artifact--spectrum:hover .spec-bar { animation-name: spectrum-hot; animation-duration: 1.1s; }
+  .artifact--spectrum:hover .spec-strip::before { background: linear-gradient(90deg, transparent, oklch(0.75 0.14 170 / 0.8) 20%, oklch(0.75 0.14 170 / 0.8) 80%, transparent); }
+  .artifact--spectrum:hover .artifact-label { color: oklch(0.92 0.09 165); text-shadow: 0 0 16px oklch(0.65 0.15 170 / 0.65); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spec-bar { animation: none; transform: scaleY(0.7); }
+}
+@media (max-width: 700px) {
+  .spec-bar--7, .spec-bar--8, .spec-bar--9 { display: none; }
+  .spec-strip { height: 18px; }
 }

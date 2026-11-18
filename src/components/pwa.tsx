@@ -29,9 +29,24 @@ export function InstallAppButton() {
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').catch(() => {
-        /* the archive must never fail to load over the SW */
-      });
+      if (process.env.NODE_ENV === 'production') {
+        navigator.serviceWorker.register('/sw.js').catch(() => {
+          /* the archive must never fail to load over the SW */
+        });
+      } else {
+        /* dev: the SW's stale-while-revalidate cache keeps serving
+           old chunks across dev-server restarts — hydration crashes
+           and a loader that never clears. Dev is always local and
+           online, so it needs no SW: unregister whatever lingers. */
+        navigator.serviceWorker
+          .getRegistrations()
+          .then((regs) => {
+            for (const reg of regs) reg.unregister();
+          })
+          .catch(() => {
+            /* nothing to clean up */
+          });
+      }
     }
 
     const standalone =

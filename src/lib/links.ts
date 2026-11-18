@@ -23,7 +23,9 @@ export type ArchiveLink = {
     | 'drive' | 'beacon'
     | 'subvault' | 'crate' | 'void' | 'darkroom' | 'catalog'
     | 'cipher' | 'relay' | 'shelf' | 'portal'
-    | 'trapdoor' | 'forum' | 'lantern' | 'zipper'
+    | 'trapdoor' | 'forum' | 'lantern' | 'zipper' | 'chronicle'
+    | 'redacted'
+    | 'spectrum'
 }
 
 export const LINKS: ArchiveLink[] = [
@@ -260,5 +262,29 @@ export const LINKS: ArchiveLink[] = [
     url: 'http://orealmvxooetglfeguv2vp65a3rig2baq2ljc7jxxs4hsqsrcemkxcad.onion',
     note: 'Hidden service — open via Tor Browser',
     variant: 'zipper',
+  },
+  {
+    label: 'Sploitony',
+    url: 'https://sploitony.com/blog.html',
+    note: 'anthonytuff - cybersecurity articles, tutorials & research',
+    variant: 'chronicle',
+  },
+  {
+    label: 'FreeXR / exploits',
+    url: 'https://github.com/FreeXR/exploits',
+    note: 'known Android / Quest exploits — CVEs, PoCs & root chains',
+    variant: 'redacted',
+  },
+  {
+    label: 'Google Security Research',
+    url: 'https://github.com/google/security-research',
+    note: 'security advisories & PoCs — kernelCTF, v8CTF, 90-day disclosure',
+    variant: 'spectrum',
+  },
+  {
+    label: 'Floor 796',
+    url: 'https://floor796.com/',
+    note: 'endless pixel-art animation — one office floor, never stops',
+    variant: 'arcade',
   },
 ]
