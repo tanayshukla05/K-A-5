@@ -116,15 +116,15 @@ sitemap, and in the RSS feed.
 The archive has two top-level entry menus:
 
 - **Archive** menu — the shellcode-loader learning path (Stage 01–08).
-- **CTF Walkthroughs** menu — the pwn.college binary-exploitation
-  walkthroughs (Stage 01–17) and the race-condition walkthroughs.
+- **CTF Walkthroughs** menu — the pwn.college binary-exploitation,
+  race-condition, and kernel-exploitation walkthroughs.
 
 The menu is decided by the `Category` metadata field: any entry whose
-category contains `Binary Exploitation` or `Race Condition` is listed under
-CTF Walkthroughs; everything else appears in the Archive index. Inside the
-pwn.college tab, that same field selects the Binary Exploitation or Race
-Condition sub-menu. Prev/next links on entry pages stay inside their own
-series and sub-menu.
+category contains `Binary Exploitation`, `Race Condition`, or `Kernel
+Exploitation` is listed under CTF Walkthroughs; everything else appears in
+the Archive index. Inside the pwn.college tab, that same field selects the
+Binary Exploitation, Race Condition, or Kernel Exploitation sub-menu.
+Prev/next links on entry pages stay inside their own series and sub-menu.
 
 Three index sections — Research Notes, Cheat Sheets, and File Archive — are
 kept in the menu but are intentionally empty for now: they render their

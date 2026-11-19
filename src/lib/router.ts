@@ -44,6 +44,7 @@ export function parseHash(hash: string): Route {
         const topic: CtfTopic | undefined =
             parts[1] === 'race-condition' ? 'race-condition'
             : parts[1] === 'binary-exploitation' ? 'binary-exploitation'
+            : parts[1] === 'kernel-exploitation' ? 'kernel-exploitation'
             : undefined
         return { name: 'ctf', topic }
     }

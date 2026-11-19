@@ -269,6 +269,7 @@ const CTF_TABS: Array<{ id: CtfSource; label: string }> = [
 const CTF_TOPICS: Array<{ id: CtfTopic; label: string }> = [
   { id: 'binary-exploitation', label: 'Binary Exploitation' },
   { id: 'race-condition', label: 'Race Condition' },
+  { id: 'kernel-exploitation', label: 'Kernel Exploitation' },
 ]
 
 export function CtfPage({ navigate, topic = 'binary-exploitation' }: { navigate: NavFn; topic?: CtfTopic }) {
@@ -280,7 +281,7 @@ export function CtfPage({ navigate, topic = 'binary-exploitation' }: { navigate:
     : sourceEntries
   const counts: Record<CtfSource, number> = { 'pwn-college': 0, hackthebox: 0 }
   for (const e of all) counts[ctfSourceOf(e)]++
-  const topicCounts: Record<CtfTopic, number> = { 'binary-exploitation': 0, 'race-condition': 0 }
+  const topicCounts: Record<CtfTopic, number> = { 'binary-exploitation': 0, 'race-condition': 0, 'kernel-exploitation': 0 }
   for (const e of all) {
     if (ctfSourceOf(e) === 'pwn-college') topicCounts[ctfTopicOf(e)]++
   }
