@@ -166,7 +166,7 @@ export function ArchiveShell() {
       case 'about': return <AboutPage navigate={navigate} />
       case 'archive': return <ArchivePage navigate={navigate} />
       case 'stage': return <StagePage slug={route.slug} navigate={navigate} />
-      case 'ctf': return <CtfPage navigate={navigate} />
+      case 'ctf': return <CtfPage navigate={navigate} topic={route.topic} />
       case 'research': return <ResearchPage navigate={navigate} />
       case 'research-entry': return <ResearchEntryPage slug={route.slug} navigate={navigate} />
       case 'cheatsheets': return <CheatsheetsPage navigate={navigate} />

@@ -16,7 +16,7 @@ import {
 import { useState } from 'react'
 import type { ArchiveEntry, ResearchSeries } from '@/lib/types'
 import type { Route } from '@/lib/router'
-import { isCtfEntry, ctfSourceOf, type CtfSource } from '@/lib/entry-group'
+import { isCtfEntry, ctfSourceOf, ctfTopicOf, type CtfSource, type CtfTopic } from '@/lib/entry-group'
 import { LINKS, type ArchiveLink } from '@/lib/links'
 import { MarioGame } from '@/components/mario-game'
 import { SnesCabinet } from '@/components/snes-cabinet'
@@ -126,8 +126,12 @@ export function StagePage({ slug, navigate }: { slug: string; navigate: NavFn })
   }
 
   // Prev/next stay inside the entry's own series (learning path vs CTF
-  // walkthroughs) so the two menus never cross-link into each other.
-  const series = entries.filter(e => isCtfEntry(e) === isCtfEntry(entry))
+  // walkthroughs) and, for pwn.college, inside the same sub-menu topic so a
+  // race-condition writeup never links into the binary-exploitation chain.
+  const series = entries.filter(e =>
+    isCtfEntry(e) === isCtfEntry(entry) &&
+    (!isCtfEntry(entry) || ctfTopicOf(e) === ctfTopicOf(entry))
+  )
   const idx = series.findIndex(e => e.slug === slug)
   const prev = idx > 0 ? series[idx - 1] : null
   const next = idx < series.length - 1 ? series[idx + 1] : null
@@ -137,7 +141,7 @@ export function StagePage({ slug, navigate }: { slug: string; navigate: NavFn })
       <button
         type="button"
         className="back-link"
-        onClick={() => navigate({ name: isCtfEntry(entry) ? 'ctf' : 'archive' })}
+        onClick={() => navigate(isCtfEntry(entry) ? { name: 'ctf', topic: ctfTopicOf(entry) } : { name: 'archive' })}
       >
         ← {isCtfEntry(entry) ? 'Back to CTF Walkthroughs' : 'Back to Archive'}
       </button>
@@ -259,12 +263,30 @@ const CTF_TABS: Array<{ id: CtfSource; label: string }> = [
   { id: 'hackthebox', label: 'HackTheBox' },
 ]
 
-export function CtfPage({ navigate }: { navigate: NavFn }) {
+// Nested sub-menus inside the pwn.college tab. Topic comes from the entry's
+// Category row through ctfTopicOf; HackTheBox keeps a flat list because its
+// writeups are organized per box, not per pwn.college module.
+const CTF_TOPICS: Array<{ id: CtfTopic; label: string }> = [
+  { id: 'binary-exploitation', label: 'Binary Exploitation' },
+  { id: 'race-condition', label: 'Race Condition' },
+]
+
+export function CtfPage({ navigate, topic = 'binary-exploitation' }: { navigate: NavFn; topic?: CtfTopic }) {
   const all = useAllEntries().filter(e => isCtfEntry(e))
   const [source, setSource] = useState<CtfSource>('pwn-college')
-  const entries = all.filter(e => ctfSourceOf(e) === source)
+  const sourceEntries = all.filter(e => ctfSourceOf(e) === source)
+  const entries = source === 'pwn-college'
+    ? sourceEntries.filter(e => ctfTopicOf(e) === topic)
+    : sourceEntries
   const counts: Record<CtfSource, number> = { 'pwn-college': 0, hackthebox: 0 }
   for (const e of all) counts[ctfSourceOf(e)]++
+  const topicCounts: Record<CtfTopic, number> = { 'binary-exploitation': 0, 'race-condition': 0 }
+  for (const e of all) {
+    if (ctfSourceOf(e) === 'pwn-college') topicCounts[ctfTopicOf(e)]++
+  }
+  const emptyLabel = source === 'pwn-college'
+    ? `pwn.college / ${CTF_TOPICS.find(t => t.id === topic)?.label}`
+    : CTF_TABS.find(t => t.id === source)?.label
   return (
     <div className="archive-container">
       <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
@@ -292,8 +314,25 @@ export function CtfPage({ navigate }: { navigate: NavFn }) {
           </button>
         ))}
       </div>
+      {source === 'pwn-college' && (
+        <div className="ctf-tabs ctf-tabs--sub" role="tablist" aria-label="pwn.college challenge series">
+          {CTF_TOPICS.map(t => (
+            <button
+              key={t.id}
+              type="button"
+              role="tab"
+              aria-selected={topic === t.id}
+              className={`ctf-tab ctf-tab--sub${topic === t.id ? ' ctf-tab--active' : ''}`}
+              onClick={() => navigate({ name: 'ctf', topic: t.id })}
+            >
+              <span>{t.label}</span>
+              <span className="ctf-tab-count">{String(topicCounts[t.id]).padStart(2, '0')}</span>
+            </button>
+          ))}
+        </div>
+      )}
       {entries.length === 0 ? (
-        <EmptyState message={`No ${CTF_TABS.find(t => t.id === source)?.label} walkthroughs published yet`} />
+        <EmptyState message={`No ${emptyLabel} walkthroughs published yet`} />
       ) : (
         <div>
           {entries.map(e => (
@@ -753,7 +792,52 @@ function ArtifactLink({ link, index }: { link: ArchiveLink; index: number }) {
             <i className="spec-bar spec-bar--9"></i>
           </span>
         )}
+        {link.variant === 'gdb' && (
+          <span className="gdb-lane" aria-hidden="true">
+            <i className="gdb-cell">mov rax,[rbx+8]</i>
+            <i className="gdb-cell">test rax,rax</i>
+            <i className="gdb-cell gdb-cell--fault">mov [rax],rcx</i>
+            <i className="gdb-cell">ret</i>
+            <i className="gdb-pc"></i>
+          </span>
+        )}
+        {link.variant === 'cve' && (
+          <span className="cve-tabs" aria-hidden="true">
+            <b className="cve-tabs-head">CVE</b>
+            <i className="cve-tab cve-tab--a">17</i>
+            <i className="cve-tab cve-tab--b">19</i>
+            <i className="cve-tab cve-tab--c">21</i>
+            <i className="cve-tab cve-tab--d">24</i>
+          </span>
+        )}
       </span>
+      {link.variant === 'pick' && (
+        <span className="pick-lock" aria-hidden="true">
+          <i className="pin pin--1"></i>
+          <i className="pin pin--2"></i>
+          <i className="pin pin--3"></i>
+          <i className="pin pin--4"></i>
+          <i className="pin pin--5"></i>
+        </span>
+      )}
+      {link.variant === 'cred' && (
+        <span className="cred-card" aria-hidden="true">
+          <span className="cred-flip">
+            <span className="cred-face cred-face--user">
+              <b>CRED</b>
+              <em>uid 1000</em>
+              <em>gid 1000</em>
+              <i>CAP_NONE</i>
+            </span>
+            <span className="cred-face cred-face--root">
+              <b>ROOT</b>
+              <em>uid 0</em>
+              <em>gid 0</em>
+              <i>CAP_ALL</i>
+            </span>
+          </span>
+        </span>
+      )}
       <span className="artifact-go" aria-hidden="true">↗</span>
     </a>
   )

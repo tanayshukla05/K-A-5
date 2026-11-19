@@ -1,17 +1,29 @@
 /**
  * Entry grouping — distinguishes CTF walkthrough entries (the pwn.college
- * binary-exploitation series) from the learning-path stages.
+ * binary-exploitation and race-condition series) from the learning-path
+ * stages.
  *
- * CTF entries carry the "Binary Exploitation" category in their metadata
- * table; learning-path stages do not. This module is imported by both the
- * server content loader (for stable ordering) and client pages (for menu
- * filtering), so it must stay free of server-only imports.
+ * CTF entries carry a CTF category in their metadata table; learning-path
+ * stages do not. This module is imported by both the server content loader
+ * (for stable ordering) and client pages (for menu filtering), so it must
+ * stay free of server-only imports.
  */
 
 import type { ArchiveEntry } from '@/lib/types'
 
 export function isCtfEntry(e: Pick<ArchiveEntry, 'category'>): boolean {
-  return /binary exploitation/i.test(e.category)
+  return /binary exploitation|race condition/i.test(e.category)
+}
+
+/**
+ * Sub-menus inside the pwn.college tab. The first segment of each entry's
+ * Category row selects the topic, so a new race-condition writeup only needs
+ * "Race Condition" in its metadata table to appear under the right sub-tab.
+ */
+export type CtfTopic = 'binary-exploitation' | 'race-condition'
+
+export function ctfTopicOf(e: Pick<ArchiveEntry, 'category'>): CtfTopic {
+  return /race condition/i.test(e.category) ? 'race-condition' : 'binary-exploitation'
 }
 
 /**

@@ -1,13 +1,14 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import type { CtfTopic } from '@/lib/entry-group'
 
 export type Route =
     | { name: 'home' }
     | { name: 'about' }
     | { name: 'archive' }
     | { name: 'stage'; slug: string }
-    | { name: 'ctf' }
+    | { name: 'ctf'; topic?: CtfTopic }
     | { name: 'research' }
     | { name: 'research-entry'; slug: string }
     | { name: 'cheatsheets' }
@@ -39,8 +40,13 @@ export function parseHash(hash: string): Route {
     if (parts[0] === 'archive') return { name: 'archive' }
     if (parts[0] === 'stage' && parts[1])
         return { name: 'stage', slug: safeDecode(parts[1]) }
-    if (parts[0] === 'ctf' || parts[0] === 'walkthroughs')
-        return { name: 'ctf' }
+    if (parts[0] === 'ctf' || parts[0] === 'walkthroughs') {
+        const topic: CtfTopic | undefined =
+            parts[1] === 'race-condition' ? 'race-condition'
+            : parts[1] === 'binary-exploitation' ? 'binary-exploitation'
+            : undefined
+        return { name: 'ctf', topic }
+    }
     if (parts[0] === 'research' && parts[1])
         return { name: 'research-entry', slug: safeDecode(parts[1]) }
     if (parts[0] === 'research')
@@ -83,7 +89,7 @@ export function routeToHash(route: Route): string {
             return `#/stage/${encodeURIComponent(route.slug)}`
 
         case 'ctf':
-            return '#/ctf'
+            return route.topic ? `#/ctf/${route.topic}` : '#/ctf'
 
         case 'research':
             return '#/research'

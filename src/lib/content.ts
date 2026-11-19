@@ -15,7 +15,8 @@
  *
  * This module reads the real markdown files in /content/learning-paths/ at
  * build time — the 8-stage shellcode-loader learning path (Stage 01–08) and
- * the 17 pwn.college CTF walkthroughs (Stage 01–17) — and exposes them as
+ * the pwn.college CTF walkthroughs (binary exploitation Stage 01–17 plus the
+ * race-condition series) — and exposes them as
  * structured records. Adding a new .md file automatically extends the
  * archive — no manual edits required.
  */
@@ -33,12 +34,251 @@ import type { ArchiveEntry } from '@/lib/types'
 
 const CONTENT_DIR = path.join(process.cwd(), 'content', 'learning-paths')
 
+// Escapes everything that could break out of an HTML text node or an
+// attribute value: & < > " '. Quotes matter because the renderer emits
+// double-quoted attributes (href, data-lang) — an unescaped " in markdown
+// would let a payload inject attributes (see the security-review PoC:
+// onmouseover executed from a link URL).
+const escapeHtml = (s: string) => s
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#39;')
+
+// ---------------------------------------------------------------------------
+// Rich code fences (learning-path / CTF articles only)
+//
+// The walkthroughs are read by people who do not write C for a living, so the
+// source gets a real reading surface instead of a black box: a titled cabinet,
+// line numbers, conservative C token colours, and optional key-line marks.
+//
+// Fence metadata is opt-in and lives in the info string:
+//   ```c title="binary-exploitation-first-overflow.c" keys="63,64,72,80-82"
+//
+// Research notes intentionally keep their existing phosphor cabinets, so the
+// renderer only takes this path when richCode is requested.
+// ---------------------------------------------------------------------------
+
+const C_KEYWORDS = new Set([
+  'if', 'else', 'for', 'while', 'do', 'switch', 'case', 'default',
+  'break', 'continue', 'return', 'goto', 'sizeof', 'typedef', 'asm',
+])
+
+const C_TYPES = new Set([
+  'void', 'char', 'short', 'int', 'long', 'float', 'double', 'signed',
+  'unsigned', 'bool', 'size_t', 'ssize_t', 'ptrdiff_t', 'intptr_t',
+  'uintptr_t', 'int8_t', 'int16_t', 'int32_t', 'int64_t', 'uint8_t',
+  'uint16_t', 'uint32_t', 'uint64_t', 'FILE', 'struct', 'union', 'enum',
+  'const', 'static', 'extern', 'register', 'inline', 'volatile', 'restrict',
+])
+
+const C_CONSTANTS = new Set([
+  'NULL', 'true', 'false', 'EOF', 'stdin', 'stdout', 'stderr',
+])
+
+function parseFenceInfo(raw: string): { lang: string; title: string; keys: Set<number> } {
+  const trimmed = raw.trim()
+  const lang = (trimmed.split(/\s+/)[0] || '').toLowerCase()
+  const attr = (name: string): string => {
+    const m = trimmed.match(new RegExp(`(?:^|\\s)${name}\\s*=\\s*"([^"]*)"`, 'i'))
+    return m ? m[1] : ''
+  }
+
+  const keys = new Set<number>()
+  for (const part of attr('keys').split(',')) {
+    const m = part.trim().match(/^(\d+)(?:\s*-\s*(\d+))?$/)
+    if (!m) continue
+    const start = parseInt(m[1], 10)
+    const end = m[2] ? parseInt(m[2], 10) : start
+    for (let n = Math.min(start, end); n <= Math.max(start, end); n++) keys.add(n)
+  }
+
+  return { lang, title: attr('title'), keys }
+}
+
+function tokenizeCLine(line: string, state: { inComment: boolean }): string {
+  const n = line.length
+  let out = ''
+  let i = 0
+
+  // A block comment opened on an earlier line swallows everything until */.
+  if (state.inComment) {
+    const end = line.indexOf('*/')
+    if (end === -1) {
+      return `<span class="tok-comment">${escapeHtml(line)}</span>`
+    }
+    out += `<span class="tok-comment">${escapeHtml(line.slice(0, end + 2))}</span>`
+    i = end + 2
+    state.inComment = false
+  }
+
+  while (i < n) {
+    const ch = line.charAt(i)
+
+    if (/\s/.test(ch)) {
+      let j = i + 1
+      while (j < n && /\s/.test(line.charAt(j))) j++
+      out += escapeHtml(line.slice(i, j))
+      i = j
+      continue
+    }
+
+    if (line.startsWith('/*', i)) {
+      const end = line.indexOf('*/', i + 2)
+      if (end === -1) {
+        out += `<span class="tok-comment">${escapeHtml(line.slice(i))}</span>`
+        state.inComment = true
+        i = n
+      } else {
+        out += `<span class="tok-comment">${escapeHtml(line.slice(i, end + 2))}</span>`
+        i = end + 2
+      }
+      continue
+    }
+
+    if (line.startsWith('//', i)) {
+      out += `<span class="tok-comment">${escapeHtml(line.slice(i))}</span>`
+      i = n
+      continue
+    }
+
+    if (ch === '"' || ch === "'") {
+      let j = i + 1
+      while (j < n) {
+        const c = line.charAt(j)
+        if (c === '\\') { j += 2; continue }
+        if (c === ch) { j++; break }
+        j++
+      }
+      const cls = ch === '"' ? 'tok-string' : 'tok-char'
+      out += `<span class="${cls}">${escapeHtml(line.slice(i, j))}</span>`
+      i = j
+      continue
+    }
+
+    if (/[A-Za-z_]/.test(ch)) {
+      let j = i + 1
+      while (j < n && /[A-Za-z0-9_]/.test(line.charAt(j))) j++
+      const word = line.slice(i, j)
+
+      let k = j
+      while (k < n && /[ \t]/.test(line.charAt(k))) k++
+      const isCall = line.charAt(k) === '('
+
+      let cls = ''
+      if (C_KEYWORDS.has(word)) cls = 'tok-keyword'
+      else if (C_TYPES.has(word)) cls = 'tok-type'
+      else if (C_CONSTANTS.has(word)) cls = 'tok-const'
+      else if (isCall && /^[A-Z_][A-Z0-9_]*$/.test(word)) cls = 'tok-macro'
+      else if (isCall) cls = 'tok-fn'
+      else if (/^[A-Z_][A-Z0-9_]{1,}$/.test(word)) cls = 'tok-macro'
+
+      out += cls ? `<span class="${cls}">${escapeHtml(word)}</span>` : escapeHtml(word)
+      i = j
+      continue
+    }
+
+    if (/[0-9]/.test(ch)) {
+      const m = line.slice(i).match(/^0[xX][0-9a-fA-F']+[uUlL]*|^\d[\d']*(?:\.\d+)?(?:[eE][+-]?\d+)?[uUlLfF]*/)
+      if (m) {
+        out += `<span class="tok-num">${escapeHtml(m[0])}</span>`
+        i += m[0].length
+        continue
+      }
+    }
+
+    out += escapeHtml(ch)
+    i++
+  }
+
+  return out
+}
+
+function highlightCLine(line: string, state: { inComment: boolean }): string {
+  if (state.inComment) return tokenizeCLine(line, state)
+
+  // Keep preprocessor directives distinct from executable code. Headers in
+  // #include <...> get string colour so the eye can find dependencies fast.
+  const directive = line.match(/^(\s*)(#[ \t]*[A-Za-z_]+)(.*)$/)
+  if (directive) {
+    let out = escapeHtml(directive[1]) + `<span class="tok-pre">${escapeHtml(directive[2])}</span>`
+    let rest = directive[3]
+    if (/^#[ \t]*include/.test(directive[2])) {
+      const header = rest.match(/^(\s*)(<[^>]+>)(.*)$/)
+      if (header) {
+        out += escapeHtml(header[1]) + `<span class="tok-include">${escapeHtml(header[2])}</span>`
+        rest = header[3]
+      }
+    }
+    return out + tokenizeCLine(rest, state)
+  }
+
+  return tokenizeCLine(line, state)
+}
+
+function highlightC(codeLines: string[]): string[] {
+  const state = { inComment: false }
+  return codeLines.map(line => highlightCLine(line, state))
+}
+
+const LANG_LABELS: Record<string, string> = {
+  c: 'C',
+  h: 'C header',
+  cpp: 'C++',
+  bash: 'Shell',
+  sh: 'Shell',
+  shell: 'Shell',
+  zsh: 'Shell',
+  python: 'Python',
+  py: 'Python',
+  javascript: 'JavaScript',
+  js: 'JavaScript',
+  typescript: 'TypeScript',
+  ts: 'TypeScript',
+  json: 'JSON',
+  rust: 'Rust',
+  asm: 'ASM',
+  nasm: 'ASM',
+  powershell: 'PowerShell',
+  ps1: 'PowerShell',
+  text: 'Text',
+  txt: 'Text',
+}
+
+function renderRichCodeFence(codeLines: string[], info: string): string {
+  const { lang, title, keys } = parseFenceInfo(info)
+  const total = Math.max(1, codeLines.length)
+  const gutter = String(total).length
+  const label = LANG_LABELS[lang] ?? (lang ? lang.toUpperCase() : 'Code')
+  const isC = lang === 'c' || lang === 'h' || lang === 'cpp'
+
+  const highlighted = isC
+    ? highlightC(codeLines)
+    : codeLines.map(line => escapeHtml(line))
+
+  const body = highlighted.map((html, index) => {
+    const no = index + 1
+    const key = keys.has(no)
+    return `<span class="code-line${key ? ' code-line--key' : ''}"><span class="code-line-no" aria-hidden="true">${no}</span><span class="code-line-text">${html}</span></span>`
+  }).join('')
+
+  const titleHtml = title ? `<span class="code-cabinet-title">${escapeHtml(title)}</span>` : ''
+  const keyHtml = keys.size ? '<span class="code-cabinet-keys">Key lines</span>' : ''
+  const countLabel = `${total} ${total === 1 ? 'line' : 'lines'}`
+
+  return `<figure class="code-cabinet" data-lang="${escapeHtml(lang)}" style="--code-gutter:${gutter}ch"><figcaption class="code-cabinet-head"><span class="code-cabinet-lang">${escapeHtml(label)}</span>${titleHtml}<span class="code-cabinet-meta">${keyHtml}<span class="code-cabinet-count">${countLabel}</span></span></figcaption><pre data-lang="${escapeHtml(lang)}"><code>${body}</code></pre></figure>`
+}
+
 // Lightweight GFM -> HTML renderer. We intentionally avoid pulling in a
 // heavy dependency for the build-time parse. This covers the constructs
 // used in the LEARNING_PATH files: headings, paragraphs, lists, tables,
 // fenced code blocks, blockquotes, horizontal rules, inline code, bold,
 // italic, links.
-function renderMarkdown(md: string): { html: string; sections: Array<{ heading: string; level: number }>; excerpt: string } {
+function renderMarkdown(
+  md: string,
+  options: { richCode?: boolean } = {},
+): { html: string; sections: Array<{ heading: string; level: number }>; excerpt: string } {
   const lines = md.replace(/\r\n/g, '\n').split('\n')
   const out: string[] = []
   const sections: Array<{ heading: string; level: number }> = []
@@ -48,17 +288,7 @@ function renderMarkdown(md: string): { html: string; sections: Array<{ heading: 
   let codeLang = ''
   let codeBuf: string[] = []
 
-  // Escapes everything that could break out of an HTML text node or an
-  // attribute value: & < > " '. Quotes matter because this renderer
-  // emits double-quoted attributes (href, data-lang) — an unescaped "
-  // in markdown would let a payload inject attributes (see the
-  // security-review PoC: onmouseover executed from a link URL).
-  const esc = (s: string) => s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
+  const esc = escapeHtml
 
   const inline = (s: string) => {
     let t = esc(s)
@@ -94,8 +324,12 @@ function renderMarkdown(md: string): { html: string; sections: Array<{ heading: 
         codeBuf = []
       } else {
         inCode = false
-        const code = esc(codeBuf.join('\n'))
-        out.push(`<pre data-lang="${esc(codeLang)}"><code data-lang="${esc(codeLang)}">${code}</code></pre>`)
+        if (options.richCode) {
+          out.push(renderRichCodeFence(codeBuf, codeLang))
+        } else {
+          const code = esc(codeBuf.join('\n'))
+          out.push(`<pre data-lang="${esc(codeLang)}"><code data-lang="${esc(codeLang)}">${code}</code></pre>`)
+        }
       }
       i++
       continue
@@ -295,7 +529,7 @@ export function getAllEntries(): ArchiveEntry[] {
       subtitle = stageMatch[4] ? stageMatch[4].trim() : 'Learning Path'
     }
 
-    const { html, sections, excerpt } = renderMarkdown(raw)
+    const { html, sections, excerpt } = renderMarkdown(raw, { richCode: true })
 
     return {
       slug,
@@ -324,7 +558,8 @@ export function getAllEntries(): ArchiveEntry[] {
   })
 
   // Order: learning-path stages first (Stage 01–08), then the CTF
-  // walkthroughs (Stage 01–17). Both series number independently, so sort
+  // walkthroughs (binary exploitation Stage 01–17 and the race-condition
+  // series). Both series number independently, so sort
   // by group before stage number to keep each series ascending internally.
   _cache = entries.sort((a, b) =>
     (isCtfEntry(a) ? 1 : 0) - (isCtfEntry(b) ? 1 : 0) ||

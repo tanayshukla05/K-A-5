@@ -26,6 +26,10 @@ export type ArchiveLink = {
     | 'trapdoor' | 'forum' | 'lantern' | 'zipper' | 'chronicle'
     | 'redacted'
     | 'spectrum'
+    | 'pick'
+    | 'cred'
+    | 'gdb'
+    | 'cve'
 }
 
 export const LINKS: ArchiveLink[] = [
@@ -284,7 +288,31 @@ export const LINKS: ArchiveLink[] = [
   {
     label: 'Floor 796',
     url: 'https://floor796.com/',
-    note: 'endless pixel-art animation — one office floor, never stops',
+    note: 'endless pixel-art animation - one office floor, never stops',
     variant: 'arcade',
+  },
+  {
+    label: 'zhuowei / GitHub',
+    url: 'https://github.com/zhuowei?tab=repositories',
+    note: 'iOS / Android exploit PoCs — 394 repos, a new project every Thursday',
+    variant: 'pick',
+  },
+  {
+    label: 'Linux Kernel Exploitation',
+    url: 'https://github.com/xairy/linux-kernel-exploitation',
+    note: 'xairy — curated kernel exploitation techniques, exploits & write-ups · 6.7k★',
+    variant: 'cred',
+  },
+  {
+    label: 'Allele Security',
+    url: 'https://allelesecurity.com/intro-linux-kernel-exploitation-part-1/',
+    note: 'intro to kernel exploitation, part 1 — net/sched NULL-deref, GDB + QEMU',
+    variant: 'gdb',
+  },
+  {
+    label: 'CVE Exploits Archive',
+    url: 'https://git.churchofmalware.org/K3ysTr0K3R/CVE-Exploits-Archive',
+    note: 'K3ysTr0K3R — a collection of CVE-indexed PoC exploits · Python',
+    variant: 'cve',
   },
 ]
