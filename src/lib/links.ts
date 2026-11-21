@@ -30,6 +30,19 @@ export type ArchiveLink = {
     | 'cred'
     | 'gdb'
     | 'cve'
+    | 'av'
+    | 'rust'
+    | 'aes'
+    | 'sc'
+    | 'bolus'
+    | 'thm'
+    | 'nim'
+    | 'rustic'
+    | 'defcon'
+    | 'net'
+    | 'dotnet'
+    | 'pic'
+    | 'clickonce'
 }
 
 export const LINKS: ArchiveLink[] = [
@@ -314,5 +327,83 @@ export const LINKS: ArchiveLink[] = [
     url: 'https://git.churchofmalware.org/K3ysTr0K3R/CVE-Exploits-Archive',
     note: 'K3ysTr0K3R — a collection of CVE-indexed PoC exploits · Python',
     variant: 'cve',
+  },
+  {
+    label: 'AV EVASION LOADER',
+    url: 'https://github.com/Jieyab89/Loader-and-shell-code-AV-Evasion',
+    note: 'Jieyab89 — loader + shellcode AV evasion',
+    variant: 'av',
+  },
+  {
+    label: 'OFFENSIVE RUST',
+    url: 'https://github.com/trickster0/OffensiveRust/tree/master',
+    note: 'trickster0 — offensive Rust implants & tooling',
+    variant: 'rust',
+  },
+  {
+    label: 'RUSTRED OPS',
+    url: 'https://github.com/joaoviictorti/RustRedOps/blob/main/Encryption_Shellcode/src/aes.rs',
+    note: 'joaoviictorti — RustRedOps AES-encrypted shellcode',
+    variant: 'aes',
+  },
+  {
+    label: 'RUST SC LOADER',
+    url: 'https://github.com/brosck/RustSCLoader/blob/main/src/main.rs',
+    note: 'brosck — RustSCLoader (Rust + shellcode loader)',
+    variant: 'sc',
+  },
+  {
+    label: 'BOLUS',
+    url: 'https://docs.rs/bolus/0.3.0/bolus/',
+    note: 'docs.rs — Bolus 0.3.0 Rust syscall library',
+    variant: 'bolus',
+  },
+  {
+    label: 'AV DEFENSE ROOM',
+    url: 'https://tryhackme.com/r/room/avevasionshellcode',
+    note: 'TryHackMe — AV evasion room',
+    variant: 'thm',
+  },
+  {
+    label: 'OFFENSIVE NIM',
+    url: 'https://github.com/byt3bl33d3r/OffensiveNim/blob/master/src/shellcode_bin.nim',
+    note: 'byt3bl33d3r — OffensiveNim shellcode bin',
+    variant: 'nim',
+  },
+  {
+    label: 'RUSTIC64',
+    url: 'https://github.com/safedv/Rustic64',
+    note: 'safedv — Rustic64 loader',
+    variant: 'rustic',
+  },
+  {
+    label: 'DEF CON C#',
+    url: 'https://github.com/mvelazc0/defcon27_csharp_workshop/blob/master/Labs/lab3/1.cs',
+    note: 'mvelazc0 — DEF CON27 C# workshop lab',
+    variant: 'defcon',
+  },
+  {
+    label: 'NET INJECTION',
+    url: 'https://www.ired.team/offensive-security/code-injection-process-injection/injecting-and-executing-.net-assemblies-to-unmanaged-process',
+    note: 'iRed Team — .NET → unmanaged process injection',
+    variant: 'net',
+  },
+  {
+    label: 'FGSEC NET',
+    url: 'https://fgsec.net/posts/Injecting-dotNet-Assemblies-To-Unmanaged-Processes/',
+    note: 'fgsec — .NET assembly injection into unmanaged processes',
+    variant: 'dotnet',
+  },
+  {
+    label: 'PIC SHELLCODE',
+    url: 'https://ppn.snovvcrash.rocks/red-team/maldev/pic-shellcode',
+    note: 'ppn — maldev PIC shellcode',
+    variant: 'pic',
+  },
+  {
+    label: 'CLICKONCE',
+    url: 'https://www.adroxz.foo/ab-using-clickonce-for-initial-access-and-persistence',
+    note: 'adroxz — abusing ClickOnce for initial access and persistence',
+    variant: 'clickonce',
   },
 ]

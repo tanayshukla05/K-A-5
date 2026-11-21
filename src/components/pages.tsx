@@ -253,6 +253,35 @@ function EntryRow({ entry, onClick }: { entry: ArchiveEntry; onClick: () => void
 }
 
 /* ============================================================
+   CTF CARD — every pwn.college walkthrough gets its own surface,
+   typeface, marker and hover behavior, the same rule the Links
+   artifacts follow. The variant comes from the continuous CTF
+   stage number (01–24), so a new walkthrough only needs the next
+   stage number to pick up the next material — until 24, where the
+   cycle would need a new design block.
+   ============================================================ */
+function CtfCard({ entry, onClick }: { entry: ArchiveEntry; onClick: () => void }) {
+  const code = String(entry.stageNumber).padStart(2, '0')
+  return (
+    <button
+      type="button"
+      className={`ctf-card ctf-card--v${code}`}
+      data-code={code}
+      onClick={onClick}
+    >
+      <span className="ctf-card-stage">{entry.stage}</span>
+      <span className="ctf-card-main">
+        <span className="ctf-card-title">{entry.title}</span>
+        <span className="ctf-card-meta">{entry.moduleName} · {entry.level}</span>
+      </span>
+      <span className={`ctf-card-vt${entry.vtScoreClean ? ' ctf-card-vt--clean' : ''}`}>
+        {entry.vtScore || '—'}
+      </span>
+    </button>
+  )
+}
+
+/* ============================================================
    CTF WALKTHROUGHS
    ============================================================ */
 // The two walkthrough origins, in menu order. An entry lands on a tab
@@ -336,7 +365,9 @@ export function CtfPage({ navigate, topic = 'binary-exploitation' }: { navigate:
         <EmptyState message={`No ${emptyLabel} walkthroughs published yet`} />
       ) : (
         <div>
-          {entries.map(e => (
+          {entries.map(e => source === 'pwn-college' ? (
+            <CtfCard key={e.slug} entry={e} onClick={() => navigate({ name: 'stage', slug: e.slug })} />
+          ) : (
             <EntryRow key={e.slug} entry={e} onClick={() => navigate({ name: 'stage', slug: e.slug })} />
           ))}
         </div>
@@ -753,6 +784,30 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
 }
 
 /* ============================================================
+   CLIPPED — gameplay videos from the archive. Where the
+   gameplay footage lives: the playable cabinets up top and the
+   walkthroughs below, with the actual clips posted here as they
+   happen. Empty for now — the videos are coming.
+   ============================================================ */
+export function ClippedPage({ navigate }: { navigate: NavFn }) {
+  return (
+    <div className="archive-container">
+      <button type="button" className="back-link" onClick={() => navigate({ name: 'games' })}>
+        ← Back
+      </button>
+      <div className="archive-eyebrow">CLIPS</div>
+      <h1 className="archive-title">Clipped</h1>
+      <p className="archive-subtitle">
+        Gameplay videos from the archive — where I will post my gameplay
+        videos. Recorded runs, boss fights, speedruns and cabinet captures
+        as they happen.
+      </p>
+      <EmptyState message="No gameplay clips posted yet" />
+    </div>
+  )
+}
+
+/* ============================================================
    LINKS — the directory as a collection of artifacts. Every row
    is a distinct material with its own typography, texture,
    sparkle and hover behaviour (see .artifact--* in globals.css).
@@ -812,6 +867,76 @@ function ArtifactLink({ link, index }: { link: ArchiveLink; index: number }) {
           </span>
         )}
       </span>
+      {link.variant === 'av' && (
+        <span className="artifact-art artifact-art--av" aria-hidden="true">
+          <i className="av-glass" />
+          <i className="av-fill" />
+          <i className="av-cap" />
+        </span>
+      )}
+      {link.variant === 'aes' && (
+        <span className="artifact-art artifact-art--aes" aria-hidden="true">
+          <i className="aes-chip" />
+        </span>
+      )}
+      {link.variant === 'sc' && (
+        <span className="artifact-art artifact-art--sc" aria-hidden="true">
+          <i className="sc-plug" />
+          <i className="sc-body" />
+          <i className="sc-led" />
+        </span>
+      )}
+      {link.variant === 'bolus' && (
+        <span className="artifact-art artifact-art--bolus" aria-hidden="true">
+          <i /><i /><i />
+        </span>
+      )}
+      {link.variant === 'nim' && (
+        <span className="artifact-art artifact-art--nim" aria-hidden="true">
+          <i className="nim-crown" />
+        </span>
+      )}
+      {link.variant === 'rustic' && (
+        <span className="artifact-art artifact-art--rustic" aria-hidden="true">
+          <span className="rustic-regs">
+            {['RAX', 'RBX', 'RCX', 'RDX', 'RSI', 'RDI', 'RBP', 'RSP'].map(reg => (
+              <i key={reg}>{reg}</i>
+            ))}
+          </span>
+        </span>
+      )}
+      {link.variant === 'defcon' && (
+        <span className="artifact-art artifact-art--defcon" aria-hidden="true">
+          <b>27</b>
+          <i className="defcon-barcode" />
+        </span>
+      )}
+      {link.variant === 'net' && (
+        <span className="artifact-art artifact-art--net" aria-hidden="true">
+          <i className="net-proc">HOST</i>
+          <i className="net-arrow" />
+          <i className="net-proc net-proc--b">TARGET</i>
+        </span>
+      )}
+      {link.variant === 'dotnet' && (
+        <span className="artifact-art artifact-art--dotnet" aria-hidden="true">
+          <i>00000000  4D 5A 90 00 03 00 00 00</i>
+          <i>00000008  04 00 00 00 FF FF 00 00</i>
+          <i>00000010  B8 2A 00 00 00 C3 90 90</i>
+        </span>
+      )}
+      {link.variant === 'pic' && (
+        <span className="artifact-art artifact-art--pic" aria-hidden="true">
+          <i className="pic-jaw" />
+          <i className="pic-screw" />
+        </span>
+      )}
+      {link.variant === 'clickonce' && (
+        <span className="artifact-art artifact-art--clickonce" aria-hidden="true">
+          <i className="clickonce-button" />
+          <i className="clickonce-led" />
+        </span>
+      )}
       {link.variant === 'pick' && (
         <span className="pick-lock" aria-hidden="true">
           <i className="pin pin--1"></i>

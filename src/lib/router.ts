@@ -14,6 +14,7 @@ export type Route =
     | { name: 'cheatsheets' }
     | { name: 'files' }
     | { name: 'games' }
+    | { name: 'clipped' }
     | { name: 'links' }
     | { name: 'tags' }
     | { name: 'tag'; tag: string }
@@ -58,6 +59,8 @@ export function parseHash(hash: string): Route {
         return { name: 'files' }
     if (parts[0] === 'games')
         return { name: 'games' }
+    if (parts[0] === 'clipped')
+        return { name: 'clipped' }
     if (parts[0] === 'links')
         return { name: 'links' }
     if (parts[0] === 'tags' && parts[1])
@@ -106,6 +109,9 @@ export function routeToHash(route: Route): string {
 
         case 'games':
             return '#/games'
+
+        case 'clipped':
+            return '#/clipped'
 
         case 'links':
             return '#/links'

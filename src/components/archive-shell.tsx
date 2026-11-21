@@ -19,7 +19,7 @@ import { InstallAppButton } from '@/components/pwa'
 import {
   HomePage, AboutPage, ArchivePage, StagePage, CtfPage,
   ResearchPage, ResearchEntryPage, CheatsheetsPage, FilesPage,
-  GamesPage, LinksPage, TagsPage, TagPage, CategoriesPage,
+  GamesPage, ClippedPage, LinksPage, TagsPage, TagPage, CategoriesPage,
   CategoryPage, NotFoundPage,
 } from '@/components/pages'
 import { useAllEntries, useAllTags, useAllCategories, useAllResearch } from '@/components/content-provider'
@@ -137,6 +137,7 @@ export function ArchiveShell() {
     { label: 'Cheat Sheets', route: { name: 'cheatsheets' } },
     { label: 'File Archive', route: { name: 'files' } },
     { label: 'Games', route: { name: 'games' }, arcade: true },
+    { label: 'Clipped', route: { name: 'clipped' } },
     { label: 'Links', route: { name: 'links' }, gold: true },
   ]
 
@@ -172,6 +173,7 @@ export function ArchiveShell() {
       case 'cheatsheets': return <CheatsheetsPage navigate={navigate} />
       case 'files': return <FilesPage navigate={navigate} />
       case 'games': return <GamesPage navigate={navigate} />
+      case 'clipped': return <ClippedPage navigate={navigate} />
       case 'links': return <LinksPage navigate={navigate} />
       case 'tags': return <TagsPage navigate={navigate} />
       case 'tag': return <TagPage tag={route.tag} navigate={navigate} />
