@@ -2,7 +2,7 @@
 
 /**
  * Search command panel — Ctrl+K / Cmd+K.
- * Instant search across stages, tags, categories, headings.
+ * Instant search across stages, headings.
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -10,10 +10,7 @@ import type { ArchiveEntry } from '@/lib/types'
 import { useAllEntries, useSearchEntries } from '@/components/content-provider'
 import type { Route } from '@/lib/router'
 
-type SearchHit =
-  | { kind: 'entry'; entry: ArchiveEntry }
-  | { kind: 'tag'; tag: string }
-  | { kind: 'category'; category: string }
+type SearchHit = { kind: 'entry'; entry: ArchiveEntry }
 
 export function SearchPanel({
   open,
@@ -44,40 +41,13 @@ export function SearchPanel({
 
   const hits: SearchHit[] = useMemo(() => {
     const q = query.trim()
+    const entryHits: SearchHit[] = []
     if (!q) {
-      const tagHits: SearchHit[] = []
-      const tagSet = new Set<string>()
-      for (const e of allEntries) {
-        for (const t of e.tags) {
-          if (!tagSet.has(t)) { tagSet.add(t); tagHits.push({ kind: 'tag', tag: t }) }
-        }
-      }
-      const entryHits: SearchHit[] = allEntries.slice(0, 5).map(e => ({ kind: 'entry', entry: e }))
-      return [...tagHits.slice(0, 6), ...entryHits]
+      for (const e of allEntries.slice(0, 5)) entryHits.push({ kind: 'entry', entry: e })
+    } else {
+      for (const e of searchResults.slice(0, 12)) entryHits.push({ kind: 'entry', entry: e })
     }
-    const entries = searchResults.slice(0, 12)
-    const entryHits: SearchHit[] = entries.map(e => ({ kind: 'entry', entry: e }))
-
-    const tagHits: SearchHit[] = []
-    const catHits: SearchHit[] = []
-    const lower = q.toLowerCase()
-    const tagSet = new Set<string>()
-    const catSet = new Set<string>()
-    for (const e of allEntries) {
-      for (const t of e.tags) {
-        if (t.toLowerCase().includes(lower) && !tagSet.has(t)) {
-          tagSet.add(t)
-          tagHits.push({ kind: 'tag', tag: t })
-        }
-      }
-      for (const c of e.categories) {
-        if (c.toLowerCase().includes(lower) && !catSet.has(c)) {
-          catSet.add(c)
-          catHits.push({ kind: 'category', category: c })
-        }
-      }
-    }
-    return [...entryHits, ...tagHits.slice(0, 4), ...catHits.slice(0, 3)]
+    return entryHits
   }, [query, allEntries, searchResults])
 
   // When the query changes, the hit list shrinks; clamp the active index
@@ -87,8 +57,6 @@ export function SearchPanel({
 
   function activate(hit: SearchHit) {
     if (hit.kind === 'entry') onNavigate({ name: 'stage', slug: hit.entry.slug })
-    else if (hit.kind === 'tag') onNavigate({ name: 'tag', tag: hit.tag })
-    else onNavigate({ name: 'category', category: hit.category })
     onClose()
   }
 
@@ -130,7 +98,7 @@ export function SearchPanel({
         <input
           ref={inputRef}
           className="search-input"
-          placeholder="Search archive — stages, tags, categories, headings…"
+          placeholder="Search archive — stages, headings…"
           value={query}
           onChange={e => setQuery(e.target.value)}
           autoComplete="off"
@@ -159,34 +127,6 @@ export function SearchPanel({
                 </button>
               )
             }
-            if (hit.kind === 'tag') {
-              return (
-                <button
-                  key={`t-${hit.tag}`}
-                  type="button"
-                  className={`search-result ${isActive ? 'search-result--active' : ''}`}
-                  data-idx={idx}
-                  onMouseEnter={() => setActiveIdx(idx)}
-                  onClick={() => activate(hit)}
-                >
-                  <div className="search-result-stage">TAG</div>
-                  <div className="search-result-title">{hit.tag}</div>
-                </button>
-              )
-            }
-            return (
-              <button
-                key={`c-${hit.category}`}
-                type="button"
-                className={`search-result ${isActive ? 'search-result--active' : ''}`}
-                data-idx={idx}
-                onMouseEnter={() => setActiveIdx(idx)}
-                onClick={() => activate(hit)}
-              >
-                <div className="search-result-stage">CATEGORY</div>
-                <div className="search-result-title">{hit.category}</div>
-              </button>
-            )
           })}
         </div>
       </div>

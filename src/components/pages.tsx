@@ -10,8 +10,7 @@
  */
 
 import {
-  useAllEntries, useEntryBySlug, useAllTags, useAllCategories,
-  useAllResearch, useResearchBySlug,
+  useAllEntries, useEntryBySlug, useAllResearch, useResearchBySlug,
 } from '@/components/content-provider'
 import { useState } from 'react'
 import type { ArchiveEntry, ResearchSeries } from '@/lib/types'
@@ -162,24 +161,8 @@ export function StagePage({ slug, navigate }: { slug: string; navigate: NavFn })
             <MetaCell label="Binary" value={entry.binary} />
             <MetaCell label="VT Score" value={entry.vtScore} highlight={entry.vtScoreClean} />
             {entry.prerequisites && <MetaCell label="Prerequisites" value={entry.prerequisites} />}
-            {entry.mitre && <MetaCell label="MITRE ATT&CK" value={entry.mitre} />}
+            {entry.mitre && <MetaCell label="MITRE ATT&ACK" value={entry.mitre} />}
           </div>
-
-          {entry.tags.length > 0 && (
-            <div style={{ marginTop: '1.25rem', display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
-              {entry.tags.map(t => (
-                <button
-                  key={t}
-                  type="button"
-                  className="tag-pill"
-                  style={{ padding: '0.3rem 0.55rem', fontSize: 10 }}
-                  onClick={() => navigate({ name: 'tag', tag: t })}
-                >
-                  <span>{t}</span>
-                </button>
-              ))}
-            </div>
-          )}
         </header>
 
         <div
@@ -208,7 +191,7 @@ export function StagePage({ slug, navigate }: { slug: string; navigate: NavFn })
                 style={{ margin: 0 }}
                 onClick={() => navigate({ name: 'stage', slug: next.slug })}
               >
-                {next.stage}: {next.title} →
+                {next.stage}: {next.title}
               </button>
             )}
           </div>
@@ -242,22 +225,22 @@ function EntryRow({ entry, onClick }: { entry: ArchiveEntry; onClick: () => void
       <div>
         <div className="entry-row-title">{entry.title}</div>
         <div className="entry-row-meta">
-          {entry.moduleName} · {entry.level} · {entry.estimatedTime}
+          {entry.moduleName} — {entry.level} — {entry.estimatedTime}
         </div>
       </div>
       <div className={`entry-row-vt ${entry.vtScoreClean ? 'entry-row-vt-clean' : ''}`}>
-        {entry.vtScore || '—'}
+        {entry.vtScore || '-'}
       </div>
     </button>
   )
 }
 
 /* ============================================================
-   CTF CARD — every pwn.college walkthrough gets its own surface,
+   CTF CARD - every pwn.college walkthrough gets its own surface,
    typeface, marker and hover behavior, the same rule the Links
    artifacts follow. The variant comes from the continuous CTF
-   stage number (01–24), so a new walkthrough only needs the next
-   stage number to pick up the next material — until 24, where the
+   stage number (01-24), so a new walkthrough only needs the next
+   stage number to pick up the next material - until 24, where the
    cycle would need a new design block.
    ============================================================ */
 function CtfCard({ entry, onClick }: { entry: ArchiveEntry; onClick: () => void }) {
@@ -272,10 +255,10 @@ function CtfCard({ entry, onClick }: { entry: ArchiveEntry; onClick: () => void 
       <span className="ctf-card-stage">{entry.stage}</span>
       <span className="ctf-card-main">
         <span className="ctf-card-title">{entry.title}</span>
-        <span className="ctf-card-meta">{entry.moduleName} · {entry.level}</span>
+        <span className="ctf-card-meta">{entry.moduleName} — {entry.level}</span>
       </span>
       <span className={`ctf-card-vt${entry.vtScoreClean ? ' ctf-card-vt--clean' : ''}`}>
-        {entry.vtScore || '—'}
+        {entry.vtScore || '-'}
       </span>
     </button>
   )
@@ -285,8 +268,8 @@ function CtfCard({ entry, onClick }: { entry: ArchiveEntry; onClick: () => void 
    CTF WALKTHROUGHS
    ============================================================ */
 // The two walkthrough origins, in menu order. An entry lands on a tab
-// through its Module Name metadata row — see ctfSourceOf in
-// entry-group.ts ("Pwn.College — …" vs "HackTheBox — …").
+// through its Module Name metadata row - see ctfSourceOf in
+// entry-group.ts ("Pwn.College - ." vs "HackTheBox - .").
 const CTF_TABS: Array<{ id: CtfSource; label: string }> = [
   { id: 'pwn-college', label: 'pwn.college' },
   { id: 'hackthebox', label: 'HackTheBox' },
@@ -326,7 +309,7 @@ export function CtfPage({ navigate, topic = 'binary-exploitation' }: { navigate:
       <h1 className="archive-title">CTF Walkthroughs</h1>
       <p className="archive-subtitle">
         Step-by-step walkthroughs of capture-the-flag challenges and binary
-        analysis exercises. Each entry documents the full chain — from initial
+        analysis exercises. Each entry documents the full chain - from initial
         reconnaissance to final payload.
       </p>
       <div className="ctf-tabs" role="tablist" aria-label="Walkthrough source">
@@ -377,7 +360,7 @@ export function CtfPage({ navigate, topic = 'binary-exploitation' }: { navigate:
 }
 
 /* ============================================================
-   RESEARCH NOTES — sub-menus per series, mirroring the CTF tab
+   RESEARCH NOTES - sub-menus per series, mirroring the CTF tab
    pattern. Series comes from each note's **Series** metadata row;
    adding a markdown file to content/research-notes/ extends the
    menus automatically.
@@ -401,7 +384,7 @@ export function ResearchPage({ navigate }: { navigate: NavFn }) {
       <div className="archive-eyebrow">RESEARCH NOTES</div>
       <h1 className="archive-title">Research Notes</h1>
       <p className="archive-subtitle">
-        Long-form working notes and curated free courses — exploit
+        Long-form working notes and curated free courses - exploit
         development, malware development, and the internals they live in.
         Third-party material is archived with full attribution.
       </p>
@@ -436,10 +419,10 @@ export function ResearchPage({ navigate }: { navigate: NavFn }) {
                 <div className="entry-row-title">{e.title}</div>
                 <div className="entry-row-meta">
                   {e.sourceLabel}
-                  {e.sourceUrl ? ` · ${e.sourceUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}` : ''}
+                  {e.sourceUrl ? ` — ${e.sourceUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}` : ''}
                 </div>
               </div>
-              <div className="entry-row-vt">↗</div>
+              <div className="entry-row-vt">?</div>
             </button>
           ))}
         </div>
@@ -449,7 +432,7 @@ export function ResearchPage({ navigate }: { navigate: NavFn }) {
 }
 
 /* ============================================================
-   RESEARCH NOTE DETAIL — rendered through the same hardened
+   RESEARCH NOTE DETAIL - rendered through the same hardened
    markdown pipeline as every other entry on the site.
    ============================================================ */
 export function ResearchEntryPage({ slug, navigate }: { slug: string; navigate: NavFn }) {
@@ -475,11 +458,11 @@ export function ResearchEntryPage({ slug, navigate }: { slug: string; navigate: 
       <article className={`research-entry research-entry--${entry.series}`}>
         <header className="article-head research-head">
           <div className={`research-series-chip research-series-chip--${entry.series}`}>
-            {entry.series === 'mal-dev' ? 'MAL-DEV' : 'EXPLOIT-DEV'} · {entry.dateLabel}
+            {entry.series === 'mal-dev' ? 'MAL-DEV' : 'EXPLOIT-DEV'} — {entry.dateLabel}
           </div>
           <h1 className="article-title research-title">{entry.title}</h1>
           {entry.sourceLabel && (
-            <div className="research-meta">Free course — {entry.sourceLabel}</div>
+            <div className="research-meta">Free course - {entry.sourceLabel}</div>
           )}
           {entry.sourceUrl && (
             <a
@@ -488,7 +471,7 @@ export function ResearchEntryPage({ slug, navigate }: { slug: string; navigate: 
               target="_blank"
               rel="noopener noreferrer"
             >
-              SOURCE <span aria-hidden="true">↗</span>
+              SOURCE <span aria-hidden="true">?</span>
             </a>
           )}
         </header>
@@ -503,22 +486,22 @@ export function ResearchEntryPage({ slug, navigate }: { slug: string; navigate: 
 }
 
 /* ============================================================
-   CHEAT SHEETS — intentionally empty section
+   CHEAT SHEETS - intentionally empty section
    ============================================================ */
 /* ============================================================
-   CHEAT SHEETS — reference material. First sheet: Windows shell
+   CHEAT SHEETS - reference material. First sheet: Windows shell
    secrets. The Run dialog (Win+R) is the fastest terminal on any
    PC; these one-click-copy commands teach visitors to drive it.
    ============================================================ */
 
 const SHELL_SECRETS: Array<{ cmd: string; desc: string }> = [
-  { cmd: 'shell:MyComputerFolder', desc: 'This PC — every drive and device in one window' },
+  { cmd: 'shell:MyComputerFolder', desc: 'This PC - every drive and device in one window' },
   { cmd: 'shell:RecycleBinFolder', desc: 'The Recycle Bin' },
-  { cmd: 'shell:AppsFolder', desc: 'Every installed app — launch any of them by name' },
+  { cmd: 'shell:AppsFolder', desc: 'Every installed app - launch any of them by name' },
   { cmd: 'shell:Startup', desc: 'Programs that run the moment you log in' },
   { cmd: 'shell:Recent', desc: 'Everything you opened lately' },
   { cmd: 'shell:Downloads', desc: 'Your Downloads folder' },
-  { cmd: 'shell:Temp', desc: 'Temp junk — safe to clear out' },
+  { cmd: 'shell:Temp', desc: 'Temp junk - safe to clear out' },
   { cmd: 'shell:Fonts', desc: 'Every font installed on the machine' },
   { cmd: 'shell:ProgramFiles', desc: 'Program Files' },
   { cmd: 'shell:Windows', desc: 'The Windows directory itself' },
@@ -571,22 +554,22 @@ export function CheatsheetsPage({ navigate }: { navigate: NavFn }) {
       <div className="archive-eyebrow">CHEAT SHEETS</div>
       <h1 className="archive-title">Cheat Sheets</h1>
       <p className="archive-subtitle">
-        Reference material — quick-lookup tables for analysis workflows.
+        Reference material - quick-lookup tables for analysis workflows.
         First sheet: the Windows Run dialog, the fastest terminal on any
         PC. No install, no admin rights, pure muscle memory.
       </p>
 
-      <div className="archive-eyebrow">SHEET 01 — WINDOWS SHELL SECRETS</div>
+      <div className="archive-eyebrow">SHEET 01 - WINDOWS SHELL SECRETS</div>
       <div className="shell-secrets">
         <div className="shell-secret-steps">
-          <div className="shell-step"><span className="shell-step-key">01</span><span>PRESS <b>Win + R</b> — the Run dialog opens</span></div>
-          <div className="shell-step"><span className="shell-step-key">02</span><span>PASTE a command — one click on <b>COPY</b> puts it on your clipboard</span></div>
-          <div className="shell-step"><span className="shell-step-key">03</span><span>HIT <b>Enter</b> — the folder opens. No menus, no hunting.</span></div>
+          <div className="shell-step"><span className="shell-step-key">01</span><span>PRESS <b>Win + R</b> - the Run dialog opens</span></div>
+          <div className="shell-step"><span className="shell-step-key">02</span><span>PASTE a command - one click on <b>COPY</b> puts it on your clipboard</span></div>
+          <div className="shell-step"><span className="shell-step-key">03</span><span>HIT <b>Enter</b> - the folder opens. No menus, no hunting.</span></div>
         </div>
         <div className="shell-secret-hero">
           <div className="shell-secret-cmd">explorer shell:MyComputerFolder</div>
           <div className="shell-secret-desc">
-            The gateway command: opens This PC — every drive, every device,
+            The gateway command: opens This PC - every drive, every device,
             one window. The archive starts where the file manager does.
           </div>
           <CopyChip text="explorer shell:MyComputerFolder" />
@@ -600,17 +583,17 @@ export function CheatsheetsPage({ navigate }: { navigate: NavFn }) {
             <CopyChip text={s.cmd} />
           </div>
         ))}
-        <div className="shell-secret-foot">WINDOWS ONLY — RUN NEEDS A KEYBOARD. ON A PHONE, THE LESSON IS STILL FREE.</div>
+        <div className="shell-secret-foot">WINDOWS ONLY - RUN NEEDS A KEYBOARD. ON A PHONE, THE LESSON IS STILL FREE.</div>
       </div>
     </div>
   )
 }
 
 /* ============================================================
-   FILE ARCHIVE — intentionally empty section
+   FILE ARCHIVE - intentionally empty section
    ============================================================ */
 export function FilesPage({ navigate }: { navigate: NavFn }) {
-  // No downloadable files have been published yet — empty state until
+  // No downloadable files have been published yet - empty state until
   // real files exist.
   return (
     <div className="archive-container">
@@ -630,20 +613,20 @@ export function FilesPage({ navigate }: { navigate: NavFn }) {
 }
 
 /* ============================================================
-   GAMES — playable things built for and hosted by the archive.
-   Cabinet 01: MultiHero — the freeware fan game's official
+   GAMES - playable things built for and hosted by the archive.
+   Cabinet 01: MultiHero - the freeware fan game's official
    WASM build, self-hosted and embedded same-origin.
    Cabinet 02: a complete side-scrolling platformer written
-   from scratch (original engine, sprites, and sound — no ROMs).
+   from scratch (original engine, sprites, and sound - no ROMs).
    Cabinet 03: a self-hosted Super Nintendo whose shelf of
    cartridges runs in the browser on the self-hosted
    EmulatorJS runtime.
    ============================================================ */
 export function GamesPage({ navigate }: { navigate: NavFn }) {
-  /* cabinet 01 (MultiHero) stays powered off until the visitor clicks —
+  /* cabinet 01 (MultiHero) stays powered off until the visitor clicks -
      the WASM build only downloads on click (~13 MB) */
   const [heroOn, setHeroOn] = useState(false)
-  /* cabinet 02 stays powered off until the visitor clicks — no auto-start */
+  /* cabinet 02 stays powered off until the visitor clicks - no auto-start */
   const [marioOn, setMarioOn] = useState(false)
   return (
     <div className="archive-container games-room">
@@ -653,26 +636,26 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
       <div className="archive-eyebrow">GAMES</div>
       <h1 className="archive-title">Games</h1>
       <p className="archive-subtitle">
-        Playable things from the archive. Cabinet 01: MultiHero — a
-        freeware browser beat-&rsquo;em-up, solo or with up to four players
-        online. Cabinet 02: SUPER ARCHIVE BROS. — a complete
+        Playable things from the archive. Cabinet 01: MultiHero - a
+        freeware browser beat-'em-up, solo or with up to four players
+        online. Cabinet 02: SUPER ARCHIVE BROS. - a complete
         side-scrolling platformer built from scratch for this site.
-        Cabinet 03: a Super Nintendo with its games pre-installed — tap a
+        Cabinet 03: a Super Nintendo with its games pre-installed - tap a
         title on the shelf and it runs right here in the browser.
       </p>
 
       {/* ============================================================
-          CABINET 01 — MultiHero, Web Edition. The port author ships a
+          CABINET 01 - MultiHero, Web Edition. The port author ships a
           complete self-hostable WASM build (public/multihero/multihero-web,
-          MIT; original freeware game by mhman — see NOTICE.md). The
+          MIT; original freeware game by mhman - see NOTICE.md). The
           loader fetches its ~13 MB data package the moment it runs, so
-          the iframe only mounts on click — nothing downloads before it.
+          the iframe only mounts on click - nothing downloads before it.
           ============================================================ */}
       <div className="game-cabinet game-cabinet--hero">
         <div className="game-cab-head">
           <span className="game-num">01</span>
-          <span className="game-cab-label">MultiHero — Web Edition</span>
-          <span className="game-cab-note">browser beat-&rsquo;em-up · touch + gamepad · up to 4 players online</span>
+          <span className="game-cab-label">MultiHero - Web Edition</span>
+          <span className="game-cab-note">browser beat-'em-up · touch + gamepad · up to 4 players online</span>
         </div>
         <div className="game-screen">
           {heroOn ? (
@@ -686,7 +669,7 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
               />
               <div className="game-ui">
                 <button type="button" className="game-btn" onClick={() => setHeroOn(false)}>
-                  ⏏ EJECT
+                  EJECT
                 </button>
               </div>
             </>
@@ -696,11 +679,11 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
                 type="button"
                 className="game-launch-poster"
                 onClick={() => setHeroOn(true)}
-                aria-label="Power on MultiHero — Web Edition"
+                aria-label="Power on MultiHero - Web Edition"
               >
                 <img
                   src="/posters/multihero-web-edition.png"
-                  alt="Cabinet 01 poster: MultiHero — Web Edition. Mario vs Bowser under the cabinet marquee, with the cast of all 27 fighters drawn from the game's own gfx."
+                  alt="Cabinet 01 poster: MultiHero - Web Edition. Mario vs Bowser under the cabinet marquee, with the cast of all 27 fighters drawn from the game's own gfx."
                   width={1200}
                   height={1800}
                   loading="lazy"
@@ -708,14 +691,14 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
                 />
               </button>
               <div className="game-launch-side">
-                <p className="game-launch-head">GAME INSTALLED — TAP TO POWER ON</p>
+                <p className="game-launch-head">GAME INSTALLED - TAP TO POWER ON</p>
                 <button type="button" className="game-launch-btn" onClick={() => setHeroOn(true)}>
-                  ▶ INSERT COIN · PLAY
+                  INSERT COIN · PLAY
                 </button>
                 <p className="game-launch-blurb">
-                  27 fighters on one cartridge — Ryu, Spider-Man, Bowser, Venom and
-                  the rest, drawn from the game&rsquo;s own gfx. The WASM build
-                  (~13&thinsp;MB) downloads only after you press start.
+                  27 fighters on one cartridge - Ryu, Spider-Man, Bowser, Venom and
+                  the rest, drawn from the game's own gfx. The WASM build
+                  (~13 MB) downloads only after you press start.
                 </p>
               </div>
             </div>
@@ -727,8 +710,8 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
       </div>
 
       {/* ============================================================
-          CABINET 02 — Super Archive Bros., written from scratch for the
-          archive (original engine, sprites, sound — no ROMs). The INSERT
+          CABINET 02 - Super Archive Bros., written from scratch for the
+          archive (original engine, sprites, sound - no ROMs). The INSERT
           COIN tap boots the game via autoStart.
           ============================================================ */}
       <div className="game-cabinet">
@@ -743,26 +726,26 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
               <MarioGame autoStart />
               <div className="game-ui">
                 <button type="button" className="game-btn" onClick={() => setMarioOn(false)}>
-                  ⏏ EJECT
+                  EJECT
                 </button>
               </div>
             </>
           ) : (
             <div className="game-launch">
-              <p className="game-launch-head">CARTRIDGE INSTALLED — TAP TO POWER ON</p>
+              <p className="game-launch-head">CARTRIDGE INSTALLED - TAP TO POWER ON</p>
               <button type="button" className="game-launch-btn" onClick={() => setMarioOn(true)}>
-                ▶ INSERT COIN · ONE CLICK PLAY
+                INSERT COIN · ONE CLICK PLAY
               </button>
             </div>
           )}
         </div>
         <div className="game-cab-foot">
-          <span className="game-keys">← → MOVE · Z JUMP (HOLD = HIGHER) · X RUN · ENTER PAUSE · M SOUND</span>
+          <span className="game-keys">MOVE · Z JUMP (HOLD = HIGHER) · X RUN · ENTER PAUSE · M SOUND</span>
         </div>
       </div>
 
       {/* ============================================================
-          CABINET 03 — Super Nintendo. Pre-installed cartridges running on
+          CABINET 03 - Super Nintendo. Pre-installed cartridges running on
           the self-hosted EmulatorJS runtime; per-game attribution at
           public/roms/CREDITS.md.
           ============================================================ */}
@@ -784,10 +767,10 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
 }
 
 /* ============================================================
-   CLIPPED — gameplay videos from the archive. Where the
+   CLIPPED - gameplay videos from the archive. Where the
    gameplay footage lives: the playable cabinets up top and the
    walkthroughs below, with the actual clips posted here as they
-   happen. Empty for now — the videos are coming.
+   happen. Empty for now - the videos are coming.
    ============================================================ */
 export function ClippedPage({ navigate }: { navigate: NavFn }) {
   return (
@@ -798,7 +781,7 @@ export function ClippedPage({ navigate }: { navigate: NavFn }) {
       <div className="archive-eyebrow">CLIPS</div>
       <h1 className="archive-title">Clipped</h1>
       <p className="archive-subtitle">
-        Gameplay videos from the archive — where I will post my gameplay
+        Gameplay videos from the archive - where I will post my gameplay
         videos. Recorded runs, boss fights, speedruns and cabinet captures
         as they happen.
       </p>
@@ -808,7 +791,7 @@ export function ClippedPage({ navigate }: { navigate: NavFn }) {
 }
 
 /* ============================================================
-   LINKS — the directory as a collection of artifacts. Every row
+   LINKS - the directory as a collection of artifacts. Every row
    is a distinct material with its own typography, texture,
    sparkle and hover behaviour (see .artifact--* in globals.css).
    ============================================================ */
@@ -964,7 +947,7 @@ function ArtifactLink({ link, index }: { link: ArchiveLink; index: number }) {
           </span>
         </span>
       )}
-      <span className="artifact-go" aria-hidden="true">↗</span>
+      <span className="artifact-go" aria-hidden="true">?</span>
     </a>
   )
 }
@@ -972,10 +955,10 @@ function ArtifactLink({ link, index }: { link: ArchiveLink; index: number }) {
 export function LinksPage({ navigate }: { navigate: NavFn }) {
   const links = LINKS
   // Two drawers under this menu: .com (the clearnet side) and .onion (Tor
-  // hidden services). Classification is automatic — any row whose host ends
+  // hidden services). Classification is automatic - any row whose host ends
   // in .onion renders in the .onion drawer, so adding a hidden service to
   // LINKS needs no extra flag. Rows keep whichever unique material they
-  // declare — every link is its own artifact, in both drawers.
+  // declare - every link is its own artifact, in both drawers.
   const isOnion = (l: ArchiveLink) => (/\.onion(\/|$)/i).test(l.url)
   const comLinks = links.filter(l => !isOnion(l))
   const onionLinks = links.filter(isOnion)
@@ -987,7 +970,7 @@ export function LinksPage({ navigate }: { navigate: NavFn }) {
       <div className="archive-eyebrow">DIRECTORY / LINKS</div>
       <h1 className="archive-title">Links</h1>
       <p className="archive-subtitle">
-        Every external link in one directory, split into two drawers — the
+        Every external link in one directory, split into two drawers - the
         clearnet (.com) and the Tor hidden services (.onion). Each row is
         its own artifact: a different material, a different behaviour. All
         open in a new tab.
@@ -1024,130 +1007,6 @@ export function LinksPage({ navigate }: { navigate: NavFn }) {
   )
 }
 
-/* ============================================================
-   TAGS / TAG DETAIL
-   ============================================================ */
-export function TagsPage({ navigate }: { navigate: NavFn }) {
-  const tags = useAllTags()
-  return (
-    <div className="archive-container">
-      <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
-        ← Back
-      </button>
-      <div className="archive-eyebrow">INDEX / TAGS</div>
-      <h1 className="archive-title">Tags</h1>
-      <p className="archive-subtitle">
-        Every tag in the archive, generated only from real content. Click a tag
-        to see every entry that carries it.
-      </p>
-      {tags.length === 0 ? (
-        <EmptyState message="No tags yet" />
-      ) : (
-        <div className="tag-grid">
-          {tags.map(t => (
-            <button
-              key={t.tag}
-              type="button"
-              className="tag-pill"
-              onClick={() => navigate({ name: 'tag', tag: t.tag })}
-            >
-              <span>{t.tag}</span>
-              <span className="tag-pill-count">{String(t.count).padStart(2, '0')}</span>
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
-
-export function TagPage({ tag, navigate }: { tag: string; navigate: NavFn }) {
-  const entries = useAllEntries().filter(e => e.tags.includes(tag))
-  return (
-    <div className="archive-container">
-      <button type="button" className="back-link" onClick={() => navigate({ name: 'tags' })}>
-        ← All Tags
-      </button>
-      <div className="archive-eyebrow">TAG / {tag.toUpperCase()}</div>
-      <h1 className="archive-title">#{tag}</h1>
-      <p className="archive-subtitle">
-        {entries.length} {entries.length === 1 ? 'entry' : 'entries'} tagged
-        with <strong>{tag}</strong>.
-      </p>
-      {entries.length === 0 ? (
-        <EmptyState message="No entries with this tag" />
-      ) : (
-        <div>
-          {entries.map(e => (
-            <EntryRow key={e.slug} entry={e} onClick={() => navigate({ name: 'stage', slug: e.slug })} />
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
-
-/* ============================================================
-   CATEGORIES / CATEGORY DETAIL
-   ============================================================ */
-export function CategoriesPage({ navigate }: { navigate: NavFn }) {
-  const cats = useAllCategories()
-  return (
-    <div className="archive-container">
-      <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
-        ← Back
-      </button>
-      <div className="archive-eyebrow">INDEX / CATEGORIES</div>
-      <h1 className="archive-title">Categories</h1>
-      <p className="archive-subtitle">
-        Top-level categories derived from real entries only.
-      </p>
-      {cats.length === 0 ? (
-        <EmptyState message="No categories yet" />
-      ) : (
-        <div className="tag-grid">
-          {cats.map(c => (
-            <button
-              key={c.category}
-              type="button"
-              className="tag-pill"
-              onClick={() => navigate({ name: 'category', category: c.category })}
-            >
-              <span>{c.category}</span>
-              <span className="tag-pill-count">{String(c.count).padStart(2, '0')}</span>
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
-
-export function CategoryPage({ category, navigate }: { category: string; navigate: NavFn }) {
-  const entries = useAllEntries().filter(e => e.categories.includes(category))
-  return (
-    <div className="archive-container">
-      <button type="button" className="back-link" onClick={() => navigate({ name: 'categories' })}>
-        ← All Categories
-      </button>
-      <div className="archive-eyebrow">CATEGORY / {category.toUpperCase()}</div>
-      <h1 className="archive-title">{category}</h1>
-      <p className="archive-subtitle">
-        {entries.length} {entries.length === 1 ? 'entry' : 'entries'} in the{' '}
-        <strong>{category}</strong> category.
-      </p>
-      {entries.length === 0 ? (
-        <EmptyState message="No entries in this category" />
-      ) : (
-        <div>
-          {entries.map(e => (
-            <EntryRow key={e.slug} entry={e} onClick={() => navigate({ name: 'stage', slug: e.slug })} />
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
 
 /* ============================================================
    404
@@ -1178,7 +1037,7 @@ export function NotFoundPage({ navigate }: { navigate: NavFn }) {
 function EmptyState({ message }: { message: string }) {
   return (
     <div className="empty-state">
-      <div className="empty-state-mark">— —</div>
+      <div className="empty-state-mark">- -</div>
       <div className="empty-state-text">{message}</div>
     </div>
   )

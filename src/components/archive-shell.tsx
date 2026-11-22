@@ -19,10 +19,9 @@ import { InstallAppButton } from '@/components/pwa'
 import {
   HomePage, AboutPage, ArchivePage, StagePage, CtfPage,
   ResearchPage, ResearchEntryPage, CheatsheetsPage, FilesPage,
-  GamesPage, ClippedPage, LinksPage, TagsPage, TagPage, CategoriesPage,
-  CategoryPage, NotFoundPage,
+  GamesPage, ClippedPage, LinksPage, NotFoundPage,
 } from '@/components/pages'
-import { useAllEntries, useAllTags, useAllCategories, useAllResearch } from '@/components/content-provider'
+import { useAllEntries, useAllResearch } from '@/components/content-provider'
 import { isCtfEntry } from '@/lib/entry-group'
 
 type NavItem = {
@@ -117,8 +116,6 @@ export function ArchiveShell() {
   }, [route.name])
 
   const entries = useAllEntries()
-  const tagCount = useAllTags().length
-  const catCount = useAllCategories().length
   const researchCount = useAllResearch().length
 
   const navPrimary: NavItem[] = [
@@ -141,22 +138,11 @@ export function ArchiveShell() {
     { label: 'Links', route: { name: 'links' }, gold: true },
   ]
 
-  const navIndex: NavItem[] = [
-    { label: 'Tags', route: { name: 'tags' }, count: tagCount },
-    { label: 'Categories', route: { name: 'categories' }, count: catCount },
-  ]
-
   function isActive(item: Route): boolean {
     if (item.name !== route.name) return false
-    // For stage/tag/category, also compare the param.
+    // For stage, also compare the param.
     if (item.name === 'stage' && route.name === 'stage') {
       return item.slug === route.slug
-    }
-    if (item.name === 'tag' && route.name === 'tag') {
-      return item.tag === route.tag
-    }
-    if (item.name === 'category' && route.name === 'category') {
-      return item.category === route.category
     }
     return true
   }
@@ -175,10 +161,6 @@ export function ArchiveShell() {
       case 'games': return <GamesPage navigate={navigate} />
       case 'clipped': return <ClippedPage navigate={navigate} />
       case 'links': return <LinksPage navigate={navigate} />
-      case 'tags': return <TagsPage navigate={navigate} />
-      case 'tag': return <TagPage tag={route.tag} navigate={navigate} />
-      case 'categories': return <CategoriesPage navigate={navigate} />
-      case 'category': return <CategoryPage category={route.category} navigate={navigate} />
       case 'notfound': return <NotFoundPage navigate={navigate} />
       default: return <NotFoundPage navigate={navigate} />
     }
@@ -235,17 +217,6 @@ export function ArchiveShell() {
 
           <NavSection title="Archive">
             {navArchive.map(item => (
-              <NavLink
-                key={item.label}
-                item={item}
-                active={isActive(item.route)}
-                onClick={() => navigate(item.route)}
-              />
-            ))}
-          </NavSection>
-
-          <NavSection title="Index">
-            {navIndex.map(item => (
               <NavLink
                 key={item.label}
                 item={item}

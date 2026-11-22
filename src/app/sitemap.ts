@@ -21,8 +21,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/#/archive`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/#/ctf`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/#/links`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${BASE}/#/tags`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
-    { url: `${BASE}/#/categories`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
   ]
   const entryUrls: MetadataRoute.Sitemap = entries.map(e => ({
     url: `${BASE}/#/stage/${encodeURIComponent(e.slug)}`,

@@ -16,10 +16,6 @@ export type Route =
     | { name: 'games' }
     | { name: 'clipped' }
     | { name: 'links' }
-    | { name: 'tags' }
-    | { name: 'tag'; tag: string }
-    | { name: 'categories' }
-    | { name: 'category'; category: string }
     | { name: 'notfound' }
 
 export function parseHash(hash: string): Route {
@@ -63,17 +59,6 @@ export function parseHash(hash: string): Route {
         return { name: 'clipped' }
     if (parts[0] === 'links')
         return { name: 'links' }
-    if (parts[0] === 'tags' && parts[1])
-        return { name: 'tag', tag: safeDecode(parts[1]) }
-    if (parts[0] === 'tags')
-        return { name: 'tags' }
-    if (parts[0] === 'categories' && parts[1])
-        return {
-            name: 'category',
-            category: safeDecode(parts[1]),
-        }
-    if (parts[0] === 'categories')
-        return { name: 'categories' }
 
     return { name: 'notfound' }
 }
@@ -115,18 +100,6 @@ export function routeToHash(route: Route): string {
 
         case 'links':
             return '#/links'
-
-        case 'tags':
-            return '#/tags'
-
-        case 'tag':
-            return `#/tags/${encodeURIComponent(route.tag)}`
-
-        case 'categories':
-            return '#/categories'
-
-        case 'category':
-            return `#/categories/${encodeURIComponent(route.category)}`
 
         case 'notfound':
             return '#/404'
