@@ -1490,25 +1490,29 @@ a, button, input, textarea, select, label, summary, [role='button'] {
 }
 
 /* ============================================================
-   CTF WALKTHROUGH CARDS — the same rule as the Links menu:
-   no two walkthroughs share a surface. Every pwn.college entry
-   is its own material built on the .ctf-card skeleton, then a
-   --vNN block replaces the surface, typeface, marker and hover.
-   The number comes from the continuous CTF stage (01–24), so a
-   new walkthrough inherits the next material automatically.
-   Zero border-radius; hover effects only under (hover: hover);
-   every decoration is pointer-events: none.
+   CTF WALKTHROUGH CARDS — 24 artifacts, no shared surface.
+   The Links rule: a card is not a template with a new colour, it
+   is a different object. Each .ctf-card--vNN block rebuilds the
+   geometry, material, typography and hover motion, and CtfArt
+   supplies its own physical part (vessel, tape reader, fader,
+   dial, spool, lever, stick, trap, cable, crate label, mailbox,
+   shell, sled, map, stopwatch, starting block, baton, pendulum,
+   film strip, flag, padlock). Zero border-radius on the card;
+   hover effects only under (hover: hover); every decoration is
+   pointer-events: none.
    ============================================================ */
 .ctf-card {
   position: relative;
+  isolation: isolate;
   display: grid;
-  grid-template-columns: 92px minmax(0, 1fr) auto;
+  grid-template-columns: 78px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 1.1rem;
+  gap: 1rem;
   width: 100%;
-  margin: 0 0 0.55rem;
-  padding: 0.95rem 1rem;
-  border: 1px solid var(--border);
+  margin: 0 0 0.8rem;
+  padding: 1rem 1.1rem;
+  border: 0;
+  border-radius: 0;
   background: transparent;
   color: var(--foreground);
   font-family: inherit;
@@ -1519,15 +1523,9 @@ a, button, input, textarea, select, label, summary, [role='button'] {
 }
 .ctf-card-stage,
 .ctf-card-main,
-.ctf-card-vt { position: relative; z-index: 1; }
-.ctf-card-stage {
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  color: var(--muted-foreground);
-  font-variant-numeric: tabular-nums;
-}
-.ctf-card-main { display: flex; flex-direction: column; gap: 0.3rem; min-width: 0; }
-.ctf-card-title { font-size: 15px; font-weight: 500; line-height: 1.25; letter-spacing: 0.01em; }
+.ctf-card-vt { position: relative; z-index: 2; }
+.ctf-card-main { display: flex; flex-direction: column; gap: 0.28rem; min-width: 0; }
+.ctf-card-title { font-size: 15px; font-weight: 500; line-height: 1.22; letter-spacing: 0.01em; }
 .ctf-card-meta { font-size: 10px; letter-spacing: 0.05em; color: var(--muted-foreground); }
 .ctf-card-vt {
   font-size: 9px;
@@ -1538,558 +1536,1012 @@ a, button, input, textarea, select, label, summary, [role='button'] {
   font-variant-numeric: tabular-nums;
 }
 .ctf-card-vt--clean { color: oklch(0.85 0 0); }
-.ctf-card::before,
+.ctf-art { position: absolute; z-index: 1; pointer-events: none; }
+.ctf-art i,
+.ctf-art b { position: absolute; display: block; font-style: normal; }
 .ctf-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   pointer-events: none;
+  background: oklch(0.05 0 0 / 0.52);
 }
 
-/* 01 — First Overflow (Easy): a level that keeps rising.
-   Monospace ledger, spill bar creeping along the bottom edge. */
+/* 01 — graduated overflow vessel: liquid rises, then drips. */
 .ctf-card--v01 {
-  border-left: 3px solid oklch(0.62 0 0);
-  background: linear-gradient(90deg, oklch(1 0 0 / 0.035), transparent 55%);
+  padding: 1rem 1.1rem 1.1rem 6.5rem;
+  border: 1px solid oklch(1 0 0 / 0.1);
+  border-top-color: oklch(1 0 0 / 0.18);
+  background:
+    linear-gradient(180deg, oklch(1 0 0 / 0.04), transparent 46%),
+    repeating-linear-gradient(0deg, transparent 0 21px, oklch(1 0 0 / 0.02) 21px 22px);
 }
-.ctf-card--v01 .ctf-card-stage { font-family: 'Space Mono', monospace; color: oklch(0.78 0 0); }
-.ctf-card--v01 .ctf-card-title { font-family: 'Special Elite', 'Courier New', monospace; font-size: 15px; }
-.ctf-card--v01::after {
+.ctf-card--v01 .ctf-card-stage { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.18em; color: oklch(0.74 0 0); }
+.ctf-card--v01 .ctf-card-title { font-family: 'Special Elite', 'Courier New', monospace; font-size: 16px; }
+.ctf-card--v01 .ctf-card-meta { font-family: 'Space Mono', monospace; font-size: 8px; }
+.ctf-art--overflow { left: 1.35rem; top: 50%; width: 42px; height: 66px; transform: translateY(-50%); }
+.ov-vessel {
+  inset: 0;
+  border: 2px solid oklch(0.52 0 0);
+  border-top: 0;
+  background: linear-gradient(90deg, oklch(1 0 0 / 0.05), transparent 42%, oklch(1 0 0 / 0.03));
+}
+.ov-vessel::before { content: ''; position: absolute; left: -4px; right: -4px; top: -4px; height: 2px; background: oklch(0.72 0 0); }
+.ov-vessel::after {
   content: '';
-  position: absolute; left: 0; bottom: 0; height: 2px; width: 26%;
-  background: oklch(0.78 0 0 / 0.7);
-  transition: width 380ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: absolute; left: 0; top: 8px; bottom: 8px; width: 7px;
+  background: repeating-linear-gradient(180deg, oklch(1 0 0 / 0.42) 0 1px, transparent 1px 8px);
+  opacity: 0.7;
+}
+.ov-liquid {
+  left: 4px; right: 4px; bottom: 3px; height: 48%;
+  background: linear-gradient(180deg, oklch(0.78 0 0 / 0.55), oklch(0.5 0 0 / 0.22));
+  transition: height 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.ov-liquid::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: oklch(0.95 0 0 / 0.75); }
+.ov-drop {
+  left: 18px; bottom: 0; width: 5px; height: 8px;
+  background: oklch(0.86 0 0 / 0);
+  clip-path: polygon(50% 100%, 0 30%, 50% 0, 100% 30%);
 }
 @media (hover: hover) {
-  .ctf-card--v01:hover { border-left-color: oklch(0.92 0 0); }
-  .ctf-card--v01:hover::after { width: 100%; }
+  .ctf-card--v01:hover { border-color: oklch(0.4 0 0); }
+  .ctf-card--v01:hover .ov-liquid { height: 82%; }
+  .ctf-card--v01:hover .ov-drop { background: oklch(0.86 0 0 / 0.85); animation: ctf-drip 1100ms linear infinite; }
+}
+@keyframes ctf-drip {
+  0% { transform: translateY(0); opacity: 0; }
+  25% { opacity: 0.9; }
+  100% { transform: translateY(15px); opacity: 0; }
 }
 
-/* 02 — First Overflow (Hard): hazard tape and a ghost stage
-   numeral stamped behind the title. */
+/* 02 — burst pipe and pressure gauge: needle swings, pipe strain. */
 .ctf-card--v02 {
-  border-bottom: 4px double oklch(0.5 0 0);
-  background: repeating-linear-gradient(-45deg, transparent 0 9px, oklch(1 0 0 / 0.028) 9px 10px);
+  padding: 1rem 7.4rem 2.35rem 1.1rem;
+  border: 1px solid oklch(0.28 0 0);
+  background:
+    repeating-linear-gradient(-45deg, transparent 0 13px, oklch(1 0 0 / 0.028) 13px 14px),
+    linear-gradient(180deg, oklch(1 0 0 / 0.035), transparent 55%);
 }
-.ctf-card--v02 .ctf-card-stage { font-family: 'Anton', sans-serif; font-size: 16px; letter-spacing: 0.06em; color: oklch(0.7 0 0); }
-.ctf-card--v02 .ctf-card-title { font-family: 'Bungee', sans-serif; font-size: 13px; letter-spacing: 0.02em; }
-.ctf-card--v02::after {
+.ctf-card--v02::before {
   content: attr(data-code);
-  position: absolute; right: 0.4rem; top: 50%; transform: translateY(-50%);
-  font-family: 'Bungee', sans-serif; font-size: 54px; line-height: 1;
+  position: absolute; right: 6.2rem; top: -0.1rem; z-index: 0;
+  font-family: 'Bungee', sans-serif; font-size: 58px; line-height: 1;
   color: oklch(1 0 0 / 0.055);
 }
+.ctf-card--v02 .ctf-card-stage { font-family: 'Anton', sans-serif; font-size: 15px; letter-spacing: 0.06em; color: oklch(0.72 0 0); }
+.ctf-card--v02 .ctf-card-title { font-family: 'Bungee', sans-serif; font-size: 13px; letter-spacing: 0.02em; }
+.ctf-card--v02 .ctf-card-meta { font-family: 'Cabin', sans-serif; }
+.ctf-art--pipe { left: 1.1rem; right: 1.1rem; bottom: 0.95rem; height: 20px; }
+.pp-pipe {
+  left: 0; right: 4.3rem; top: 7px; height: 10px;
+  border: 1px solid oklch(0.44 0 0);
+  background: linear-gradient(180deg, oklch(0.3 0 0), oklch(0.16 0 0));
+}
+.pp-pipe::before {
+  content: '';
+  position: absolute; left: 38%; top: -3px; bottom: -3px; width: 2px;
+  background: oklch(0.82 0 0 / 0.55);
+  transform: rotate(11deg);
+}
+.pp-pipe::after {
+  content: '';
+  position: absolute; right: 12%; top: -4px; bottom: -4px; width: 5px;
+  border-left: 1px solid oklch(0.62 0 0);
+  border-right: 1px solid oklch(0.62 0 0);
+}
+.pp-gauge {
+  right: 0; top: -10px; width: 38px; height: 38px;
+  background: radial-gradient(circle closest-side, oklch(0.09 0 0) 0 89%, oklch(0.58 0 0) 89% 100%, transparent 100%);
+}
+.pp-gauge::before {
+  content: '';
+  position: absolute;
+  left: 50%; top: 50%; width: 14px; height: 1px;
+  background: oklch(0.88 0 0);
+  transform-origin: 0 50%; transform: rotate(-38deg);
+  transition: transform 420ms cubic-bezier(0.3, 1.4, 0.4, 1);
+}
+.pp-gauge::after {
+  content: '';
+  position: absolute;
+  left: calc(50% - 2px); top: calc(50% - 2px); width: 4px; height: 4px;
+  background: oklch(0.9 0 0);
+  clip-path: circle(50%);
+}
 @media (hover: hover) {
-  .ctf-card--v02:hover::after { color: oklch(1 0 0 / 0.11); }
-  .ctf-card--v02:hover .ctf-card-title { letter-spacing: 0.05em; }
+  .ctf-card--v02:hover .pp-gauge::before { transform: rotate(34deg); }
+  .ctf-card--v02:hover .pp-pipe { border-color: oklch(0.62 0 0); }
 }
 
-/* 03 — Precision (Easy): dotted plotting paper with a
-   crosshair reticle that locks on hover. */
+/* 03 — plotting paper and optical reticle: the reticle turns. */
 .ctf-card--v03 {
+  padding: 1rem 1.1rem 1rem 6rem;
   border: 1px solid oklch(0.42 0 0);
-  background-image: radial-gradient(oklch(1 0 0 / 0.05) 1px, transparent 1px);
+  background-image: radial-gradient(oklch(1 0 0 / 0.055) 1px, transparent 1.4px);
   background-size: 9px 9px;
-  padding-right: 5.4rem;
 }
 .ctf-card--v03 .ctf-card-stage { font-family: 'Syncopate', sans-serif; font-size: 7px; letter-spacing: 0.16em; }
 .ctf-card--v03 .ctf-card-title { font-family: 'Syncopate', sans-serif; font-size: 13px; letter-spacing: 0.03em; font-weight: 700; }
-.ctf-card--v03::after {
-  content: '';
-  position: absolute; right: 3.6rem; top: 50%; width: 18px; height: 18px; margin-top: -9px;
+.ctf-art--reticle { left: 1.25rem; top: 50%; width: 42px; height: 42px; transform: translateY(-50%); }
+.rt-ring {
+  inset: 0;
   background:
-    linear-gradient(oklch(0.8 0 0 / 0.45), oklch(0.8 0 0 / 0.45)) center / 100% 1px no-repeat,
-    linear-gradient(oklch(0.8 0 0 / 0.45), oklch(0.8 0 0 / 0.45)) center / 1px 100% no-repeat;
-  opacity: 0.7;
-  transition: transform 500ms ease, opacity 300ms ease;
+    radial-gradient(circle closest-side,
+      transparent 0 71.4%,
+      oklch(0.72 0 0 / 0.28) 71.4% 76.2%,
+      transparent 76.2% 95.2%,
+      oklch(0.72 0 0 / 0.7) 95.2% 100%,
+      transparent 100%);
+  transition: transform 520ms cubic-bezier(0.2, 0.8, 0.2, 1), filter 300ms;
 }
+.rt-ring::before { content: ''; position: absolute; left: 50%; top: -5px; width: 1px; height: 7px; background: oklch(0.82 0 0 / 0.6); }
+.rt-ring::after { content: ''; position: absolute; left: 50%; bottom: -5px; width: 1px; height: 7px; background: oklch(0.82 0 0 / 0.6); }
+.rt-cross {
+  inset: 6px;
+  background:
+    linear-gradient(oklch(0.82 0 0 / 0.55), oklch(0.82 0 0 / 0.55)) center / 100% 1px no-repeat,
+    linear-gradient(oklch(0.82 0 0 / 0.55), oklch(0.82 0 0 / 0.55)) center / 1px 100% no-repeat;
+  transition: transform 520ms ease;
+}
+.rt-dot { left: calc(50% - 2px); top: calc(50% - 2px); width: 4px; height: 4px; background: oklch(0.95 0 0 / 0.8); clip-path: circle(50%); }
 @media (hover: hover) {
-  .ctf-card--v03:hover { border-color: oklch(0.62 0 0); }
-  .ctf-card--v03:hover::after { transform: rotate(90deg); opacity: 1; }
+  .ctf-card--v03:hover .rt-ring { transform: rotate(90deg); filter: brightness(1.4); }
+  .ctf-card--v03:hover .rt-cross { transform: rotate(45deg) scale(0.82); }
 }
 
-/* 04 — Precision (Hard): double frame, vertical rule paper,
-   stencil lettering and a tick strip at the right edge. */
+/* 04 — punched paper tape: sprocket holes advance across the card. */
 .ctf-card--v04 {
-  border: 1px solid oklch(0.34 0 0);
-  box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.04);
-  background: repeating-linear-gradient(90deg, transparent 0 54px, oklch(1 0 0 / 0.03) 54px 55px);
-  padding-left: 1.2rem;
+  margin-right: 7px;
+  padding: 1.15rem 5.8rem 1.15rem 1.3rem;
+  border: 1px solid oklch(0.4 0 0);
+  border-left: 0;
+  background-color: oklch(0.95 0 0 / 0.03);
+  background-image:
+    radial-gradient(circle, oklch(0.06 0 0) 0 2px, oklch(0.55 0 0 / 0.45) 2.2px 2.8px, transparent 3.1px),
+    radial-gradient(circle, oklch(0.06 0 0) 0 2px, oklch(0.55 0 0 / 0.45) 2.2px 2.8px, transparent 3.1px);
+  background-size: 15px 9px, 15px 9px;
+  background-position: left 7px top 4px, left 7px bottom 4px;
+  background-repeat: repeat-x, repeat-x;
+  box-shadow: inset 6px 0 0 oklch(0.7 0 0 / 0.08);
+  transition: background-position 360ms linear;
 }
+.ctf-card--v04 .ctf-card-stage { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 0.22em; color: oklch(0.76 0 0); }
 .ctf-card--v04 .ctf-card-title { font-family: 'Black Ops One', sans-serif; font-size: 14px; letter-spacing: 0.03em; }
-.ctf-card--v04 .ctf-card-stage { font-family: 'Anton', sans-serif; font-size: 14px; color: oklch(0.62 0 0); }
-.ctf-card--v04::after {
+.ctf-card--v04 .ctf-card-meta { font-family: 'Space Mono', monospace; font-size: 8px; }
+.ctf-art--tape { right: 1.1rem; top: 50%; width: 44px; height: 34px; transform: translateY(-50%); }
+.tp-reader {
+  inset: 0;
+  border: 1px solid oklch(0.5 0 0);
+  background:
+    repeating-linear-gradient(90deg, transparent 0 6px, oklch(1 0 0 / 0.04) 6px 7px),
+    oklch(0.1 0 0 / 0.65);
+}
+.tp-reader::before {
   content: '';
-  position: absolute; right: 0; top: 0; bottom: 0; width: 8px;
-  background: repeating-linear-gradient(180deg, oklch(0.8 0 0 / 0.5) 0 4px, transparent 4px 8px);
-  opacity: 0.5;
-  transition: opacity 260ms ease;
+  position: absolute; left: 5px; right: 5px; top: 7px; height: 19px;
+  background: radial-gradient(circle, oklch(0.85 0 0 / 0.55) 0 1.5px, transparent 2px) 0 0 / 8px 8px repeat;
+}
+.tp-reader::after {
+  content: 'RD';
+  position: absolute; right: 3px; bottom: 2px;
+  font-family: 'Share Tech Mono', monospace; font-size: 6px;
+  letter-spacing: 0.1em; color: oklch(0.8 0 0 / 0.5);
 }
 @media (hover: hover) {
-  .ctf-card--v04:hover { box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.12); }
-  .ctf-card--v04:hover::after { opacity: 0.9; }
+  .ctf-card--v04:hover { background-position: left 19px top 4px, left 19px bottom 4px; }
+  .ctf-card--v04:hover .tp-reader { border-color: oklch(0.68 0 0); }
 }
 
-/* 05 — Variable Control (Easy): a slider track with a square
-   knob that travels to the far end on hover. */
+/* 05 — mixing-console channel: the fader rides and the LED lights. */
 .ctf-card--v05 {
-  border: none;
-  border-top: 1px solid oklch(0.32 0 0);
-  border-bottom: 1px solid oklch(0.32 0 0);
-  background: linear-gradient(180deg, transparent 63%, oklch(1 0 0 / 0.06) 63% 64%, transparent 64%);
-  padding-bottom: 1.2rem;
+  padding: 0.95rem 5.9rem 0.95rem 1.1rem;
+  border: 1px solid oklch(1 0 0 / 0.07);
+  background: linear-gradient(90deg, oklch(1 0 0 / 0.04), transparent 52%);
+  box-shadow: inset 0 -1px 0 oklch(1 0 0 / 0.06);
 }
-.ctf-card--v05 .ctf-card-stage { font-family: 'Chakra Petch', sans-serif; font-weight: 700; letter-spacing: 0.14em; }
+.ctf-card--v05 .ctf-card-stage { font-family: 'Chakra Petch', sans-serif; font-size: 8px; font-weight: 700; letter-spacing: 0.16em; color: oklch(0.74 0 0); }
 .ctf-card--v05 .ctf-card-title { font-family: 'Chakra Petch', sans-serif; font-size: 16px; text-transform: uppercase; letter-spacing: 0.06em; }
-.ctf-card--v05::after {
-  content: '';
-  position: absolute; left: 24%; bottom: 0.55rem; width: 11px; height: 11px;
-  background: oklch(0.72 0 0);
-  box-shadow: 0 0 0 3px oklch(0.08 0 0);
-  transition: left 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+.ctf-card--v05 .ctf-card-meta { font-family: 'Chakra Petch', sans-serif; font-size: 9px; }
+.ctf-art--fader { right: 1.15rem; top: 50%; width: 26px; height: 66px; transform: translateY(-50%); }
+.fd-track { left: 12px; top: 0; bottom: 0; width: 2px; background: oklch(0.4 0 0); }
+.fd-track::before,
+.fd-track::after { content: ''; position: absolute; left: -5px; width: 12px; height: 1px; background: oklch(0.55 0 0); }
+.fd-track::before { top: 0; }
+.fd-track::after { bottom: 0; }
+.fd-knob {
+  left: 1px; top: 40px; width: 24px; height: 12px;
+  border: 1px solid oklch(0.62 0 0);
+  background: linear-gradient(180deg, oklch(0.34 0 0), oklch(0.16 0 0));
+  transition: top 380ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
+.fd-knob::before { content: ''; position: absolute; left: 2px; right: 2px; top: 5px; height: 1px; background: oklch(0.92 0 0 / 0.55); }
+.fd-led { left: 10px; bottom: 3px; width: 6px; height: 3px; background: oklch(0.6 0 0 / 0.5); transition: background 200ms, box-shadow 200ms; }
 @media (hover: hover) {
-  .ctf-card--v05:hover::after { left: 74%; }
-  .ctf-card--v05:hover .ctf-card-title { color: oklch(0.9 0 0); }
+  .ctf-card--v05:hover { border-color: oklch(1 0 0 / 0.16); }
+  .ctf-card--v05:hover .fd-knob { top: 8px; }
+  .ctf-card--v05:hover .fd-led { background: oklch(0.95 0 0); box-shadow: 0 0 7px oklch(0.95 0 0 / 0.7); }
 }
 
-/* 06 — Variable Control (Hard): quartered blocks, a heavy
-   left rail and stencil numerals. */
+/* 06 — rotary instrument: the needle sweeps a graduated face. */
 .ctf-card--v06 {
-  border: none;
-  border-left: 7px solid oklch(0.46 0 0);
-  background:
-    repeating-linear-gradient(90deg, oklch(1 0 0 / 0.03) 0 1px, transparent 1px 25%),
-    linear-gradient(90deg, oklch(1 0 0 / 0.03), transparent 40%);
-  padding-left: 1.3rem;
+  padding: 1rem 1.1rem 1rem 7rem;
+  border: 1px solid oklch(0.33 0 0);
+  background: radial-gradient(58% 130% at 9% 50%, oklch(1 0 0 / 0.05), transparent 62%);
 }
-.ctf-card--v06 .ctf-card-stage { font-family: 'Saira Stencil One', sans-serif; font-size: 12px; letter-spacing: 0.16em; color: oklch(0.6 0 0); }
+.ctf-card--v06 .ctf-card-stage { font-family: 'Saira Stencil One', sans-serif; font-size: 12px; letter-spacing: 0.12em; color: oklch(0.68 0 0); }
 .ctf-card--v06 .ctf-card-title { font-family: 'Saira Stencil One', sans-serif; font-size: 15px; letter-spacing: 0.02em; }
-.ctf-card--v06::after {
-  content: '';
-  position: absolute; right: 0; top: 0; bottom: 0; width: 22%;
-  background: linear-gradient(90deg, transparent, oklch(1 0 0 / 0.035));
-}
-@media (hover: hover) {
-  .ctf-card--v06:hover { border-left-color: oklch(0.8 0 0); }
-  .ctf-card--v06:hover .ctf-card-title { letter-spacing: 0.06em; }
-}
-
-/* 07 — String Lengths (Easy): a ruler rule under condensed
-   capitals; the tick marks slide on hover. */
-.ctf-card--v07 {
-  border: 1px solid oklch(0.3 0 0);
-  background: linear-gradient(180deg, transparent 78%, oklch(1 0 0 / 0.035) 78%);
-}
-.ctf-card--v07 .ctf-card-stage { font-family: 'Cabin', sans-serif; letter-spacing: 0.22em; }
-.ctf-card--v07 .ctf-card-title { font-family: 'Six Caps', sans-serif; font-size: 24px; letter-spacing: 0.09em; }
-.ctf-card--v07::after {
-  content: '';
-  position: absolute; left: 0; right: 0; bottom: 0; height: 7px;
+.ctf-art--dial { left: 1.15rem; top: 50%; width: 54px; height: 54px; transform: translateY(-50%); }
+.dl-face {
+  inset: 0;
   background:
-    repeating-linear-gradient(90deg, oklch(0.66 0 0 / 0.55) 0 1px, transparent 1px 9px),
-    repeating-linear-gradient(90deg, oklch(0.8 0 0 / 0.5) 0 1px, transparent 1px 45px);
-  background-size: 100% 4px, 100% 7px;
-  background-position: left bottom, left bottom;
-  background-repeat: no-repeat;
-  transition: background-position 300ms linear;
+    radial-gradient(circle closest-side, transparent 0 90%, oklch(0.58 0 0) 90% 100%, transparent 100%),
+    repeating-conic-gradient(from -90deg, oklch(0.78 0 0 / 0.65) 0 1deg, transparent 1deg 15deg);
+  clip-path: circle(50%);
 }
-@media (hover: hover) {
-  .ctf-card--v07:hover::after { background-position: 4px bottom, 9px bottom; }
-  .ctf-card--v07:hover .ctf-card-title { color: oklch(0.95 0 0); }
-}
-
-/* 08 — String Lengths (Hard): dashed border with tall bracket
-   ends that pull apart on hover. */
-.ctf-card--v08 {
-  border: 1px dashed oklch(0.4 0 0);
-  background: oklch(1 0 0 / 0.015);
-}
-.ctf-card--v08 .ctf-card-stage { font-family: 'Teko', sans-serif; font-size: 12px; letter-spacing: 0.28em; }
-.ctf-card--v08 .ctf-card-title { font-family: 'Teko', sans-serif; font-size: 22px; letter-spacing: 0.09em; text-transform: uppercase; }
-.ctf-card--v08::before,
-.ctf-card--v08::after {
+.dl-face::after {
   content: '';
-  position: absolute; top: 50%; width: 9px; height: 22px; margin-top: -11px;
-  border-top: 1px solid oklch(0.7 0 0 / 0.6);
-  border-bottom: 1px solid oklch(0.7 0 0 / 0.6);
-  transition: transform 260ms ease;
+  position: absolute; inset: 7px;
+  background: radial-gradient(circle closest-side, oklch(0.09 0 0) 0 99%, transparent 100%);
 }
-.ctf-card--v08::before { left: 0.45rem; border-left: 1px solid oklch(0.7 0 0 / 0.6); }
-.ctf-card--v08::after { right: 0.45rem; border-right: 1px solid oklch(0.7 0 0 / 0.6); }
+.dl-needle {
+  left: 50%; top: 50%; width: 18px; height: 2px; z-index: 1;
+  background: oklch(0.9 0 0);
+  transform-origin: 0 50%; transform: rotate(-55deg);
+  transition: transform 480ms cubic-bezier(0.3, 1.3, 0.4, 1);
+}
+.dl-needle::after {
+  content: '';
+  position: absolute; left: -3px; top: -2px; width: 6px; height: 6px;
+  background: oklch(0.9 0 0);
+  clip-path: circle(50%);
+}
 @media (hover: hover) {
-  .ctf-card--v08:hover::before { transform: translateX(-3px); }
-  .ctf-card--v08:hover::after { transform: translateX(3px); }
+  .ctf-card--v06:hover .dl-needle { transform: rotate(35deg); }
+  .ctf-card--v06:hover .dl-face { border-color: oklch(0.8 0 0); }
 }
 
-/* 09 — Control Hijack (Easy): the redirect arrow in the
-   corner, uppercase grotesque, arrow leaves on hover. */
+/* 07 — steel rule: a vernier cursor slides along the tick edge. */
+.ctf-card--v07 {
+  padding: 1.05rem 4.8rem 1.45rem 1.1rem;
+  border: 0;
+  border-bottom: 1px solid oklch(0.48 0 0);
+  background:
+    linear-gradient(180deg, oklch(1 0 0 / 0.028), transparent 62%),
+    repeating-linear-gradient(90deg, oklch(0.7 0 0 / 0.28) 0 1px, transparent 1px 9px) left bottom / 100% 6px no-repeat,
+    repeating-linear-gradient(90deg, oklch(0.85 0 0 / 0.4) 0 1px, transparent 1px 45px) left bottom / 100% 12px no-repeat;
+}
+.ctf-card--v07 .ctf-card-stage { font-family: 'Cabin', sans-serif; font-size: 9px; letter-spacing: 0.24em; }
+.ctf-card--v07 .ctf-card-title { font-family: 'Six Caps', sans-serif; font-size: 27px; letter-spacing: 0.09em; line-height: 1; }
+.ctf-card--v07 .ctf-card-meta { font-family: 'Cabin', sans-serif; }
+.ctf-art--ruler { right: 0.9rem; bottom: 0; width: 34px; height: 34px; }
+.ru-cursor {
+  left: 10px; top: 2px; width: 14px; height: 26px;
+  border: 1px solid oklch(0.8 0 0 / 0.65);
+  background: oklch(0.1 0 0 / 0.6);
+  transition: transform 300ms ease;
+}
+.ru-cursor::before { content: ''; position: absolute; left: 6px; top: 2px; bottom: 2px; width: 1px; background: oklch(0.95 0 0 / 0.8); }
+@media (hover: hover) {
+  .ctf-card--v07:hover .ru-cursor { transform: translateX(-9px); }
+  .ctf-card--v07:hover .ctf-card-title { color: oklch(0.97 0 0); }
+}
+
+/* 08 — string spool: wound thread turns and the type opens up. */
+.ctf-card--v08 {
+  padding: 1rem 6.3rem 1rem 1.1rem;
+  border: 1px dashed oklch(0.4 0 0);
+  background-color: oklch(1 0 0 / 0.012);
+}
+.ctf-card--v08 .ctf-card-stage { font-family: 'Teko', sans-serif; font-size: 12px; letter-spacing: 0.28em; line-height: 1; }
+.ctf-card--v08 .ctf-card-title { font-family: 'Teko', sans-serif; font-size: 23px; letter-spacing: 0.09em; text-transform: uppercase; line-height: 0.95; }
+.ctf-art--spool { right: 1.15rem; top: 50%; width: 46px; height: 46px; transform: translateY(-50%); }
+.sp-flange {
+  inset: 0;
+  background: radial-gradient(circle closest-side,
+    transparent 0 73.9%,
+    oklch(0.45 0 0) 73.9% 78.3%,
+    transparent 78.3% 91.3%,
+    oklch(0.55 0 0) 91.3% 100%,
+    transparent 100%);
+}
+.sp-flange::after {
+  content: '';
+  position: absolute; top: 50%; left: -8px; width: 12px; height: 1px;
+  background: oklch(0.5 0 0);
+  box-shadow: 49px 0 0 oklch(0.5 0 0);
+}
+.sp-thread {
+  inset: 9px;
+  background: repeating-linear-gradient(0deg, oklch(0.72 0 0 / 0.55) 0 1px, transparent 1px 3px);
+  clip-path: circle(50%);
+  transition: transform 500ms ease;
+}
+@media (hover: hover) {
+  .ctf-card--v08:hover { border-color: oklch(0.6 0 0); }
+  .ctf-card--v08:hover .sp-thread { transform: rotate(28deg); }
+  .ctf-card--v08:hover .ctf-card-title { letter-spacing: 0.12em; }
+}
+
+/* 09 — railway switch lever: the arm throws across its quadrant. */
 .ctf-card--v09 {
-  border: 1px solid oklch(0.36 0 0);
-  border-right: 3px solid oklch(0.55 0 0);
-  background: linear-gradient(90deg, oklch(1 0 0 / 0.03), transparent 45%);
-  padding-right: 5.2rem;
+  padding: 1rem 6.5rem 1rem 1.1rem;
+  border: 1px solid oklch(0.34 0 0);
+  border-left-color: oklch(0.6 0 0);
+  background: linear-gradient(90deg, oklch(1 0 0 / 0.035), transparent 48%);
 }
-.ctf-card--v09 .ctf-card-stage { font-family: 'Oswald', sans-serif; font-weight: 300; letter-spacing: 0.24em; }
+.ctf-card--v09 .ctf-card-stage { font-family: 'Oswald', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.24em; }
 .ctf-card--v09 .ctf-card-title { font-family: 'Oswald', sans-serif; font-size: 16px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
-.ctf-card--v09::after {
-  content: '↗';
-  position: absolute; right: 3.4rem; top: 50%; transform: translateY(-50%);
-  font-size: 22px; line-height: 1; color: oklch(0.62 0 0);
-  transition: transform 260ms ease, color 260ms ease;
+.ctf-art--lever { right: 1.2rem; top: 50%; width: 44px; height: 54px; transform: translateY(-50%); }
+.lv-plate {
+  right: 0; top: 0; bottom: 0; width: 18px;
+  border: 1px solid oklch(0.45 0 0);
+  background: repeating-linear-gradient(180deg, oklch(0.6 0 0 / 0.35) 0 1px, transparent 1px 9px);
+}
+.lv-arm {
+  right: 6px; bottom: 7px; width: 4px; height: 36px;
+  background: oklch(0.75 0 0);
+  transform-origin: 50% 100%; transform: rotate(-24deg);
+  transition: transform 340ms cubic-bezier(0.3, 1.4, 0.4, 1);
+}
+.lv-arm::before { content: ''; position: absolute; left: -4px; top: -7px; width: 12px; height: 8px; background: oklch(0.86 0 0); }
+.lv-arm::after {
+  content: '';
+  position: absolute; left: -3px; bottom: -3px; width: 10px; height: 10px;
+  background: radial-gradient(circle closest-side, oklch(0.09 0 0) 0 68%, oklch(0.55 0 0) 68% 100%, transparent 100%);
 }
 @media (hover: hover) {
-  .ctf-card--v09:hover { border-right-color: oklch(0.9 0 0); }
-  .ctf-card--v09:hover::after { transform: translate(5px, -5px); color: oklch(0.92 0 0); }
+  .ctf-card--v09:hover { border-left-color: oklch(0.9 0 0); }
+  .ctf-card--v09:hover .lv-arm { transform: rotate(22deg); }
 }
 
-/* 10 — Control Hijack (Hard): a skewed panel behind an
-   inverted stage chip; the title steps in on hover. */
+/* 10 — machine joystick: the stick tips and the ball catches light. */
 .ctf-card--v10 {
+  padding: 0.95rem 5.8rem 0.95rem 1.2rem;
   border: 1px solid oklch(0.3 0 0);
-  background: linear-gradient(102deg, oklch(1 0 0 / 0.045) 0 34%, transparent 34.2%);
+  background: linear-gradient(102deg, oklch(1 0 0 / 0.05) 0 32%, transparent 32.2%);
 }
 .ctf-card--v10 .ctf-card-stage {
   font-family: 'Staatliches', sans-serif; font-size: 11px; letter-spacing: 0.16em;
-  background: oklch(0.86 0 0); color: oklch(0.1 0 0); padding: 0.18rem 0.4rem; width: fit-content;
+  background: oklch(0.86 0 0); color: oklch(0.1 0 0);
+  padding: 0.18rem 0.4rem; width: fit-content;
 }
 .ctf-card--v10 .ctf-card-title { font-family: 'Staatliches', sans-serif; font-size: 18px; letter-spacing: 0.04em; }
-.ctf-card--v10::after {
+.ctf-art--stick { right: 1.25rem; bottom: 0.7rem; width: 52px; height: 52px; }
+.st-base {
+  left: 4px; right: 4px; bottom: 0; height: 12px;
+  background:
+    radial-gradient(ellipse 50% 100% at 50% 100%, oklch(0.28 0 0) 0 86%, oklch(0.48 0 0) 86% 100%, transparent 100%);
+}
+.st-base::after {
   content: '';
-  position: absolute; left: 0; top: 0; bottom: 0; width: 34%;
-  border-right: 1px solid oklch(1 0 0 / 0.08);
-  transform: skewX(-9deg); transform-origin: top left;
+  position: absolute; left: 8px; right: 8px; bottom: 3px; height: 6px;
+  background: radial-gradient(ellipse 50% 100% at 50% 100%, oklch(0.14 0 0) 0 92%, transparent 100%);
+}
+.st-stick {
+  left: calc(50% - 2px); bottom: 8px; width: 4px; height: 30px;
+  background: linear-gradient(90deg, oklch(0.5 0 0), oklch(0.8 0 0), oklch(0.45 0 0));
+  transform-origin: 50% 100%; transform: rotate(-12deg);
+  transition: transform 380ms cubic-bezier(0.3, 1.3, 0.4, 1);
+}
+.st-ball {
+  left: -6px; top: -12px; width: 16px; height: 16px;
+  background:
+    radial-gradient(circle closest-side, transparent 0 82%, oklch(1 0 0 / 0.16) 82% 100%, transparent 100%),
+    radial-gradient(circle at 35% 30%, oklch(0.78 0 0), oklch(0.35 0 0));
+  clip-path: circle(50%);
+  transition: filter 300ms;
 }
 @media (hover: hover) {
-  .ctf-card--v10:hover { border-color: oklch(0.5 0 0); }
+  .ctf-card--v10:hover .st-stick { transform: rotate(14deg); }
+  .ctf-card--v10:hover .st-ball { filter: brightness(1.3) drop-shadow(0 0 5px oklch(1 0 0 / 0.35)); }
   .ctf-card--v10:hover .ctf-card-title { text-indent: 5px; }
 }
 
-/* 11 — Tricky Control Hijack (Easy): a hard offset shadow
-   that duplicates the title; the shadow deepens on hover. */
+/* 11 — spring trap: the arm snaps shut over the bait. */
 .ctf-card--v11 {
-  border: 1px solid oklch(0.34 0 0);
-  box-shadow: 4px 4px 0 oklch(1 0 0 / 0.045);
-  background: oklch(1 0 0 / 0.02);
-  margin-right: 5px;
+  margin-right: 4px;
+  padding: 1rem 6.2rem 1rem 1.1rem;
+  border: 1px solid oklch(0.36 0 0);
+  background:
+    repeating-linear-gradient(90deg, oklch(1 0 0 / 0.025) 0 1px, transparent 1px 9px),
+    oklch(1 0 0 / 0.02);
+  box-shadow: 4px 4px 0 oklch(1 0 0 / 0.04);
 }
 .ctf-card--v11 .ctf-card-stage { font-family: 'Major Mono Display', monospace; font-size: 10px; letter-spacing: 0.1em; }
 .ctf-card--v11 .ctf-card-title {
   font-family: 'Major Mono Display', monospace; font-size: 14px; letter-spacing: 0.04em;
   text-shadow: 2px 2px 0 oklch(1 0 0 / 0.08);
-  transition: text-shadow 220ms ease;
+  transition: text-shadow 220ms;
 }
-.ctf-card--v11::after {
+.ctf-art--trap { right: 1.15rem; top: 50%; width: 52px; height: 44px; transform: translateY(-50%); }
+.tr-board {
+  inset: 0;
+  border: 1px solid oklch(0.5 0 0);
+  background: repeating-linear-gradient(0deg, oklch(1 0 0 / 0.03) 0 2px, transparent 2px 6px);
+}
+.tr-spring {
+  left: 7px; top: 7px; width: 12px; height: 12px;
+  background: radial-gradient(circle closest-side, transparent 0 56%, oklch(0.7 0 0) 56% 100%, transparent 100%);
+}
+.tr-arm {
+  left: 12px; top: 8px; width: 36px; height: 2px;
+  background: oklch(0.82 0 0);
+  transform-origin: 0 50%; transform: rotate(-31deg);
+  transition: transform 160ms cubic-bezier(0.5, 0, 0.9, 0.4);
+}
+.tr-arm::after {
   content: '';
-  position: absolute; right: 0.8rem; top: 0.65rem; width: 7px; height: 7px;
-  border-top: 1px solid oklch(0.7 0 0 / 0.7);
-  border-right: 1px solid oklch(0.7 0 0 / 0.7);
+  position: absolute; right: -4px; top: -2px; width: 8px; height: 6px;
+  border: 1px solid oklch(0.82 0 0);
 }
+.tr-cheese { right: 5px; bottom: 5px; width: 14px; height: 9px; background: oklch(0.82 0.07 95); clip-path: polygon(0 100%, 100% 100%, 100% 0); }
 @media (hover: hover) {
   .ctf-card--v11:hover { box-shadow: 7px 7px 0 oklch(1 0 0 / 0.07); }
+  .ctf-card--v11:hover .tr-arm { transform: rotate(-4deg); }
   .ctf-card--v11:hover .ctf-card-title { text-shadow: 4px 4px 0 oklch(1 0 0 / 0.14); }
 }
 
-/* 12 — Tricky Control Hijack (Hard): broken-signal strips,
-   a glitch typeface and a rule that rebuilds on hover. */
+/* 12 — spliced cable: the join sparks and the ends jump. */
 .ctf-card--v12 {
-  border: 1px solid oklch(0.3 0 0);
-  background: oklch(0.055 0 0);
+  padding: 1rem 6.8rem 1rem 1.1rem;
+  border: 0;
+  background: linear-gradient(180deg, oklch(0.16 0 0), oklch(0.1 0 0));
+  box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.07);
 }
 .ctf-card--v12 .ctf-card-stage { font-family: 'Rubik Glitch', cursive; font-size: 9px; letter-spacing: 0.14em; }
 .ctf-card--v12 .ctf-card-title { font-family: 'Rubik Glitch', cursive; font-size: 16px; letter-spacing: 0.02em; }
-.ctf-card--v12::before {
+.ctf-art--splice { right: 1.1rem; top: 50%; width: 58px; height: 40px; transform: translateY(-50%); }
+.sl-left,
+.sl-right { top: 18px; width: 23px; height: 4px; background: oklch(0.42 0 0); transition: transform 160ms steps(2); }
+.sl-left { left: 0; }
+.sl-right { right: 0; }
+.sl-left::before,
+.sl-right::before {
   content: '';
-  position: absolute; left: 0; top: 0; width: 100%; height: 6px;
-  background: repeating-linear-gradient(90deg, oklch(0.8 0 0 / 0.5) 0 14px, transparent 14px 22px);
-  opacity: 0.4;
-  transition: transform 300ms steps(3);
+  position: absolute; top: -2px; width: 8px; height: 8px;
+  background: oklch(0.72 0.09 70);
 }
-.ctf-card--v12::after {
+.sl-left::before { right: 0; }
+.sl-right::before { left: 0; }
+.sl-arc {
+  left: 18px; top: 2px; width: 22px; height: 18px;
+  background: radial-gradient(ellipse 50% 100% at 50% 100%, transparent 0 82%, oklch(0.95 0 0) 82% 96%, transparent 96%);
+  opacity: 0;
+  transition: opacity 160ms;
+}
+.sl-arc::before {
   content: '';
-  position: absolute; left: 0; bottom: 0; width: 100%; height: 1px;
-  background: oklch(0.9 0 0 / 0.5);
-  transform: scaleX(0.25); transform-origin: left;
-  transition: transform 400ms ease;
+  position: absolute; left: 9px; top: 5px; width: 2px; height: 9px;
+  background: oklch(0.98 0 0 / 0);
+  box-shadow: -5px 3px 0 oklch(0.98 0 0 / 0), 5px -2px 0 oklch(0.98 0 0 / 0);
+  transform: rotate(18deg);
 }
 @media (hover: hover) {
-  .ctf-card--v12:hover::before { transform: translateX(9px); }
-  .ctf-card--v12:hover::after { transform: scaleX(1); }
+  .ctf-card--v12:hover .sl-left { transform: translateX(-2px); }
+  .ctf-card--v12:hover .sl-right { transform: translateX(2px); }
+  .ctf-card--v12:hover .sl-arc { opacity: 1; }
+  .ctf-card--v12:hover .sl-arc::before {
+    background: oklch(0.98 0 0 / 0.95);
+    box-shadow: -5px 3px 0 oklch(0.98 0 0 / 0.7), 5px -2px 0 oklch(0.98 0 0 / 0.7);
+    animation: ctf-spark 700ms steps(2) infinite;
+  }
 }
-
-/* 13 — PIEs (Easy): dotted target paper, offset corner
-   brackets and wide-tracked coordinates. */
-.ctf-card--v13 {
-  border: 1px solid oklch(0.38 0 0);
-  background:
-    radial-gradient(circle at 92% 24%, oklch(0.9 0 0 / 0.5) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 92% 24%, transparent 0 9px, oklch(0.8 0 0 / 0.16) 9px 10px, transparent 10px);
-  background-repeat: no-repeat;
-}
-.ctf-card--v13 .ctf-card-stage { font-family: 'Electrolize', sans-serif; font-size: 8px; letter-spacing: 0.26em; }
-.ctf-card--v13 .ctf-card-title { font-family: 'Electrolize', sans-serif; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; }
-.ctf-card--v13::before,
-.ctf-card--v13::after { content: ''; position: absolute; width: 8px; height: 8px; }
-.ctf-card--v13::before { left: 0; top: 0; border-left: 1px solid oklch(0.7 0 0); border-top: 1px solid oklch(0.7 0 0); }
-.ctf-card--v13::after { right: 0; bottom: 0; border-right: 1px solid oklch(0.7 0 0); border-bottom: 1px solid oklch(0.7 0 0); }
-@media (hover: hover) {
-  .ctf-card--v13:hover { border-color: oklch(0.66 0 0); }
-  .ctf-card--v13:hover .ctf-card-title { letter-spacing: 0.12em; }
-}
-
-/* 14 — PIEs (Hard): a relocated side panel that widens,
-   set in squared-off techno capitals. */
-.ctf-card--v14 {
-  border: 1px solid oklch(0.32 0 0);
-  background: linear-gradient(90deg, transparent 56%, oklch(1 0 0 / 0.04) 56%);
-}
-.ctf-card--v14 .ctf-card-stage { font-family: 'Michroma', sans-serif; font-size: 7px; letter-spacing: 0.18em; }
-.ctf-card--v14 .ctf-card-title { font-family: 'Michroma', sans-serif; font-size: 12px; letter-spacing: 0.05em; }
-.ctf-card--v14::after {
-  content: '';
-  position: absolute; right: 0; top: 0; bottom: 0; width: 44%;
-  border-left: 1px solid oklch(1 0 0 / 0.09);
-  background: linear-gradient(180deg, oklch(1 0 0 / 0.02), transparent);
-  transition: width 380ms ease;
-}
-@media (hover: hover) {
-  .ctf-card--v14:hover::after { width: 50%; }
-  .ctf-card--v14:hover .ctf-card-title { letter-spacing: 0.08em; }
-}
-
-/* 15 — Basic Shellcode: scanline paper, a byte strip and a
-   live rail on the left. */
-.ctf-card--v15 {
-  border-left: 2px solid oklch(0.55 0 0);
-  background: repeating-linear-gradient(0deg, transparent 0 3px, oklch(1 0 0 / 0.02) 3px 4px);
-}
-.ctf-card--v15 .ctf-card-stage { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 0.12em; }
-.ctf-card--v15 .ctf-card-title { font-family: 'Share Tech Mono', monospace; font-size: 15px; }
-.ctf-card--v15::after {
-  content: '90 90 90 90 90 90';
-  position: absolute; right: 0.8rem; top: 0.45rem;
-  font-family: 'Share Tech Mono', monospace; font-size: 7px; letter-spacing: 0.18em;
-  color: oklch(0.8 0 0 / 0.25);
-}
-@media (hover: hover) {
-  .ctf-card--v15:hover { border-left-color: oklch(0.9 0 0); }
-  .ctf-card--v15:hover::after { color: oklch(0.9 0 0 / 0.5); }
-}
-
-/* 16 — NOP Sleds: dash runs top and bottom, huge terminal
-   type between them; the sled slides on hover. */
-.ctf-card--v16 {
-  border: none;
-  border-top: 1px solid oklch(0.3 0 0);
-  border-bottom: 1px solid oklch(0.3 0 0);
-  padding-top: 1.05rem;
-  padding-bottom: 1.05rem;
-}
-.ctf-card--v16 .ctf-card-stage { font-family: 'VT323', monospace; font-size: 13px; letter-spacing: 0.14em; }
-.ctf-card--v16 .ctf-card-title { font-family: 'VT323', monospace; font-size: 24px; letter-spacing: 0.12em; text-transform: uppercase; }
-.ctf-card--v16::before,
-.ctf-card--v16::after {
-  content: ''; position: absolute; left: 0; right: 0; height: 1px;
-  background: repeating-linear-gradient(90deg, oklch(0.7 0 0 / 0.45) 0 16px, transparent 16px 24px);
-  transition: background-position 400ms linear;
-}
-.ctf-card--v16::before { top: 4px; }
-.ctf-card--v16::after { bottom: 4px; }
-@media (hover: hover) {
-  .ctf-card--v16:hover::before,
-  .ctf-card--v16:hover::after { background-position: 24px 0; }
-}
-
-/* 17 — Hijack to (Mapped) Shellcode (Easy): nested boundary
-   frames that close in on hover. */
-.ctf-card--v17 {
-  border: 1px solid oklch(0.4 0 0);
-  background: radial-gradient(120% 160% at 100% 0%, oklch(1 0 0 / 0.05), transparent 55%);
-}
-.ctf-card--v17 .ctf-card-stage { font-family: 'Orbitron', sans-serif; font-size: 7px; letter-spacing: 0.2em; }
-.ctf-card--v17 .ctf-card-title { font-family: 'Orbitron', sans-serif; font-size: 13px; letter-spacing: 0.02em; }
-.ctf-card--v17::before,
-.ctf-card--v17::after {
-  content: ''; position: absolute; border: 1px solid oklch(1 0 0 / 0.08);
-  transition: inset 360ms ease;
-}
-.ctf-card--v17::before { inset: 5px; }
-.ctf-card--v17::after { inset: 11px; border-color: oklch(1 0 0 / 0.05); }
-@media (hover: hover) {
-  .ctf-card--v17:hover::before { inset: 3px; }
-  .ctf-card--v17:hover::after { inset: 7px; }
-}
-
-/* 18 — Race 1.0: a checkpoint line with two markers that
-   converge on hover. */
-.ctf-card--v18 {
-  border: 1px solid oklch(0.32 0 0);
-  background: linear-gradient(180deg, transparent calc(50% - 0.5px), oklch(1 0 0 / 0.05) calc(50% - 0.5px) calc(50% + 0.5px), transparent calc(50% + 0.5px));
-}
-.ctf-card--v18 .ctf-card-stage { font-family: 'Nova Square', sans-serif; font-size: 8px; letter-spacing: 0.16em; }
-.ctf-card--v18 .ctf-card-title { font-family: 'Nova Square', sans-serif; font-size: 14px; letter-spacing: 0.03em; }
-.ctf-card--v18::before,
-.ctf-card--v18::after {
-  content: ''; position: absolute; top: 50%; width: 7px; height: 7px; margin-top: -3.5px;
-  background: oklch(0.85 0 0 / 0.6);
-  box-shadow: 0 0 0 2px oklch(0.08 0 0);
-  transition: left 380ms ease, right 380ms ease;
-}
-.ctf-card--v18::before { left: 20%; }
-.ctf-card--v18::after { right: 24%; }
-@media (hover: hover) {
-  .ctf-card--v18:hover::before { left: 28%; }
-  .ctf-card--v18:hover::after { right: 18%; }
-}
-
-/* 19 — Race 1.1: two offset square entries that separate
-   like an exchanged pair. */
-.ctf-card--v19 {
-  border: 1px solid oklch(0.34 0 0);
-  background: oklch(1 0 0 / 0.012);
-  padding-right: 4.5rem;
-}
-.ctf-card--v19 .ctf-card-stage { font-family: 'Marcellus', serif; font-size: 10px; letter-spacing: 0.2em; }
-.ctf-card--v19 .ctf-card-title { font-family: 'Marcellus', serif; font-size: 16px; letter-spacing: 0.02em; }
-.ctf-card--v19::before,
-.ctf-card--v19::after {
-  content: ''; position: absolute; width: 12px; height: 12px;
-  border: 1px solid oklch(0.66 0 0 / 0.6);
-  transition: transform 340ms ease;
-}
-.ctf-card--v19::before { right: 2.6rem; top: 50%; margin-top: -10px; }
-.ctf-card--v19::after { right: 2.05rem; top: 50%; margin-top: -2px; }
-@media (hover: hover) {
-  .ctf-card--v19:hover::before { transform: translate(-4px, -4px); }
-  .ctf-card--v19:hover::after { transform: translate(4px, 4px); }
-}
-
-/* 20 — Race 2.0: a dashed boundary and a linked connector
-   that lengthens on hover. */
-.ctf-card--v20 {
-  border: 1px dashed oklch(0.42 0 0);
-  background: linear-gradient(90deg, transparent 62%, oklch(1 0 0 / 0.025) 62%);
-  padding-right: 6rem;
-}
-.ctf-card--v20 .ctf-card-stage { font-family: 'Oxanium', sans-serif; font-size: 8px; letter-spacing: 0.18em; }
-.ctf-card--v20 .ctf-card-title { font-family: 'Kanit', sans-serif; font-size: 15px; font-weight: 600; }
-.ctf-card--v20::after {
-  content: '';
-  position: absolute; right: 3.2rem; top: 50%; width: 26px; height: 1px;
-  background: repeating-linear-gradient(90deg, oklch(0.75 0 0 / 0.6) 0 4px, transparent 4px 7px);
-  transition: width 320ms ease;
-}
-@media (hover: hover) {
-  .ctf-card--v20:hover { border-color: oklch(0.62 0 0); }
-  .ctf-card--v20:hover::after { width: 40px; }
-}
-
-/* 21 — Race 2.1: a diamond token that turns forty-five
-   degrees on hover, set in narrow techno capitals. */
-.ctf-card--v21 {
-  border: 1px solid oklch(0.36 0 0);
-  background: radial-gradient(80% 140% at 0% 50%, oklch(1 0 0 / 0.04), transparent 60%);
-  padding-right: 5rem;
-}
-.ctf-card--v21 .ctf-card-stage { font-family: 'Iceland', sans-serif; font-size: 10px; letter-spacing: 0.18em; }
-.ctf-card--v21 .ctf-card-title { font-family: 'Iceland', sans-serif; font-size: 18px; letter-spacing: 0.05em; text-transform: uppercase; }
-.ctf-card--v21::after {
-  content: ''; position: absolute; right: 3.2rem; top: 50%; width: 17px; height: 17px;
-  margin-top: -8.5px; border: 1px solid oklch(0.7 0 0 / 0.55);
-  transform: rotate(45deg);
-  transition: transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-@media (hover: hover) {
-  .ctf-card--v21:hover::after { transform: rotate(135deg); border-color: oklch(0.9 0 0 / 0.8); }
-}
-
-/* 22 — Race 3.0: terminal paper, an underlined mono stage
-   and a prompt caret that blinks while hovered. */
-.ctf-card--v22 {
-  border: 1px solid oklch(0.3 0 0);
-  background: repeating-linear-gradient(0deg, transparent 0 4px, oklch(1 0 0 / 0.018) 4px 5px);
-  padding-right: 3.8rem;
-}
-.ctf-card--v22 .ctf-card-stage {
-  font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.12em;
-  text-decoration: underline; text-underline-offset: 3px;
-}
-.ctf-card--v22 .ctf-card-title { font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: -0.01em; }
-.ctf-card--v22::after {
-  content: '>_'; position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
-  font-family: 'Space Mono', monospace; font-size: 15px; color: oklch(0.78 0 0 / 0.7);
-}
-@media (hover: hover) {
-  .ctf-card--v22:hover { border-color: oklch(0.6 0 0); }
-  .ctf-card--v22:hover::after { animation: ctf-caret 900ms steps(2) infinite; }
-}
-@keyframes ctf-caret {
+@keyframes ctf-spark {
   0%, 49% { opacity: 1; }
   50%, 100% { opacity: 0.25; }
 }
 
-/* 23 — Race 3.1: the byte ruler — an olive measure rail and
-   a tick column, the only card with a hue accent. */
+/* 13 — wooden address crate: the shipping label peels up. */
+.ctf-card--v13 {
+  padding: 1rem 6.4rem 1rem 1.2rem;
+  border: 2px solid oklch(0.42 0 0);
+  background:
+    repeating-linear-gradient(90deg, transparent 0 43px, oklch(1 0 0 / 0.035) 43px 46px),
+    linear-gradient(180deg, oklch(1 0 0 / 0.03), transparent);
+}
+.ctf-card--v13::before {
+  content: 'PIE';
+  position: absolute; left: 0.35rem; bottom: 0.1rem; z-index: 0;
+  font-family: 'Staatliches', sans-serif; font-size: 34px; letter-spacing: 0.1em;
+  color: oklch(1 0 0 / 0.05);
+}
+.ctf-card--v13 .ctf-card-stage { font-family: 'Electrolize', sans-serif; font-size: 8px; letter-spacing: 0.26em; }
+.ctf-card--v13 .ctf-card-title { font-family: 'Electrolize', sans-serif; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; }
+.ctf-art--crate { right: 1.05rem; top: 50%; width: 56px; height: 40px; transform: translateY(-50%); }
+.cr-label {
+  left: 0; right: 0; height: 16px;
+  border: 1px solid oklch(0.6 0 0);
+  background: oklch(0.88 0 0 / 0.9);
+}
+.cr-label--a { top: 3px; transform: rotate(-1.5deg); transition: transform 300ms, opacity 300ms; }
+.cr-label--b { top: 21px; transform: rotate(1deg); opacity: 0.45; transition: transform 300ms, opacity 300ms; }
+.cr-label--a::before {
+  content: '0x7ffd…';
+  position: absolute; left: 3px; top: 3px;
+  font-family: 'Share Tech Mono', monospace; font-size: 6px;
+  color: oklch(0.15 0 0);
+}
+.cr-label--a::after {
+  content: '';
+  position: absolute; left: 3px; right: 3px; bottom: 3px; height: 2px;
+  background: repeating-linear-gradient(90deg, oklch(0.2 0 0) 0 1px, transparent 1px 3px);
+}
+.cr-label--b::before {
+  content: 'ASLR ON';
+  position: absolute; left: 3px; top: 3px;
+  font-family: 'Share Tech Mono', monospace; font-size: 6px;
+  color: oklch(0.15 0 0);
+}
+@media (hover: hover) {
+  .ctf-card--v13:hover .cr-label--a { transform: translateY(-5px) rotate(-2.5deg); opacity: 0.9; }
+  .ctf-card--v13:hover .cr-label--b { transform: translateY(2px); opacity: 1; }
+}
+
+/* 14 — change-of-address mailbox: the flag drops, a letter shows. */
+.ctf-card--v14 {
+  padding: 1rem 7.6rem 1rem 1.2rem;
+  border: 1px solid oklch(0.32 0 0);
+  background: linear-gradient(180deg, transparent 72%, oklch(1 0 0 / 0.03) 72%);
+}
+.ctf-card--v14 .ctf-card-stage { font-family: 'Michroma', sans-serif; font-size: 7px; letter-spacing: 0.18em; }
+.ctf-card--v14 .ctf-card-title { font-family: 'Michroma', sans-serif; font-size: 12px; letter-spacing: 0.05em; }
+.ctf-art--mailbox { right: 1.1rem; top: 50%; width: 54px; height: 58px; transform: translateY(-50%) scale(0.88); transform-origin: center; }
+.mb-box {
+  left: 4px; top: 2px; width: 42px; height: 24px;
+  border: 1px solid oklch(0.58 0 0);
+  background: linear-gradient(180deg, oklch(0.28 0 0), oklch(0.16 0 0));
+}
+.mb-box::before { content: ''; position: absolute; left: 4px; right: 4px; top: 4px; height: 2px; background: oklch(0.6 0 0); }
+.mb-box::after {
+  content: '';
+  position: absolute; left: 7px; right: 7px; bottom: 3px; height: 9px;
+  background: oklch(0.88 0 0 / 0.85);
+  transform: translateY(7px); opacity: 0;
+  transition: transform 300ms, opacity 300ms;
+}
+.mb-post { left: 23px; top: 26px; bottom: 0; width: 4px; border-left: 1px solid oklch(0.5 0 0); border-right: 1px solid oklch(0.5 0 0); }
+.mb-post::after { content: ''; position: absolute; bottom: 0; left: -8px; width: 20px; height: 2px; background: oklch(0.5 0 0); }
+.mb-flag {
+  left: 43px; top: 6px; width: 10px; height: 15px;
+  border-left: 2px solid oklch(0.8 0 0);
+  border-top: 2px solid oklch(0.8 0 0);
+  transform-origin: 0 100%; transform: rotate(0deg);
+  transition: transform 380ms cubic-bezier(0.3, 1.4, 0.4, 1);
+}
+@media (hover: hover) {
+  .ctf-card--v14:hover .mb-flag { transform: rotate(62deg); }
+  .ctf-card--v14:hover .mb-box::after { transform: translateY(0); opacity: 1; }
+}
+
+/* 15 — shellcode casing: the shell racks and the brass catches. */
+.ctf-card--v15 {
+  padding: 1rem 6.2rem 1rem 1.25rem;
+  border: 0;
+  border-left: 3px solid oklch(0.6 0 0);
+  background:
+    repeating-linear-gradient(0deg, transparent 0 3px, oklch(1 0 0 / 0.022) 3px 4px),
+    linear-gradient(90deg, oklch(1 0 0 / 0.035), transparent 55%);
+}
+.ctf-card--v15 .ctf-card-stage { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 0.12em; }
+.ctf-card--v15 .ctf-card-title { font-family: 'Share Tech Mono', monospace; font-size: 15px; }
+.ctf-art--shell { right: 1.3rem; top: 50%; width: 34px; height: 58px; transform: translateY(-50%); transition: transform 300ms; }
+.sh-hull {
+  left: 4px; right: 4px; top: 0; height: 38px;
+  border: 1px solid oklch(0.5 0.06 30);
+  background: linear-gradient(90deg, oklch(0.35 0.05 30), oklch(0.22 0.04 30));
+}
+.sh-hull::before {
+  content: '90';
+  position: absolute; left: 0; right: 0; top: 7px;
+  text-align: center;
+  font-family: 'Share Tech Mono', monospace; font-size: 8px;
+  letter-spacing: 0.15em;
+  color: oklch(0.9 0 0 / 0.55);
+}
+.sh-hull::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: oklch(0.12 0 0 / 0.7); }
+.sh-brass {
+  left: 2px; right: 2px; bottom: 0; height: 20px;
+  border: 1px solid oklch(0.7 0.07 85);
+  background: linear-gradient(180deg, oklch(0.68 0.06 85), oklch(0.45 0.05 80));
+  transition: box-shadow 300ms;
+}
+.sh-brass::before { content: ''; position: absolute; left: 6px; right: 6px; top: 5px; height: 1px; background: oklch(0.2 0 0 / 0.5); }
+@media (hover: hover) {
+  .ctf-card--v15:hover .ctf-art--shell { transform: translateY(-56%) rotate(-7deg); }
+  .ctf-card--v15:hover .sh-brass { box-shadow: 0 0 10px oklch(0.85 0.08 85 / 0.3); }
+}
+
+/* 16 — NOP sled: the runner skates forward along its trail. */
+.ctf-card--v16 {
+  padding: 1.15rem 1.2rem 2.05rem;
+  border: 0;
+  border-top: 1px solid oklch(0.34 0 0);
+  border-bottom: 1px solid oklch(0.34 0 0);
+  background: linear-gradient(180deg, oklch(1 0 0 / 0.02), transparent 70%);
+}
+.ctf-card--v16 .ctf-card-stage { font-family: 'VT323', monospace; font-size: 13px; letter-spacing: 0.14em; }
+.ctf-card--v16 .ctf-card-title { font-family: 'VT323', monospace; font-size: 25px; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; }
+.ctf-art--sled { right: 1.4rem; bottom: 0.55rem; width: 96px; height: 20px; transition: transform 420ms cubic-bezier(0.3, 1.2, 0.4, 1); }
+.sd-trail { left: 0; right: 0; top: 9px; height: 1px; background: repeating-linear-gradient(90deg, oklch(0.85 0 0 / 0.45) 0 14px, transparent 14px 21px); }
+.sd-runner { left: 34px; right: 0; bottom: 0; height: 2px; background: oklch(0.72 0 0); }
+.sd-runner::before {
+  content: '';
+  position: absolute; left: 4px; bottom: 2px; width: 2px; height: 7px;
+  background: oklch(0.72 0 0);
+  box-shadow: 30px 0 0 oklch(0.72 0 0);
+}
+.sd-deck { left: 38px; top: 2px; width: 48px; height: 5px; background: oklch(0.6 0 0); }
+.sd-deck::before { content: ''; position: absolute; left: 0; top: -2px; width: 100%; height: 1px; background: oklch(0.85 0 0 / 0.4); }
+@media (hover: hover) {
+  .ctf-card--v16:hover .ctf-art--sled { transform: translateX(26px); }
+}
+
+/* 17 — folded payload map: the sheet opens, the pin relocates. */
+.ctf-card--v17 {
+  padding: 1rem 6.5rem 1rem 1.2rem;
+  border: 1px solid oklch(0.38 0 0);
+  background: linear-gradient(135deg, oklch(1 0 0 / 0.045), transparent 58%);
+}
+.ctf-card--v17 .ctf-card-stage { font-family: 'Orbitron', sans-serif; font-size: 7px; letter-spacing: 0.2em; }
+.ctf-card--v17 .ctf-card-title { font-family: 'Orbitron', sans-serif; font-size: 13px; letter-spacing: 0.02em; }
+.ctf-art--map { right: 1.05rem; top: 50%; width: 58px; height: 48px; transform: translateY(-50%); }
+.mp-sheet {
+  inset: 0;
+  border: 1px solid oklch(0.55 0 0);
+  background:
+    linear-gradient(90deg, transparent 49%, oklch(0.6 0 0 / 0.35) 49% 51%, transparent 51%),
+    linear-gradient(0deg, transparent 49%, oklch(0.6 0 0 / 0.25) 49% 51%, transparent 51%),
+    oklch(1 0 0 / 0.02);
+  transition: transform 360ms;
+}
+.mp-route {
+  left: 9px; right: 9px; top: 50%; height: 1px;
+  background: repeating-linear-gradient(90deg, oklch(0.85 0 0 / 0.7) 0 5px, transparent 5px 8px);
+  transform: rotate(-18deg);
+}
+.mp-pin {
+  left: 12px; top: 9px; width: 8px; height: 8px;
+  background: radial-gradient(circle closest-side, oklch(0.1 0 0) 0 56%, oklch(0.95 0 0 / 0.85) 56% 100%, transparent 100%);
+  transition: left 420ms, top 420ms;
+}
+.mp-pin::after { content: ''; position: absolute; left: 3px; top: 8px; width: 1px; height: 8px; background: oklch(0.95 0 0 / 0.85); }
+@media (hover: hover) {
+  .ctf-card--v17:hover .mp-pin { left: 38px; top: 30px; }
+  .ctf-card--v17:hover .mp-sheet { transform: scaleX(1.06); }
+}
+
+/* 18 — split-time stopwatch: the hand sweeps a full turn. */
+.ctf-card--v18 {
+  padding: 1rem 6.6rem 1rem 1.2rem;
+  border: 1px solid oklch(0.36 0 0);
+  background: radial-gradient(circle at 90% 50%, oklch(1 0 0 / 0.055), transparent 38%);
+}
+.ctf-card--v18 .ctf-card-stage { font-family: 'Nova Square', sans-serif; font-size: 8px; letter-spacing: 0.16em; }
+.ctf-card--v18 .ctf-card-title { font-family: 'Nova Square', sans-serif; font-size: 14px; letter-spacing: 0.03em; }
+.ctf-art--watch { right: 1.2rem; top: 50%; width: 48px; height: 58px; transform: translateY(-50%); }
+.wt-crown { left: 20px; top: 0; width: 8px; height: 6px; border: 1px solid oklch(0.6 0 0); }
+.wt-crown::before { content: ''; position: absolute; left: 2px; top: -3px; width: 4px; height: 2px; background: oklch(0.6 0 0); }
+.wt-face {
+  left: 2px; top: 5px; width: 44px; height: 44px;
+  background:
+    radial-gradient(circle closest-side, transparent 0 89%, oklch(0.62 0 0) 89% 100%, transparent 100%),
+    repeating-conic-gradient(from 0deg, oklch(0.75 0 0 / 0.55) 0 1deg, transparent 1deg 30deg);
+  clip-path: circle(50%);
+}
+.wt-face::before { content: ''; position: absolute; inset: 6px; background: radial-gradient(circle closest-side, oklch(0.09 0 0) 0 99%, transparent 100%); }
+.wt-hand {
+  left: 50%; top: 50%; width: 15px; height: 2px; z-index: 1;
+  background: oklch(0.92 0 0);
+  transform-origin: 0 50%; transform: rotate(-90deg);
+  transition: transform 900ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.wt-hand::after {
+  content: '';
+  position: absolute; left: -3px; top: -2px; width: 6px; height: 6px;
+  background: oklch(0.92 0 0);
+  clip-path: circle(50%);
+}
+.wt-tag { left: 6px; bottom: 0; width: 36px; height: 6px; border-left: 1px solid oklch(0.6 0 0); border-right: 1px solid oklch(0.6 0 0); }
+@media (hover: hover) {
+  .ctf-card--v18:hover .wt-hand { transform: rotate(220deg); }
+}
+
+/* 19 — starting block: the pedal depresses into the rail. */
+.ctf-card--v19 {
+  padding: 1.05rem 6rem 1.05rem 5.6rem;
+  border: 0;
+  border-left: 6px solid oklch(0.62 0 0);
+  background: linear-gradient(90deg, oklch(1 0 0 / 0.055) 0 4rem, transparent 4rem);
+}
+.ctf-card--v19::before {
+  content: attr(data-code);
+  position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%); z-index: 0;
+  font-family: 'Bebas Neue', sans-serif; font-size: 30px;
+  color: oklch(0.9 0 0 / 0.18);
+}
+.ctf-card--v19 .ctf-card-stage { font-family: 'Marcellus', serif; font-size: 10px; letter-spacing: 0.2em; }
+.ctf-card--v19 .ctf-card-title { font-family: 'Marcellus', serif; font-size: 16px; letter-spacing: 0.02em; }
+.ctf-art--block { right: 1.2rem; top: 50%; width: 58px; height: 40px; transform: translateY(-50%); }
+.bk-rail { left: 0; right: 0; bottom: 4px; height: 3px; background: repeating-linear-gradient(90deg, oklch(0.7 0 0 / 0.65) 0 8px, transparent 8px 12px); }
+.bk-pedal {
+  left: 6px; top: 4px; width: 34px; height: 12px;
+  border: 1px solid oklch(0.65 0 0);
+  background: linear-gradient(180deg, oklch(0.35 0 0), oklch(0.18 0 0));
+  transform: skewX(-18deg) translateY(0);
+  transition: transform 260ms;
+}
+.bk-pedal::before {
+  content: '';
+  position: absolute; left: 6px; bottom: -9px; width: 2px; height: 9px;
+  background: oklch(0.55 0 0);
+  box-shadow: 16px 0 0 oklch(0.55 0 0);
+}
+@media (hover: hover) {
+  .ctf-card--v19:hover .bk-pedal { transform: skewX(-18deg) translateY(4px); }
+}
+
+/* 20 — relay lanes: the baton crosses from one lane to the other. */
+.ctf-card--v20 {
+  padding: 1rem 1.2rem 2.35rem;
+  border: 1px dashed oklch(0.44 0 0);
+  background: linear-gradient(180deg, oklch(1 0 0 / 0.02), transparent 70%);
+}
+.ctf-card--v20 .ctf-card-stage { font-family: 'Oxanium', sans-serif; font-size: 8px; letter-spacing: 0.18em; }
+.ctf-card--v20 .ctf-card-title { font-family: 'Kanit', sans-serif; font-size: 15px; font-weight: 600; }
+.ctf-art--relay { left: 1.2rem; right: 5rem; bottom: 0.65rem; height: 26px; }
+.ry-lane { left: 0; right: 0; height: 1px; background: repeating-linear-gradient(90deg, oklch(0.75 0 0 / 0.5) 0 18px, transparent 18px 26px); }
+.ry-lane--a { top: 5px; }
+.ry-lane--b { bottom: 5px; }
+.ry-baton {
+  left: 8%; top: 0; width: 30px; height: 6px;
+  background: oklch(0.82 0 0);
+  transition: left 460ms cubic-bezier(0.3, 1.2, 0.4, 1), top 460ms cubic-bezier(0.3, 1.2, 0.4, 1);
+}
+.ry-baton::after { content: ''; position: absolute; inset: 1px 3px; background: repeating-linear-gradient(90deg, oklch(0.2 0 0) 0 2px, transparent 2px 5px); }
+@media (hover: hover) {
+  .ctf-card--v20:hover .ry-baton { left: 58%; top: 17px; }
+}
+
+/* 21 — pendulum clock: the bob swings wide from its rod. */
+.ctf-card--v21 {
+  padding: 1rem 6.2rem 1rem 1.2rem;
+  border: 1px solid oklch(0.38 0 0);
+  background: radial-gradient(80% 140% at 100% 50%, oklch(1 0 0 / 0.04), transparent 60%);
+}
+.ctf-card--v21 .ctf-card-stage { font-family: 'Iceland', sans-serif; font-size: 10px; letter-spacing: 0.18em; }
+.ctf-card--v21 .ctf-card-title { font-family: 'Iceland', sans-serif; font-size: 18px; letter-spacing: 0.05em; text-transform: uppercase; }
+.ctf-art--pendulum { right: 1.3rem; top: 50%; width: 54px; height: 60px; transform: translateY(-50%); }
+.pd-rod {
+  left: 26px; top: 0; width: 1px; height: 44px;
+  background: oklch(0.8 0 0 / 0.7);
+  transform-origin: 50% 0;
+  transition: transform 560ms cubic-bezier(0.45, 0, 0.55, 1);
+}
+.pd-bob {
+  left: 15px; top: 40px; width: 23px; height: 23px;
+  background:
+    radial-gradient(circle closest-side, transparent 0 88%, oklch(0.75 0 0) 88% 100%, transparent 100%),
+    radial-gradient(circle at 35% 30%, oklch(0.5 0 0), oklch(0.18 0 0));
+  clip-path: circle(50%);
+  transform-origin: 11.5px -40px;
+  transition: transform 560ms cubic-bezier(0.45, 0, 0.55, 1);
+}
+@media (hover: hover) {
+  .ctf-card--v21:hover .pd-rod,
+  .ctf-card--v21:hover .pd-bob { transform: rotate(18deg); }
+}
+
+/* 22 — photo-finish film: perforations advance past the finish line. */
+.ctf-card--v22 {
+  padding: 1.1rem 6.8rem 1.1rem 1.2rem;
+  border: 0;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 28px, oklch(1 0 0 / 0.025) 28px 29px),
+    linear-gradient(180deg, oklch(0.13 0 0), oklch(0.1 0 0));
+  box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.06);
+}
+.ctf-card--v22 .ctf-card-stage { font-family: 'Silkscreen', monospace; font-size: 7px; letter-spacing: 0.14em; text-decoration: underline; text-underline-offset: 3px; }
+.ctf-card--v22 .ctf-card-title { font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: -0.01em; }
+.ctf-art--film { right: 1.1rem; top: 50%; width: 56px; height: 58px; transform: translateY(-50%); }
+.fm-strip {
+  inset: 0;
+  border: 1px solid oklch(0.5 0 0);
+  background:
+    radial-gradient(circle, oklch(0.85 0 0 / 0.5) 0 1.5px, transparent 2px) left 3px top 0 / 8px 8px repeat-y,
+    radial-gradient(circle, oklch(0.85 0 0 / 0.5) 0 1.5px, transparent 2px) right 3px top 0 / 8px 8px repeat-y,
+    oklch(1 0 0 / 0.03);
+  transition: background-position 400ms linear;
+}
+.fm-strip::before {
+  content: '';
+  position: absolute; left: 11px; right: 11px; top: 5px; bottom: 5px;
+  border-left: 1px solid oklch(0.9 0 0 / 0.25);
+  border-right: 1px solid oklch(0.9 0 0 / 0.25);
+  background: repeating-linear-gradient(180deg, transparent 0 10px, oklch(0.95 0 0 / 0.55) 10px 11px);
+}
+.fm-strip::after {
+  content: 'FINISH';
+  position: absolute; left: 12px; right: 12px; top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  font-family: 'Space Mono', monospace; font-size: 5px; letter-spacing: 0.2em;
+  text-align: center; color: oklch(0.95 0 0 / 0.5);
+}
+@media (hover: hover) {
+  .ctf-card--v22:hover .fm-strip { background-position: left 3px top 8px, right 3px top 8px, 0 0; }
+}
+
+/* 23 — chequered pennant: the cloth ripples on the pole. */
 .ctf-card--v23 {
-  border-left: 3px solid oklch(0.62 0.05 110);
+  padding: 1rem 6.6rem 1rem 1.2rem;
+  border-left: 3px solid oklch(0.64 0.06 110);
   border-top: 1px solid oklch(0.3 0 0);
   border-right: 1px solid oklch(0.3 0 0);
   border-bottom: 1px solid oklch(0.3 0 0);
-  background: linear-gradient(90deg, oklch(0.62 0.05 110 / 0.06), transparent 35%);
+  background: linear-gradient(90deg, oklch(0.64 0.06 110 / 0.07), transparent 38%);
 }
-.ctf-card--v23 .ctf-card-stage { font-family: 'Unbounded', sans-serif; font-size: 7px; letter-spacing: 0.1em; color: oklch(0.74 0.05 110); }
+.ctf-card--v23 .ctf-card-stage { font-family: 'Unbounded', sans-serif; font-size: 7px; letter-spacing: 0.1em; color: oklch(0.76 0.06 110); }
 .ctf-card--v23 .ctf-card-title { font-family: 'Unbounded', sans-serif; font-size: 12px; font-weight: 500; }
-.ctf-card--v23::after {
-  content: '';
-  position: absolute; right: 0.55rem; top: 12%; bottom: 12%; width: 5px;
-  background: repeating-linear-gradient(180deg, oklch(0.74 0.05 110 / 0.55) 0 2px, transparent 2px 8px);
-  opacity: 0.6;
-  transition: transform 300ms ease;
+.ctf-art--flag { right: 1.25rem; top: 50%; width: 58px; height: 52px; transform: translateY(-50%); }
+.fg-pole { left: 2px; top: 0; bottom: 0; width: 2px; background: oklch(0.62 0 0); }
+.fg-pole::after { content: ''; position: absolute; left: -3px; top: -2px; width: 8px; height: 3px; background: oklch(0.75 0 0); }
+.fg-cloth {
+  left: 4px; top: 4px; width: 48px; height: 31px;
+  background: conic-gradient(oklch(0.92 0 0) 25%, oklch(0.12 0 0) 0 50%, oklch(0.92 0 0) 0 75%, oklch(0.12 0 0) 0) 0 0 / 12px 12px;
+  transform-origin: 0 50%;
+  transition: transform 420ms cubic-bezier(0.3, 1.2, 0.4, 1);
 }
 @media (hover: hover) {
-  .ctf-card--v23:hover { border-left-color: oklch(0.82 0.07 110); }
-  .ctf-card--v23:hover::after { transform: translateY(4px); }
+  .ctf-card--v23:hover .fg-cloth { transform: skewY(-4deg) scaleX(1.04); }
 }
 
-/* 24 — Kernel 1.0: concentric privilege rings — the only
-   card with a radial field and a double-ring marker. */
+/* 24 — ring-0 padlock: the shackle lifts, the keyhole brightens. */
 .ctf-card--v24 {
-  border: 1px solid oklch(0.4 0 0);
+  padding: 1rem 6.4rem 1rem 1.2rem;
+  border: 1px solid oklch(0.42 0 0);
   background: radial-gradient(90% 150% at 100% 50%, oklch(1 0 0 / 0.055), transparent 62%);
-  padding-right: 5.2rem;
 }
 .ctf-card--v24 .ctf-card-stage { font-family: 'Zen Dots', sans-serif; font-size: 7px; letter-spacing: 0.14em; }
 .ctf-card--v24 .ctf-card-title { font-family: 'Zen Dots', sans-serif; font-size: 12px; letter-spacing: 0.04em; }
-.ctf-card--v24::before,
-.ctf-card--v24::after {
-  content: ''; position: absolute; right: 1rem; top: 50%; width: 30px; height: 30px; margin-top: -15px;
-  border: 1px solid oklch(0.8 0 0 / 0.35);
-  transition: width 380ms ease, height 380ms ease, margin 380ms ease;
+.ctf-art--lock { right: 1.4rem; top: 50%; width: 42px; height: 52px; transform: translateY(-50%); }
+.lk-shackle {
+  left: 9px; top: 0; width: 24px; height: 24px;
+  background: radial-gradient(circle 12px at 50% 100%, transparent 0 80%, oklch(0.7 0 0) 80% 96%, transparent 96%);
+  transition: transform 300ms cubic-bezier(0.3, 1.3, 0.4, 1);
 }
-.ctf-card--v24::after { width: 18px; height: 18px; margin-top: -9px; border-color: oklch(0.9 0 0 / 0.25); }
+.lk-body {
+  left: 2px; right: 2px; top: 20px; bottom: 0;
+  border: 1px solid oklch(0.58 0 0);
+  background: linear-gradient(180deg, oklch(0.33 0 0), oklch(0.16 0 0));
+}
+.lk-body::before {
+  content: 'RING 0';
+  position: absolute; left: 0; right: 0; top: 5px;
+  text-align: center;
+  font-family: 'Share Tech Mono', monospace; font-size: 5px; letter-spacing: 0.14em;
+  color: oklch(0.85 0 0 / 0.5);
+}
+.lk-keyhole {
+  left: calc(50% - 3px); top: 30px; width: 6px; height: 6px;
+  background: radial-gradient(circle closest-side, transparent 0 52%, oklch(0.9 0 0 / 0.7) 52% 100%, transparent 100%);
+  transition: filter 300ms;
+}
+.lk-keyhole::after { content: ''; position: absolute; left: 2px; top: 5px; width: 1px; height: 6px; background: oklch(0.9 0 0 / 0.7); }
 @media (hover: hover) {
-  .ctf-card--v24:hover::before { width: 34px; height: 34px; margin-top: -17px; }
-  .ctf-card--v24:hover::after { width: 22px; height: 22px; margin-top: -11px; }
+  .ctf-card--v24:hover .lk-shackle { transform: translateY(-4px); }
+  .ctf-card--v24:hover .lk-keyhole { filter: brightness(1.6); }
 }
 
 @media (max-width: 700px) {
   .ctf-card {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 0.35rem;
-    padding: 0.85rem 0.9rem;
   }
   .ctf-card-title { font-size: 14px; }
   .ctf-card-vt { text-align: left; }
-  .ctf-card--v19 { padding-right: 3.8rem; }
-  .ctf-card--v20 { padding-right: 1rem; }
-  .ctf-card--v22 { padding-right: 3.2rem; }
-  .ctf-card--v24 { padding-right: 4.4rem; }
-  .ctf-card--v02::after { font-size: 40px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .ctf-card,
-  .ctf-card::before,
-  .ctf-card::after { transition: none !important; }
-  .ctf-card--v22:hover::after { animation: none; }
+
+  .ctf-card--v01 { padding: 0.9rem 0.9rem 0.9rem 4.6rem; }
+  .ctf-art--overflow { left: 0.85rem; width: 36px; height: 56px; }
+  .ov-vessel::after { top: 6px; bottom: 6px; }
+
+  .ctf-card--v02 { padding: 0.9rem 4.9rem 2.2rem 0.9rem; }
+  .ctf-card--v02::before { right: 4.2rem; font-size: 46px; }
+  .ctf-art--pipe { left: 0.9rem; right: 0.9rem; }
+  .pp-pipe { right: 3.4rem; }
+  .pp-gauge { width: 32px; height: 32px; top: -7px; }
+
+  .ctf-card--v03 { padding: 0.9rem 0.9rem 0.9rem 4.2rem; }
+  .ctf-art--reticle { left: 0.8rem; width: 36px; height: 36px; }
+
+  .ctf-card--v04 { padding: 1rem 4.4rem 1rem 1rem; }
+  .ctf-art--tape { right: 0.75rem; width: 38px; height: 30px; }
+
+  .ctf-card--v05 { padding: 0.9rem 4rem 0.9rem 0.9rem; }
+  .ctf-art--fader { right: 0.8rem; height: 58px; }
+  .fd-knob { top: 33px; }
+
+  .ctf-card--v06 { padding: 0.9rem 0.9rem 0.9rem 5.2rem; }
+  .ctf-art--dial { left: 0.8rem; width: 46px; height: 46px; }
+  .dl-face::after { inset: 6px; }
+  .dl-needle { width: 15px; }
+
+  .ctf-card--v07 { padding: 0.9rem 3.6rem 1.3rem 0.9rem; }
+  .ctf-art--ruler { right: 0.5rem; }
+
+  .ctf-card--v08 { padding: 0.9rem 4.6rem 0.9rem 0.9rem; }
+  .ctf-art--spool { right: 0.8rem; width: 40px; height: 40px; }
+
+  .ctf-card--v09 { padding: 0.9rem 4.5rem 0.9rem 0.9rem; }
+  .ctf-art--lever { right: 0.8rem; width: 40px; }
+
+  .ctf-card--v10 { padding: 0.9rem 4.8rem 0.9rem 0.9rem; }
+  .ctf-art--stick { right: 0.9rem; width: 46px; height: 46px; }
+
+  .ctf-card--v11 { padding: 0.9rem 4.8rem 0.9rem 0.9rem; }
+  .ctf-art--trap { right: 0.8rem; width: 46px; height: 40px; }
+
+  .ctf-card--v12 { padding: 0.9rem 5rem 0.9rem 0.9rem; }
+  .ctf-art--splice { right: 0.7rem; width: 52px; }
+
+  .ctf-card--v13 { padding: 0.9rem 4.8rem 0.9rem 0.9rem; }
+  .ctf-art--crate { right: 0.7rem; width: 50px; height: 38px; }
+
+  .ctf-card--v14 { padding: 0.9rem 5rem 0.9rem 0.9rem; }
+  .ctf-art--mailbox { right: 0.8rem; width: 50px; height: 54px; transform: translateY(-50%) scale(0.9); }
+
+  .ctf-card--v15 { padding: 0.9rem 4rem 0.9rem 0.95rem; }
+  .ctf-art--shell { right: 0.9rem; width: 30px; height: 52px; }
+
+  .ctf-card--v16 { padding: 1rem 0.9rem 2rem; }
+  .ctf-art--sled { right: 0.9rem; width: 84px; }
+
+  .ctf-card--v17 { padding: 0.9rem 4.8rem 0.9rem 0.9rem; }
+  .ctf-art--map { right: 0.7rem; width: 52px; height: 44px; }
+
+  .ctf-card--v18 { padding: 0.9rem 4.6rem 0.9rem 0.9rem; }
+  .ctf-art--watch { right: 0.8rem; width: 44px; height: 54px; }
+  .wt-face { width: 40px; height: 40px; }
+  .wt-crown { left: 16px; }
+  .wt-hand { width: 13px; }
+
+  .ctf-card--v19 { padding: 0.9rem 4.8rem 0.9rem 3.6rem; }
+  .ctf-card--v19::before { left: 0.5rem; font-size: 24px; }
+  .ctf-art--block { right: 0.8rem; width: 52px; height: 36px; }
+
+  .ctf-card--v20 { padding: 0.9rem 0.9rem 2.15rem; }
+  .ctf-art--relay { left: 0.9rem; right: 3.2rem; bottom: 0.5rem; }
+
+  .ctf-card--v21 { padding: 0.9rem 4.8rem 0.9rem 0.9rem; }
+  .ctf-art--pendulum { right: 0.8rem; width: 48px; height: 54px; }
+  .pd-rod { left: 23px; height: 39px; }
+  .pd-bob { left: 13px; top: 36px; width: 21px; height: 21px; transform-origin: 10.5px -36px; }
+
+  .ctf-card--v22 { padding: 1rem 5rem 1rem 0.9rem; }
+  .ctf-art--film { right: 0.7rem; width: 50px; height: 52px; }
+
+  .ctf-card--v23 { padding: 0.9rem 5rem 0.9rem 0.9rem; }
+  .ctf-art--flag { right: 0.8rem; width: 52px; height: 46px; }
+  .fg-cloth { width: 42px; height: 28px; }
+
+  .ctf-card--v24 { padding: 0.9rem 4.4rem 0.9rem 0.9rem; }
+  .ctf-art--lock { right: 0.8rem; width: 38px; height: 48px; }
+  .lk-shackle { left: 8px; width: 22px; height: 22px; }
+  .lk-body { top: 19px; }
+  .lk-keyhole { top: 28px; }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .ctf-card,
+  .ctf-card *,
+  .ctf-card *::before,
+  .ctf-card *::after,
+  .ctf-card::before,
+  .ctf-card::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
 /* ============================================================
    SHELL SECRETS — the Win+R cheatsheet on the Cheat Sheets menu.
    A monochrome sheet with a hero command, numbered steps, and
@@ -5833,6 +6285,77 @@ a, button, input, textarea, select, label, summary, [role='button'] {
 }
 @media (hover: hover) {
   .back-link:hover { color: var(--foreground); }
+}
+
+/* ============================================================
+   CLIPS — gameplay videos clipped from the archive. The
+   pasted footage lives in the repo root and is served from
+   /public; each clip is its own card: frame + controls + source
+   note. Zero border-radius everywhere (see the global wipe) so
+   the clip frame stays square — a rectangular box is the point.
+   ============================================================ */
+.clip-list {
+  display: grid;
+  gap: 1.75rem;
+  margin-top: 2.25rem;
+  max-width: 680px;
+}
+.clip-card {
+  border: 1px solid var(--border);
+  background: oklch(0.07 0 0 / 0.72);
+}
+.clip-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: oklch(0.03 0 0 / 0.85);
+  object-fit: contain;
+}
+.clip-body {
+  display: block;
+  padding: 0.9rem 1rem 1.05rem;
+}
+.clip-label {
+  display: block;
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: oklch(0.9 0 0);
+}
+.clip-note {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+}
+@media (max-width: 700px) {
+  .clip-list { gap: 1.25rem; }
+  .clip-body { padding: 0.75rem 0.85rem 0.85rem; }
+}
+/* ============================================================
+   ANHILATION — second menu under CLIPS. Same clip card
+   treatment, headed by its own menu name.
+   ============================================================ */
+.clip-menu {
+  margin-top: 3.5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 2rem;
+}
+.clip-menu-name {
+  display: block;
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-size: 12px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: oklch(0.82 0 0);
+  margin-bottom: 1.25rem;
+}
+.clip-menu .clip-list { margin-top: 0; }
+@media (max-width: 700px) {
+  .clip-menu { margin-top: 2.25rem; padding-top: 1.5rem; }
 }
 
 /* (No body scroll lock here — the new loader manages body.overflow via

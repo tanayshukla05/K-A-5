@@ -236,13 +236,198 @@ function EntryRow({ entry, onClick }: { entry: ArchiveEntry; onClick: () => void
 }
 
 /* ============================================================
-   CTF CARD - every pwn.college walkthrough gets its own surface,
-   typeface, marker and hover behavior, the same rule the Links
-   artifacts follow. The variant comes from the continuous CTF
-   stage number (01-24), so a new walkthrough only needs the next
-   stage number to pick up the next material - until 24, where the
-   cycle would need a new design block.
+   CTF CARD - the Links rule applied to walkthroughs: no two
+   stages share a surface, a silhouette or a behaviour. Every
+   card is a different physical artifact - a vessel, a tape, a
+   fader, a trap, a shell, a flag, a lock - and carries its own
+   art markup. The stage number picks the object; add a new
+   walkthrough and it needs a matching CtfArt case and CSS block.
    ============================================================ */
+function CtfArt({ code }: { code: string }) {
+  switch (code) {
+    case '01':
+      return (
+        <span className="ctf-art ctf-art--overflow" aria-hidden="true">
+          <i className="ov-vessel" />
+          <i className="ov-liquid" />
+          <i className="ov-drop" />
+        </span>
+      )
+    case '02':
+      return (
+        <span className="ctf-art ctf-art--pipe" aria-hidden="true">
+          <i className="pp-pipe" />
+          <i className="pp-gauge" />
+        </span>
+      )
+    case '03':
+      return (
+        <span className="ctf-art ctf-art--reticle" aria-hidden="true">
+          <i className="rt-ring" />
+          <i className="rt-cross" />
+          <i className="rt-dot" />
+        </span>
+      )
+    case '04':
+      return (
+        <span className="ctf-art ctf-art--tape" aria-hidden="true">
+          <i className="tp-reader" />
+        </span>
+      )
+    case '05':
+      return (
+        <span className="ctf-art ctf-art--fader" aria-hidden="true">
+          <i className="fd-track" />
+          <i className="fd-knob" />
+          <i className="fd-led" />
+        </span>
+      )
+    case '06':
+      return (
+        <span className="ctf-art ctf-art--dial" aria-hidden="true">
+          <i className="dl-face" />
+          <i className="dl-needle" />
+        </span>
+      )
+    case '07':
+      return (
+        <span className="ctf-art ctf-art--ruler" aria-hidden="true">
+          <i className="ru-cursor" />
+        </span>
+      )
+    case '08':
+      return (
+        <span className="ctf-art ctf-art--spool" aria-hidden="true">
+          <i className="sp-flange" />
+          <i className="sp-thread" />
+        </span>
+      )
+    case '09':
+      return (
+        <span className="ctf-art ctf-art--lever" aria-hidden="true">
+          <i className="lv-plate" />
+          <i className="lv-arm" />
+        </span>
+      )
+    case '10':
+      return (
+        <span className="ctf-art ctf-art--stick" aria-hidden="true">
+          <i className="st-base" />
+          <i className="st-stick"><b className="st-ball" /></i>
+        </span>
+      )
+    case '11':
+      return (
+        <span className="ctf-art ctf-art--trap" aria-hidden="true">
+          <i className="tr-board" />
+          <i className="tr-spring" />
+          <i className="tr-arm" />
+          <i className="tr-cheese" />
+        </span>
+      )
+    case '12':
+      return (
+        <span className="ctf-art ctf-art--splice" aria-hidden="true">
+          <i className="sl-left" />
+          <i className="sl-right" />
+          <i className="sl-arc" />
+        </span>
+      )
+    case '13':
+      return (
+        <span className="ctf-art ctf-art--crate" aria-hidden="true">
+          <i className="cr-label cr-label--a" />
+          <i className="cr-label cr-label--b" />
+        </span>
+      )
+    case '14':
+      return (
+        <span className="ctf-art ctf-art--mailbox" aria-hidden="true">
+          <i className="mb-box" />
+          <i className="mb-post" />
+          <i className="mb-flag" />
+        </span>
+      )
+    case '15':
+      return (
+        <span className="ctf-art ctf-art--shell" aria-hidden="true">
+          <i className="sh-hull" />
+          <i className="sh-brass" />
+        </span>
+      )
+    case '16':
+      return (
+        <span className="ctf-art ctf-art--sled" aria-hidden="true">
+          <i className="sd-trail" />
+          <i className="sd-runner" />
+          <i className="sd-deck" />
+        </span>
+      )
+    case '17':
+      return (
+        <span className="ctf-art ctf-art--map" aria-hidden="true">
+          <i className="mp-sheet" />
+          <i className="mp-route" />
+          <i className="mp-pin" />
+        </span>
+      )
+    case '18':
+      return (
+        <span className="ctf-art ctf-art--watch" aria-hidden="true">
+          <i className="wt-crown" />
+          <i className="wt-face" />
+          <i className="wt-hand" />
+          <i className="wt-tag" />
+        </span>
+      )
+    case '19':
+      return (
+        <span className="ctf-art ctf-art--block" aria-hidden="true">
+          <i className="bk-pedal" />
+          <i className="bk-rail" />
+        </span>
+      )
+    case '20':
+      return (
+        <span className="ctf-art ctf-art--relay" aria-hidden="true">
+          <i className="ry-lane ry-lane--a" />
+          <i className="ry-lane ry-lane--b" />
+          <i className="ry-baton" />
+        </span>
+      )
+    case '21':
+      return (
+        <span className="ctf-art ctf-art--pendulum" aria-hidden="true">
+          <i className="pd-rod" />
+          <i className="pd-bob" />
+        </span>
+      )
+    case '22':
+      return (
+        <span className="ctf-art ctf-art--film" aria-hidden="true">
+          <i className="fm-strip" />
+        </span>
+      )
+    case '23':
+      return (
+        <span className="ctf-art ctf-art--flag" aria-hidden="true">
+          <i className="fg-pole" />
+          <i className="fg-cloth" />
+        </span>
+      )
+    case '24':
+      return (
+        <span className="ctf-art ctf-art--lock" aria-hidden="true">
+          <i className="lk-shackle" />
+          <i className="lk-body" />
+          <i className="lk-keyhole" />
+        </span>
+      )
+    default:
+      return null
+  }
+}
+
 function CtfCard({ entry, onClick }: { entry: ArchiveEntry; onClick: () => void }) {
   const code = String(entry.stageNumber).padStart(2, '0')
   return (
@@ -260,6 +445,7 @@ function CtfCard({ entry, onClick }: { entry: ArchiveEntry; onClick: () => void 
       <span className={`ctf-card-vt${entry.vtScoreClean ? ' ctf-card-vt--clean' : ''}`}>
         {entry.vtScore || '-'}
       </span>
+      <CtfArt code={code} />
     </button>
   )
 }
@@ -770,8 +956,35 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
    CLIPPED - gameplay videos from the archive. Where the
    gameplay footage lives: the playable cabinets up top and the
    walkthroughs below, with the actual clips posted here as they
-   happen. Empty for now - the videos are coming.
+   happen. Each clip is its own card: the pasted footage plays,
+   the source note keeps the catalog honest.
    ============================================================ */
+const CLIPS: Array<{ src: string; label: string; note: string }> = [
+  {
+    src: '/clip1_0001.mp4',
+    label: 'Clip 0001',
+    note: 'Raw gameplay footage — the first clip pasted into the archive root.',
+  },
+  {
+    src: '/clip_0002.mp4',
+    label: 'Clip 0002',
+    note: 'Raw gameplay footage — the second clip pasted into the archive root.',
+  },
+  {
+    src: '/clip_0003.mp4.mp4',
+    label: 'Clip 0003',
+    note: 'Raw gameplay footage — the third clip pasted into the archive root.',
+  },
+]
+
+const ANHILATION_CLIPS: Array<{ src: string; label: string; note: string }> = [
+  {
+    src: '/CA_clip_0001.mp4.mp4',
+    label: 'CA Clip 0001',
+    note: 'Raw gameplay footage — the ANHILATION clip pasted into the archive root.',
+  },
+]
+
 export function ClippedPage({ navigate }: { navigate: NavFn }) {
   return (
     <div className="archive-container">
@@ -785,7 +998,57 @@ export function ClippedPage({ navigate }: { navigate: NavFn }) {
         videos. Recorded runs, boss fights, speedruns and cabinet captures
         as they happen.
       </p>
-      <EmptyState message="No gameplay clips posted yet" />
+      <div className="clip-list">
+        {CLIPS.map((clip) => (
+          <article key={clip.src} className="clip-card">
+            <video
+              className="clip-video"
+              src={clip.src}
+              controls
+              playsInline
+              muted
+              loop
+              autoPlay
+              preload="metadata"
+              aria-label={clip.label}
+            />
+            <div className="clip-body">
+              <span className="clip-label">{clip.label}</span>
+              <span className="clip-note">{clip.note}</span>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      {/* ============================================================
+         ANHILATION — the second menu under CLIPS. Carries its own
+         clip, kept as its own menu rather than merged into the
+         gameplay list.
+         ============================================================ */}
+      <div className="clip-menu">
+        <span className="clip-menu-name">ANHILATION</span>
+        <div className="clip-list">
+          {ANHILATION_CLIPS.map((clip) => (
+            <article key={clip.src} className="clip-card">
+              <video
+                className="clip-video"
+                src={clip.src}
+                controls
+                playsInline
+                muted
+                loop
+                autoPlay
+                preload="metadata"
+                aria-label={clip.label}
+              />
+              <div className="clip-body">
+                <span className="clip-label">{clip.label}</span>
+                <span className="clip-note">{clip.note}</span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
