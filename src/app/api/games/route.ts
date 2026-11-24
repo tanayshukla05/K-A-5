@@ -1,5 +1,6 @@
 import { readdir, stat } from 'node:fs/promises'
 import path from 'node:path'
+import artworkByRom from '@/lib/rom-artwork.json'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,6 +26,7 @@ export async function GET() {
           title,
           file: `/roms/${encodeURIComponent(file.name)}`,
           size: displaySize(fileStats.size),
+          artwork: artworkByRom[file.name as keyof typeof artworkByRom] ?? null,
         }
       }),
   )

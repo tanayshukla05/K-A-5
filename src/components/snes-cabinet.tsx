@@ -28,6 +28,7 @@ type ShelfGame = {
   /** same-origin path; EmulatorJS fetches this itself */
   file: string
   size: string
+  artwork: string | null
 }
 
 export function SnesCabinet() {
@@ -38,6 +39,22 @@ export function SnesCabinet() {
   const [booted, setBooted] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const holderRef = useRef<HTMLDivElement>(null)
+  const gameButtonsRef = useRef(new Map<string, HTMLButtonElement>())
+  const selectedGameIdRef = useRef<string | null>(null)
+  const shelfScrollYRef = useRef(0)
+
+  function ejectGame() {
+    setGame(null)
+    setBooted(false)
+    setError(null)
+    // EmulatorJS teardown and removing the focused EJECT button can both
+    // move the document. Restore the launch position after the shelf returns.
+    window.requestAnimationFrame(() => {
+      window.scrollTo(0, shelfScrollYRef.current)
+      const selected = selectedGameIdRef.current
+      if (selected) gameButtonsRef.current.get(selected)?.focus({ preventScroll: true })
+    })
+  }
 
   useEffect(() => {
     let active = true
@@ -93,7 +110,7 @@ export function SnesCabinet() {
     <div className="snes-cab">
       {!game && (
         <div className="snes-shelf">
-          <p className="snes-shelf-head">SNES GAME LIBRARY — {shelf.length} CARTRIDGES</p>
+          <p className="snes-shelf-head">SNES GAME LIBRARY — {shelf.length} CARTRIDGES · {shelf.filter((g) => g.artwork).length} ARTWORKS INDEXED</p>
           <label className="snes-search-label">
             <span className="sr-only">Search games</span>
             <input
@@ -112,10 +129,32 @@ export function SnesCabinet() {
                 <button
                   type="button"
                   className="snes-shelf-item"
-                  onClick={() => { setError(null); setBooted(false); setGame(g) }}
+                  ref={(element) => {
+                    if (element) gameButtonsRef.current.set(g.id, element)
+                    else gameButtonsRef.current.delete(g.id)
+                  }}
+                  onClick={(event) => {
+                    shelfScrollYRef.current = window.scrollY
+                    selectedGameIdRef.current = g.id
+                    setError(null)
+                    setBooted(false)
+                    setGame(g)
+                  }}
                 >
                   <span className="snes-shelf-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                   <span className="snes-shelf-body">
+                    <span className="snes-shelf-poster" aria-hidden="true">
+                      <span className="snes-shelf-poster-fallback">{g.title}</span>
+                      {g.artwork && (
+                        <img
+                          src={g.artwork}
+                          alt=""
+                          loading="lazy"
+                          decoding="async"
+                          onError={(event) => { event.currentTarget.style.display = 'none' }}
+                        />
+                      )}
+                    </span>
                     <span className="snes-shelf-title">{g.title}</span>
                     <span className="snes-shelf-meta">SUPER NINTENDO · {g.size}</span>
                   </span>
@@ -126,7 +165,11 @@ export function SnesCabinet() {
           </ul>
           {shelf.length > 0 && shelf.filter((g) => g.title.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())).length === 0 &&
             <p className="snes-shelf-note">No games match “{query}”.</p>}
-          <p className="snes-shelf-note">Select a cartridge to play. ROM files are served from this site&apos;s local library.</p>
+          <p className="snes-shelf-note">
+            Select a cartridge to play. Box art, title screens and screenshots from the{' '}
+            <a href="https://github.com/libretro-thumbnails/libretro-thumbnails" target="_blank" rel="noreferrer">Libretro Thumbnail Project</a>
+            {' '}and <a href="https://gamesdb.launchbox-app.com/" target="_blank" rel="noreferrer">LaunchBox Games Database</a>; bundled with this site.
+          </p>
         </div>
       )}
 
@@ -146,7 +189,7 @@ export function SnesCabinet() {
             <button
               type="button"
               className="game-btn"
-              onClick={() => { setGame(null); setBooted(false); setError(null) }}
+              onClick={ejectGame}
             >
               ⏏ EJECT
             </button>

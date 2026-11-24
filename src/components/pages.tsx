@@ -964,11 +964,6 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
                 <button type="button" className="game-launch-btn" onClick={() => setHeroOn(true)}>
                   INSERT COIN · PLAY
                 </button>
-                <p className="game-launch-blurb">
-                  27 fighters on one cartridge - Ryu, Spider-Man, Bowser, Venom and
-                  the rest, drawn from the game's own gfx. The WASM build
-                  (~13 MB) downloads only after you press start.
-                </p>
               </div>
             </div>
           )}
@@ -1023,9 +1018,9 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
                   <span><b>JUMP</b> Z / SPACE</span>
                   <span><b>RUN</b> X / SHIFT</span>
                 </p>
-              <button type="button" className="game-launch-btn" onClick={() => setMarioOn(true)}>
+                <button type="button" className="game-launch-btn" onClick={() => setMarioOn(true)}>
                   ▶&nbsp; START THE ADVENTURE
-              </button>
+                </button>
               </div>
             </div>
           )}
@@ -1050,7 +1045,7 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
           <SnesCabinet />
         </div>
         <div className="game-cab-foot">
-          <span className="game-keys">7 GAMES INSTALLED · SAVE STATES + TOUCH CONTROLS BUILT IN · CREDITS AT /ROMS</span>
+          <span className="game-keys">SNES LIBRARY · SEARCH ALL INSTALLED CARTRIDGES · SAVE STATES + TOUCH CONTROLS · CREDITS AT /ROMS</span>
         </div>
       </div>
     </div>
