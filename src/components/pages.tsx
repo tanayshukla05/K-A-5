@@ -819,62 +819,29 @@ export function ResearchEntryPage({ slug, navigate }: { slug: string; navigate: 
   )
 }
 
-/* ============================================================
-   CHEAT SHEETS - intentionally empty section
-   ============================================================ */
-/* ============================================================
-   CHEAT SHEETS - reference material. First sheet: Windows shell
-   secrets. The Run dialog (Win+R) is the fastest terminal on any
-   PC; these one-click-copy commands teach visitors to drive it.
-   ============================================================ */
+function CopyCommandButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false)
 
-const SHELL_SECRETS: Array<{ cmd: string; desc: string }> = [
-  { cmd: 'shell:MyComputerFolder', desc: 'This PC - every drive and device in one window' },
-  { cmd: 'shell:RecycleBinFolder', desc: 'The Recycle Bin' },
-  { cmd: 'shell:AppsFolder', desc: 'Every installed app - launch any of them by name' },
-  { cmd: 'shell:Startup', desc: 'Programs that run the moment you log in' },
-  { cmd: 'shell:Recent', desc: 'Everything you opened lately' },
-  { cmd: 'shell:Downloads', desc: 'Your Downloads folder' },
-  { cmd: 'shell:Temp', desc: 'Temp junk - safe to clear out' },
-  { cmd: 'shell:Fonts', desc: 'Every font installed on the machine' },
-  { cmd: 'shell:ProgramFiles', desc: 'Program Files' },
-  { cmd: 'shell:Windows', desc: 'The Windows directory itself' },
-]
-
-function CopyChip({ text }: { text: string }) {
-  const [state, setState] = useState<'idle' | 'done'>('idle')
-  async function copy() {
-    let ok = false
+  async function copyCommand() {
     try {
       await navigator.clipboard.writeText(text)
-      ok = true
     } catch {
-      // Fallback for browsers that refuse the async clipboard API
-      try {
-        const ta = document.createElement('textarea')
-        ta.value = text
-        ta.style.position = 'fixed'
-        ta.style.opacity = '0'
-        document.body.appendChild(ta)
-        ta.select()
-        document.execCommand('copy')
-        document.body.removeChild(ta)
-        ok = true
-      } catch {
-        ok = false
-      }
+      const input = document.createElement('textarea')
+      input.value = text
+      input.style.position = 'fixed'
+      input.style.opacity = '0'
+      document.body.appendChild(input)
+      input.select()
+      document.execCommand('copy')
+      input.remove()
     }
-    if (!ok) window.prompt('Copy this command:', text)
-    setState('done')
-    setTimeout(() => setState('idle'), 1600)
+    setCopied(true)
+    window.setTimeout(() => setCopied(false), 1600)
   }
+
   return (
-    <button
-      type="button"
-      className={`copy-chip${state === 'done' ? ' copy-chip--done' : ''}`}
-      onClick={copy}
-    >
-      {state === 'done' ? 'COPIED' : 'COPY'}
+    <button type="button" className={`copy-chip${copied ? ' copy-chip--done' : ''}`} onClick={copyCommand}>
+      {copied ? 'COPIED' : 'COPY'}
     </button>
   )
 }
@@ -887,37 +854,9 @@ export function CheatsheetsPage({ navigate }: { navigate: NavFn }) {
       </button>
       <div className="archive-eyebrow">CHEAT SHEETS</div>
       <h1 className="archive-title">Cheat Sheets</h1>
-      <p className="archive-subtitle">
-        Reference material - quick-lookup tables for analysis workflows.
-        First sheet: the Windows Run dialog, the fastest terminal on any
-        PC. No install, no admin rights, pure muscle memory.
-      </p>
-
-      <div className="archive-eyebrow">SHEET 01 - WINDOWS SHELL SECRETS</div>
-      <div className="shell-secrets">
-        <div className="shell-secret-steps">
-          <div className="shell-step"><span className="shell-step-key">01</span><span>PRESS <b>Win + R</b> - the Run dialog opens</span></div>
-          <div className="shell-step"><span className="shell-step-key">02</span><span>PASTE a command - one click on <b>COPY</b> puts it on your clipboard</span></div>
-          <div className="shell-step"><span className="shell-step-key">03</span><span>HIT <b>Enter</b> - the folder opens. No menus, no hunting.</span></div>
-        </div>
-        <div className="shell-secret-hero">
-          <div className="shell-secret-cmd">explorer shell:MyComputerFolder</div>
-          <div className="shell-secret-desc">
-            The gateway command: opens This PC - every drive, every device,
-            one window. The archive starts where the file manager does.
-          </div>
-          <CopyChip text="explorer shell:MyComputerFolder" />
-        </div>
-        {SHELL_SECRETS.map(s => (
-          <div key={s.cmd} className="shell-secret-row">
-            <div>
-              <div className="shell-secret-cmd shell-secret-cmd--small">{s.cmd}</div>
-              <div className="shell-secret-desc">{s.desc}</div>
-            </div>
-            <CopyChip text={s.cmd} />
-          </div>
-        ))}
-        <div className="shell-secret-foot">WINDOWS ONLY - RUN NEEDS A KEYBOARD. ON A PHONE, THE LESSON IS STILL FREE.</div>
+      <div className="shell-secret-hero">
+        <pre className="shell-secrets"><code>{'explorer.exe "$(wslpath -w ~/extracted)"'}</code></pre>
+        <CopyCommandButton text={'explorer.exe "$(wslpath -w ~/extracted)"'} />
       </div>
     </div>
   )
@@ -970,12 +909,8 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
       <div className="archive-eyebrow">GAMES</div>
       <h1 className="archive-title">Games</h1>
       <p className="archive-subtitle">
-        Playable things from the archive. Cabinet 01: MultiHero - a
-        freeware browser beat-'em-up, solo or with up to four players
-        online. Cabinet 02: SUPER ARCHIVE BROS. - a complete
-        side-scrolling platformer built from scratch for this site.
-        Cabinet 03: a Super Nintendo with its games pre-installed - tap a
-        title on the shelf and it runs right here in the browser.
+        Three cabinets, ready to play. Step into MultiHero, take on the five-course
+        Super Archive Bros. campaign, or browse the Super Nintendo library.
       </p>
 
       {/* ============================================================
@@ -1048,11 +983,11 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
           archive (original engine, sprites, sound - no ROMs). The INSERT
           COIN tap boots the game via autoStart.
           ============================================================ */}
-      <div className="game-cabinet">
+      <div className="game-cabinet game-cabinet--sarb">
         <div className="game-cab-head">
           <span className="game-num">02</span>
           <span className="game-cab-label">Super Archive Bros.</span>
-          <span className="game-cab-note">side-scrolling platformer · 3 courses · one click to play</span>
+          <span className="game-cab-note">original platform adventure · 5 courses · saved high score</span>
         </div>
         <div className="game-screen">
           {marioOn ? (
@@ -1065,16 +1000,38 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
               </div>
             </>
           ) : (
-            <div className="game-launch">
-              <p className="game-launch-head">CARTRIDGE INSTALLED - TAP TO POWER ON</p>
+            <div className="game-launch game-launch--sarb">
+              <div className="game-sarb-art" aria-hidden="true">
+                <span className="game-sarb-sun">✹</span>
+                <span className="game-sarb-cloud game-sarb-cloud--one" />
+                <span className="game-sarb-cloud game-sarb-cloud--two" />
+                <span className="game-sarb-hill game-sarb-hill--one" />
+                <span className="game-sarb-hill game-sarb-hill--two" />
+                <span className="game-sarb-ground" />
+                <span className="game-sarb-hero">★</span>
+                <span className="game-sarb-brick">?</span>
+              </div>
+              <div className="game-sarb-copy">
+                <p className="game-launch-head">A FIVE-COURSE PIXEL ADVENTURE</p>
+                <p className="game-sarb-description">
+                  Run, leap and stomp your way from bright green hills to the
+                  night course. Find bonus blocks, grab mushrooms and beat your
+                  best score. Original sprites, soundtrack and game engine.
+                </p>
+                <p className="game-sarb-controls">
+                  <span><b>MOVE</b> ← → / A D</span>
+                  <span><b>JUMP</b> Z / SPACE</span>
+                  <span><b>RUN</b> X / SHIFT</span>
+                </p>
               <button type="button" className="game-launch-btn" onClick={() => setMarioOn(true)}>
-                INSERT COIN · ONE CLICK PLAY
+                  ▶&nbsp; START THE ADVENTURE
               </button>
+              </div>
             </div>
           )}
         </div>
         <div className="game-cab-foot">
-          <span className="game-keys">MOVE · Z JUMP (HOLD = HIGHER) · X RUN · ENTER PAUSE · M SOUND</span>
+          <span className="game-keys">5 ORIGINAL COURSES · HIGH SCORE SAVED ON THIS DEVICE · Z / SPACE JUMP · X / SHIFT RUN · ENTER PAUSE · M SOUND</span>
         </div>
       </div>
 

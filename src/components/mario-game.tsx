@@ -259,6 +259,45 @@ function build(index: number): Level {
     decorate(l)
     return l
   }
+  if (index === 3) {
+    const l = makeLevel(222, 'dusk', '4-1')
+    ground(l, 0, 221)
+    gap(l, 24, 26); gap(l, 57, 60); gap(l, 92, 96); gap(l, 132, 136); gap(l, 171, 174)
+    pipe(l, 14, 2); goomba(l, 20); goomba(l, 29)
+    row(l, 34, 38, 9, 'B'); put(l, 36, 9, 'Q'); coins(l, 34, 38, 8)
+    pipe(l, 44, 4); goomba(l, 50); coins(l, 57, 60, 8)
+    row(l, 64, 69, 8, 'B'); put(l, 66, 8, 'M'); put(l, 68, 8, 'Q'); goomba(l, 71)
+    stairs(l, 78, 4, 1); goomba(l, 84); goomba(l, 87)
+    coins(l, 92, 96, 7); pipe(l, 101, 3)
+    row(l, 108, 114, 9, 'B'); put(l, 111, 9, 'Q'); coins(l, 109, 113, 8)
+    goomba(l, 118); goomba(l, 120); pipe(l, 124, 5)
+    coins(l, 132, 136, 7); row(l, 141, 147, 7, 'B'); put(l, 144, 7, 'M')
+    goomba(l, 151); goomba(l, 154); stairs(l, 158, 5, 1); stairs(l, 164, 5, -1)
+    coins(l, 171, 174, 8); pipe(l, 180, 3); goomba(l, 185); goomba(l, 188)
+    row(l, 193, 198, 9, 'B'); put(l, 195, 9, 'Q'); goomba(l, 201); goomba(l, 204)
+    stairs(l, 207, 6, 1); flagAt(l, 213)
+    decorate(l)
+    return l
+  }
+  if (index === 4) {
+    const l = makeLevel(238, 'night', '5-1')
+    ground(l, 0, 237)
+    gap(l, 21, 24); gap(l, 43, 48); gap(l, 67, 73); gap(l, 95, 101); gap(l, 123, 130); gap(l, 151, 158); gap(l, 181, 188); gap(l, 211, 216)
+    put(l, 12, 9, 'M'); put(l, 16, 9, 'Q'); goomba(l, 18); coins(l, 21, 24, 8)
+    row(l, 29, 34, 8, 'B'); put(l, 31, 8, 'Q'); goomba(l, 36); pipe(l, 39, 3)
+    coins(l, 43, 48, 7); row(l, 52, 58, 9, 'B'); put(l, 55, 9, 'M'); goomba(l, 61)
+    stairs(l, 76, 5, 1); goomba(l, 82); goomba(l, 85); pipe(l, 89, 4)
+    coins(l, 95, 101, 7); row(l, 105, 112, 8, 'B'); put(l, 108, 8, 'Q'); put(l, 111, 8, 'Q')
+    goomba(l, 115); goomba(l, 118); stairs(l, 132, 5, 1)
+    row(l, 139, 145, 7, 'B'); coins(l, 140, 144, 6); goomba(l, 147)
+    coins(l, 151, 158, 7); pipe(l, 162, 5); goomba(l, 169); goomba(l, 172)
+    row(l, 176, 180, 9, 'B'); put(l, 178, 9, 'M'); coins(l, 181, 188, 7)
+    stairs(l, 191, 6, 1); goomba(l, 199); goomba(l, 202); pipe(l, 205, 4)
+    coins(l, 211, 216, 7); row(l, 220, 225, 8, 'B'); put(l, 222, 8, 'Q'); goomba(l, 228)
+    stairs(l, 229, 7, 1); flagAt(l, 232)
+    decorate(l)
+    return l
+  }
   const l = makeLevel(210, 'night', '3-1')
   ground(l, 0, 209)
   gap(l, 30, 33); gap(l, 50, 54); gap(l, 72, 80); gap(l, 100, 104)
@@ -292,7 +331,7 @@ function build(index: number): Level {
   return l
 }
 
-const LEVEL_COUNT = 3
+const LEVEL_COUNT = 5
 
 /* ============================== SPRITES ============================== */
 
@@ -1006,10 +1045,11 @@ export function MarioGame({ autoStart = false }: { autoStart?: boolean }) {
       ctx.restore()
 
       // HUD
-      txt('HERO', 8, 8); txt(pad(score, 6), 8, 18)
+      txt('SCORE', 8, 8); txt(pad(score, 6), 8, 18)
       drawCoin(ctx, 70, 14, 0)
       txt('×' + pad(coinCount, 2), 86, 18)
-      txt('WORLD', 122, 8); txt(L.name, 130, 18)
+      txt('♥ ' + lives, 112, 18, '#f87878')
+      txt('WORLD', 148, 8); txt(L.name, 156, 18)
       txt('TIME', 190, 8)
       txt(pad(time, 3), 194, 18, time < 100 ? '#f8b800' : '#fff')
 
@@ -1053,7 +1093,7 @@ export function MarioGame({ autoStart = false }: { autoStart?: boolean }) {
       if (stateT > 40 && Math.floor(frameN / 30) % 2 === 0) txt('PRESS ENTER', VW / 2, 156, '#fff', 8, 'center')
     }
     function renderWin() {
-      txt('ALL COURSES CLEARED!', VW / 2, 80, '#f8d878', 10, 'center')
+      txt('ALL FIVE COURSES CLEARED!', VW / 2, 76, '#f8d878', 9, 'center')
       txt('FINAL SCORE', VW / 2, 112, '#c8c8c8', 8, 'center')
       txt(pad(score, 6), VW / 2, 126, '#fff', 10, 'center')
       txt('THE ARCHIVE SALUTES YOU', VW / 2, 156, '#fff', 8, 'center')
@@ -1176,6 +1216,8 @@ export function MarioGame({ autoStart = false }: { autoStart?: boolean }) {
           width={VW * SCALE}
           height={VH * SCALE}
           className="game-canvas"
+          role="img"
+          aria-label="Super Archive Bros. pixel platform game. Use arrow keys to move, Z or Space to jump, and X or Shift to run."
           onContextMenu={e => e.preventDefault()}
           onPointerDown={() => {
             ensureAudio()

@@ -139,13 +139,13 @@ export function ArchiveShell() {
   const navArchive: NavItem[] = [
     // Archive lists the learning-path stages only; the CTF walkthrough
     // series lives in its own section. Research Notes / Cheat Sheets /
-    // File Archive are kept as menu sections but are intentionally empty
+    // My Apps are kept as menu sections but are intentionally empty
     // (no content published for them yet), so they carry no count badge.
     { label: 'Archive', route: { name: 'archive' }, count: entries.filter(e => !isCtfEntry(e)).length },
     { label: 'CTF Walkthroughs', route: { name: 'ctf' } },
     { label: 'Research Notes', route: { name: 'research' }, count: researchCount },
     { label: 'Cheat Sheets', route: { name: 'cheatsheets' } },
-    { label: 'File Archive', route: { name: 'files' } },
+    { label: 'My Apps', route: { name: 'files' } },
     { label: 'Games', route: { name: 'games' }, arcade: true },
     { label: 'Clipped', route: { name: 'clipped' } },
     { label: 'Links', route: { name: 'links' }, gold: true },

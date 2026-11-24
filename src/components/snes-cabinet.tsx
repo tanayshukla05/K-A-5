@@ -28,106 +28,28 @@ type ShelfGame = {
   /** same-origin path; EmulatorJS fetches this itself */
   file: string
   size: string
-  author: string
-  year: string
-  genre: string
-  players: string
-  blurb: string
 }
 
-/** the shelf — author-released homebrew carts plus the owner's own cartridges (see public/roms/CREDITS.md) */
-const SHELF: ShelfGame[] = [
-  {
-    id: 'super-boss-gaiden',
-    title: 'Super Boss Gaiden',
-    file: '/roms/super-boss-gaiden.sfc',
-    size: '0.5 MB',
-    author: 'ChronoMoogle & D4S',
-    year: '2016',
-    genre: 'action platformer',
-    players: '1 player',
-    blurb:
-      'A CEO rampages through Sony HQ after the SNES-CD prototype leaks. Tight, hard, funny — three secret characters hidden inside.',
-  },
-  {
-    id: 'uwol-quest-for-money',
-    title: 'UWOL: Quest for Money',
-    file: '/roms/uwol-quest-for-money.sfc',
-    size: '0.25 MB',
-    author: 'Mojon Twins · port: Alekmaul',
-    year: '2015',
-    genre: 'puzzle platformer',
-    players: '1 player',
-    blurb:
-      'Steal 255 gold coins out of the Storm Palace maze — every floor needs all its coins before the arrow lets you descend.',
-  },
-  {
-    id: 'powerfest-94-lost-levels',
-    title: 'PowerFest 94 — The Lost Levels',
-    file: '/roms/powerfest-94-lost-levels.sfc',
-    size: '0.5 MB',
-    author: 'Nintendo · owner cartridge',
-    year: '1994',
-    genre: 'competition cart',
-    players: '1 player',
-    blurb:
-      'The 1994 PowerFest competition cartridge. Its headline event: Super Mario Bros.: The Lost Levels on a points-against-the-clock run — pick the event from the cart\u2019s own menu.',
-  },
-  {
-    id: 'jet-pilot-rising',
-    title: 'Jet Pilot Rising',
-    file: '/roms/jet-pilot-rising.sfc',
-    size: '0.5 MB',
-    author: 'd4s · music: stargazer',
-    year: '2013',
-    genre: 'one-button flyer',
-    players: '1 player',
-    blurb:
-      'A cat riding a rocket, coded in 24 hours for the SNES\u2019s 23rd birthday. Thrust is the only button — the sky does the rest.',
-  },
-  {
-    id: 'n-warp-daisakusen',
-    title: 'N-Warp Daisakusen',
-    file: '/roms/n-warp-daisakusen.sfc',
-    size: '2 MB',
-    author: 'd4s · music: maf',
-    year: '2008',
-    genre: 'arena brawler',
-    players: '2–8 players (one keyboard)',
-    blurb:
-      'Eight fighters, one arena, zero mercy. Player 1 vs player 2 on the same keyboard — remap controls in the emulator menu.',
-  },
-  {
-    id: 'yoshis-island-usa',
-    title: 'Yoshi\u2019s Island',
-    file: '/roms/yoshis-island-usa.sfc',
-    size: '2 MB',
-    author: 'Nintendo · owner cartridge',
-    year: '1995',
-    genre: 'platformer',
-    players: '1 player',
-    blurb:
-      'Super Mario World 2: a stork mix-up leaves Baby Mario on Yoshi\u2019s back. Crayon-drawn world, flower-hunting, egg throws and the Super FX2 chip doing the morphing.',
-  },
-  {
-    id: 'aladdin-usa',
-    title: 'Disney\u2019s Aladdin',
-    file: '/roms/aladdin-usa.sfc',
-    size: '1.25 MB',
-    author: 'Disney · Capcom · owner cartridge',
-    year: '1993',
-    genre: 'platformer',
-    players: '1 player',
-    blurb:
-      'Capcom\u2019s take on the film: Agrabah rooftops, apple-throwing, carpet chases and a genie bonus round. Sword-swinging across six stages.',
-  },
-]
-
 export function SnesCabinet() {
+  const [shelf, setShelf] = useState<ShelfGame[]>([])
+  const [query, setQuery] = useState('')
+  const [catalogError, setCatalogError] = useState<string | null>(null)
   const [game, setGame] = useState<ShelfGame | null>(null)
   const [booted, setBooted] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const holderRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    let active = true
+    fetch('/api/games')
+      .then((response) => {
+        if (!response.ok) throw new Error('Could not load the game catalog.')
+        return response.json() as Promise<ShelfGame[]>
+      })
+      .then((games) => { if (active) setShelf(games) })
+      .catch(() => { if (active) setCatalogError('Game catalog failed to load.') })
+    return () => { active = false }
+  }, [])
 
   /* boot the loader exactly once per mounted container */
   useEffect(() => {
@@ -171,9 +93,21 @@ export function SnesCabinet() {
     <div className="snes-cab">
       {!game && (
         <div className="snes-shelf">
-          <p className="snes-shelf-head">GAMES SHIPPED WITH THIS CABINET — TAP ONE, IT PLAYS</p>
+          <p className="snes-shelf-head">SNES GAME LIBRARY — {shelf.length} CARTRIDGES</p>
+          <label className="snes-search-label">
+            <span className="sr-only">Search games</span>
+            <input
+              className="snes-search"
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search the game library…"
+            />
+          </label>
+          {catalogError && <p className="snes-error" role="alert">✕ {catalogError}</p>}
+          {!shelf.length && !catalogError && <p className="snes-shelf-note">Loading game library…</p>}
           <ul className="snes-shelf-list">
-            {SHELF.map((g, i) => (
+            {shelf.filter((g) => g.title.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())).map((g, i) => (
               <li key={g.id}>
                 <button
                   type="button"
@@ -183,21 +117,16 @@ export function SnesCabinet() {
                   <span className="snes-shelf-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                   <span className="snes-shelf-body">
                     <span className="snes-shelf-title">{g.title}</span>
-                    <span className="snes-shelf-meta">
-                      {g.author} · {g.year} · {g.genre} · {g.players} · {g.size}
-                    </span>
-                    <span className="snes-shelf-blurb">{g.blurb}</span>
+                    <span className="snes-shelf-meta">SUPER NINTENDO · {g.size}</span>
                   </span>
                   <span className="snes-shelf-play" aria-hidden="true">PLAY ▸</span>
                 </button>
               </li>
             ))}
           </ul>
-          <p className="snes-shelf-note">
-            The homebrew cartridges here are released free by their own authors;
-            PowerFest 94, Yoshi&apos;s Island and Aladdin are the owner&apos;s
-            own cartridges. Full credits: /roms/CREDITS.md
-          </p>
+          {shelf.length > 0 && shelf.filter((g) => g.title.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())).length === 0 &&
+            <p className="snes-shelf-note">No games match “{query}”.</p>}
+          <p className="snes-shelf-note">Select a cartridge to play. ROM files are served from this site&apos;s local library.</p>
         </div>
       )}
 
@@ -213,7 +142,7 @@ export function SnesCabinet() {
             {!booted && <div className="snes-boot">POWERING ON…</div>}
           </div>
           <div className="snes-live-ui">
-            <span className="snes-live-note">{game.author} · {game.year} · {game.players}</span>
+            <span className="snes-live-note">SUPER NINTENDO · {game.size}</span>
             <button
               type="button"
               className="game-btn"
