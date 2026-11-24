@@ -50,25 +50,32 @@ const SOUND_ROUTE: Record<string, string[]> = {
   [HOME_SOUND]: ['home'],
 }
 
-// Lazy singletons keyed by source: created on the first click (a real user
-// gesture, so iOS Safari and Android Chrome both allow playback) and
-// restarted from the top on every further click. Playback rejection (e.g.
-// missing user activation) is swallowed — the click must never break
-// navigation.
+// Warm the sounds as the app starts so the first menu click does not pay the
+// network or seek cost. Playback still happens synchronously in the click
+// handler so mobile browsers keep the user-activation chain intact.
 const menuSounds = new Map<string, HTMLAudioElement>()
 
-function playMenuSound(src: string, start = 0) {
-  if (typeof window === 'undefined') return
+function getMenuSound(src: string, start = 0): HTMLAudioElement | null {
+  if (typeof window === 'undefined') return null
   let sound = menuSounds.get(src)
   if (!sound) {
-    // The media fragment (#t=…) makes the very first load seek straight to
-    // the start point; the currentTime line below re-anchors every later
-    // click to it as well.
-    sound = new Audio(start > 0 ? src + '#t=' + start : src)
+    sound = new Audio(src)
     sound.preload = 'auto'
+    if (start > 0) {
+      sound.addEventListener('loadedmetadata', () => {
+        if (Math.abs(sound!.currentTime - start) > 0.05) sound!.currentTime = start
+      }, { once: true })
+    }
     menuSounds.set(src, sound)
+    sound.load()
   }
-  sound.currentTime = start
+  return sound
+}
+
+function playMenuSound(src: string, start = 0) {
+  const sound = getMenuSound(src, start)
+  if (!sound) return
+  if (Math.abs(sound.currentTime - start) > 0.05) sound.currentTime = start
   void sound.play().catch(() => {})
 }
 
@@ -76,6 +83,11 @@ export function ArchiveShell() {
   const { route, navigate } = useRouter()
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchKey, setSearchKey] = useState(0)
+
+  useEffect(() => {
+    getMenuSound(HOME_SOUND)
+    getMenuSound(ABOUT_SOUND, ABOUT_SOUND_START)
+  }, [])
 
   function openSearch() {
     // Bump the key so the SearchPanel remounts with fresh state every

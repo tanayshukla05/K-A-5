@@ -10585,3 +10585,124 @@ a, button, input, textarea, select, label, summary, [role='button'] {
   }
 }
 
+/* ASCII MAGIC — a tiny live terminal translating a bitmap into glyphs. */
+.artifact--ascii {
+  min-height: 100px;
+  padding-right: 255px;
+  border: 1px solid oklch(0.55 0.13 150 / 0.48);
+  background:
+    repeating-linear-gradient(0deg, oklch(0.7 0.14 150 / 0.035) 0 1px, transparent 1px 4px),
+    linear-gradient(108deg, oklch(0.12 0.025 155), oklch(0.075 0.012 170) 56%, oklch(0.09 0.025 195));
+  box-shadow: inset 0 1px 0 oklch(0.85 0.08 150 / 0.08), inset 0 0 35px oklch(0.35 0.1 150 / 0.09);
+  transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+}
+.artifact--ascii > :is(.artifact-num, .artifact-body, .artifact-go) {
+  position: relative;
+  z-index: 1;
+}
+.artifact--ascii .artifact-num { color: oklch(0.7 0.15 150); }
+.artifact--ascii .artifact-body { max-width: 68%; }
+.artifact--ascii .artifact-label {
+  color: oklch(0.92 0.1 145);
+  font-family: 'Orbitron', var(--font-geist-mono), monospace;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 15px oklch(0.68 0.2 150 / 0.28);
+}
+.artifact--ascii .artifact-url { color: oklch(0.72 0.09 165); }
+.artifact--ascii .artifact-go { color: oklch(0.79 0.17 150); }
+.artifact-art--ascii {
+  top: 50%;
+  right: 3.5rem;
+  width: 180px;
+  transform: translateY(-50%);
+}
+.ascii-magic-panel {
+  position: relative;
+  display: flex;
+  min-height: 76px;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  padding: 7px 10px 6px;
+  border-left: 1px solid oklch(0.72 0.17 150 / 0.48);
+  border-right: 1px solid oklch(0.72 0.17 185 / 0.25);
+  background:
+    linear-gradient(90deg, oklch(0.32 0.11 150 / 0.13), transparent 70%),
+    repeating-linear-gradient(90deg, oklch(0.72 0.16 150 / 0.045) 0 1px, transparent 1px 7px);
+}
+.ascii-magic-meta,
+.ascii-magic-footer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: oklch(0.66 0.11 160);
+  font: 6px/1 var(--font-geist-mono), ui-monospace, monospace;
+  letter-spacing: 0.16em;
+  white-space: nowrap;
+}
+.ascii-magic-meta i {
+  width: 15px;
+  height: 1px;
+  background: oklch(0.7 0.18 165 / 0.75);
+}
+.ascii-magic-glyph {
+  position: relative;
+  z-index: 1;
+  margin: 5px 0 4px;
+  color: oklch(0.82 0.18 150);
+  font: 8px/0.96 'Space Mono', ui-monospace, monospace;
+  text-align: center;
+  text-shadow: 0 0 8px oklch(0.65 0.2 150 / 0.45);
+  transition: color 180ms ease, transform 260ms ease;
+}
+.ascii-magic-footer { color: oklch(0.53 0.08 165); font-size: 5px; }
+.ascii-magic-footer i {
+  width: 4px;
+  height: 4px;
+  background: oklch(0.8 0.18 150);
+  box-shadow: 0 0 6px oklch(0.7 0.22 150 / 0.8);
+}
+.ascii-magic-scan {
+  position: absolute;
+  z-index: 2;
+  top: -35%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, oklch(0.88 0.2 155 / 0.82), transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .artifact--ascii:hover {
+    transform: translateY(-2px);
+    border-color: oklch(0.72 0.18 150 / 0.82);
+    box-shadow: inset 0 1px 0 oklch(0.85 0.08 150 / 0.12), inset 0 0 42px oklch(0.4 0.15 150 / 0.14), 0 10px 25px -20px oklch(0.65 0.2 150 / 0.7);
+  }
+  .artifact--ascii:hover .ascii-magic-glyph { color: oklch(0.94 0.13 150); transform: scale(1.04); }
+  .artifact--ascii:hover .ascii-magic-scan { animation: ascii-magic-scan 1.35s ease-in-out infinite; }
+}
+.artifact--ascii:focus-visible { outline-color: oklch(0.8 0.18 150); }
+@keyframes ascii-magic-scan {
+  0% { top: -5%; opacity: 0; }
+  15% { opacity: 0.9; }
+  85% { opacity: 0.8; }
+  100% { top: 105%; opacity: 0; }
+}
+@media (max-width: 700px) {
+  .artifact--ascii { min-height: 92px; padding-right: 166px; }
+  .artifact--ascii .artifact-body { max-width: 64%; }
+  .artifact--ascii .artifact-label { font-size: 15px; letter-spacing: 0.07em; }
+  .artifact-art--ascii { right: 2.9rem; width: 118px; }
+  .ascii-magic-panel { min-height: 68px; padding: 6px 6px 5px; }
+  .ascii-magic-glyph { font-size: 6px; }
+  .ascii-magic-meta { font-size: 5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--ascii,
+  .ascii-magic-glyph { transition: none; }
+  .ascii-magic-scan { display: none; }
+}
+

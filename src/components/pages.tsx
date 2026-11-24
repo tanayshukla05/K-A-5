@@ -1331,6 +1331,22 @@ function ArtifactLink({ link, index }: { link: ArchiveLink; index: number }) {
           <i className="clickonce-led" />
         </span>
       )}
+      {link.variant === 'ascii' && (
+        <span className="artifact-art artifact-art--ascii" aria-hidden="true">
+          <span className="ascii-magic-panel">
+            <span className="ascii-magic-meta">BITMAP <i /> GLYPH</span>
+            <pre className="ascii-magic-glyph">{`         .::::.
+      .::+####+::.
+   .::+#%%@@%%#+::.
+ .::+#%%@@##@@%%#+::.
+   .::+#%%@@%%#+::.
+      '::+####+::'
+         '----'`}</pre>
+            <span className="ascii-magic-footer"><i /> RENDER / 80 COL</span>
+            <i className="ascii-magic-scan" />
+          </span>
+        </span>
+      )}
       {link.variant === 'pick' && (
         <span className="pick-lock" aria-hidden="true">
           <i className="pin pin--1"></i>
@@ -1358,7 +1374,7 @@ function ArtifactLink({ link, index }: { link: ArchiveLink; index: number }) {
           </span>
         </span>
       )}
-      <span className="artifact-go" aria-hidden="true">?</span>
+      <span className="artifact-go" aria-hidden="true">{link.variant === 'ascii' ? '↗' : '?'}</span>
     </a>
   )
 }

@@ -43,6 +43,7 @@ export type ArchiveLink = {
     | 'dotnet'
     | 'pic'
     | 'clickonce'
+    | 'ascii'
 }
 
 export const LINKS: ArchiveLink[] = [
@@ -69,6 +70,11 @@ export const LINKS: ArchiveLink[] = [
     url: 'https://github.com/tanayshukla05',
     note: 'tanayshukla05',
     variant: 'terminal',
+  },
+  {
+    label: 'ASCII Magic',
+    url: 'https://www.ascii-magic.com/',
+    variant: 'ascii',
   },
   {
     label: 'RCWS v5',
