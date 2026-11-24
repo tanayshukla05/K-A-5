@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react'
 import { useRouter, type Route } from '@/lib/router'
 import { SearchPanel } from '@/components/search-panel'
 import { InstallAppButton } from '@/components/pwa'
+import { LogoMotion } from '@/components/logo-motion'
 import {
   HomePage, AboutPage, ArchivePage, StagePage, CtfPage,
   ResearchPage, ResearchEntryPage, CheatsheetsPage, FilesPage,
@@ -176,7 +177,9 @@ export function ArchiveShell() {
             onClick={() => navigate({ name: 'home' })}
             aria-label="Archive home"
           >
-            <img src="/logo.png" alt="" className="archive-brand-mark" />
+            <LogoMotion className="archive-brand-mark-motion">
+              <img src="/logo.png" alt="" className="archive-brand-mark" />
+            </LogoMotion>
             <span className="archive-brand-text">
               Pandit Tanay Shukla Ji Maharaj
               <small>Knowledge Archive</small>

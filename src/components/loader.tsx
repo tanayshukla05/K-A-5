@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { LogoMotion } from "@/components/logo-motion";
 import { RHYMES, pickRhymeIndex } from "@/lib/rhymes";
 
 /**
@@ -343,19 +344,21 @@ export function LoadingScreen() {
             {/* The logo — clean, unobstructed, no container/card/border.
                 ORIGINAL COLORS PRESERVED: no brightness/invert filter,
                 only a subtle drop-shadow glow and a slow breathing pulse. */}
-            <img
-              src="/logo.png"
-              alt="Pandit Tanay Shukla Ji Maharaj"
-              draggable={false}
-              className="select-none relative z-10"
-              style={{
-                width: "min(36vw, 190px)",
-                height: "auto",
-                objectFit: "contain",
-                filter: "drop-shadow(0 0 24px rgba(255,255,255,0.05))",
-                animation: "ldx-breathe 3s ease-in-out 1s infinite",
-              }}
-            />
+            <LogoMotion>
+              <img
+                src="/logo.png"
+                alt="Pandit Tanay Shukla Ji Maharaj"
+                draggable={false}
+                className="select-none relative z-10"
+                style={{
+                  width: "min(36vw, 190px)",
+                  height: "auto",
+                  objectFit: "contain",
+                  filter: "drop-shadow(0 0 24px rgba(255,255,255,0.05))",
+                  animation: "ldx-breathe 3s ease-in-out 1s infinite",
+                }}
+              />
+            </LogoMotion>
           </div>
         </div>
 

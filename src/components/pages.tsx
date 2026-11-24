@@ -19,6 +19,7 @@ import { isCtfEntry, ctfSourceOf, ctfTopicOf, type CtfSource, type CtfTopic } fr
 import { LINKS, type ArchiveLink } from '@/lib/links'
 import { MarioGame } from '@/components/mario-game'
 import { SnesCabinet } from '@/components/snes-cabinet'
+import { LogoMotion } from '@/components/logo-motion'
 type NavFn = (route: Route) => void
 
 /* ============================================================
@@ -142,7 +143,7 @@ export function ArchivePage({ navigate }: { navigate: NavFn }) {
             <span aria-hidden="true">←</span> HOME
           </button>
           <div className="archive-explorer-kicker"><i /> LEARNING PATH <span>/</span> STAGE DIRECTORY</div>
-          <h1 id="archive-explorer-title">Knowledge,<br /><em>unsealed.</em></h1>
+          <h1 id="archive-explorer-title">FUD Loader<br /><em>dev</em></h1>
           <p>{stageNumbers.length} stages of loader engineering, injection research and defensive evasion. Follow the path or search the field notes.</p>
           <div className="archive-explorer-stats" aria-label="Archive overview">
             <div><strong>{String(stageNumbers.length).padStart(2, '0')}</strong><span>STAGES</span></div>
@@ -155,7 +156,9 @@ export function ArchivePage({ navigate }: { navigate: NavFn }) {
           <div className="archive-explorer-emblem-ring archive-explorer-emblem-ring--inner" />
           <span className="archive-explorer-emblem-cross archive-explorer-emblem-cross--horizontal" />
           <span className="archive-explorer-emblem-cross archive-explorer-emblem-cross--diagonal" />
-          <img src="/logo.png" alt="" />
+          <LogoMotion className="archive-explorer-emblem-mark">
+            <img src="/logo.png" alt="" />
+          </LogoMotion>
           <span className="archive-explorer-emblem-caption">01 / {String(stageNumbers.length).padStart(2, '0')} <i /> FIELD ARCHIVE</span>
         </div>
         <div className="archive-explorer-hero-index"><span>TS</span><i /> PERSONAL KNOWLEDGE ARCHIVE</div>
