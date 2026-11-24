@@ -12,7 +12,7 @@
 import {
   useAllEntries, useEntryBySlug, useAllResearch, useResearchBySlug,
 } from '@/components/content-provider'
-import { useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ArchiveEntry, ResearchSeries } from '@/lib/types'
 import type { Route } from '@/lib/router'
 import { isCtfEntry, ctfSourceOf, ctfTopicOf, type CtfSource, type CtfTopic } from '@/lib/entry-group'
@@ -79,30 +79,175 @@ export function AboutPage({ navigate }: { navigate: NavFn }) {
    ARCHIVE INDEX
    ============================================================ */
 export function ArchivePage({ navigate }: { navigate: NavFn }) {
-  // The Archive index lists the learning-path stages only (Stage 01–08).
-  // The CTF walkthrough series lives in its own section of the menu.
-  const entries = useAllEntries().filter(e => !isCtfEntry(e))
+  const allEntries = useAllEntries()
+  const entries = useMemo(() => allEntries.filter(e => !isCtfEntry(e)), [allEntries])
+  const [query, setQuery] = useState('')
+  const [activeLevel, setActiveLevel] = useState('all')
+  const [activeStage, setActiveStage] = useState<number | null>(null)
+  const [sortOrder, setSortOrder] = useState<'path' | 'title'>('path')
+  const searchRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const target = event.target
+      const isEditing = target instanceof HTMLElement
+        && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName))
+      if (event.key === '/' && !event.metaKey && !event.ctrlKey && !event.altKey && !isEditing) {
+        event.preventDefault()
+        searchRef.current?.focus()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
+
+  const stageNumbers = useMemo(
+    () => Array.from(new Set(entries.map(entry => entry.stageNumber))).sort((a, b) => a - b),
+    [entries],
+  )
+  const levels = useMemo(
+    () => Array.from(new Set(entries.map(entry => entry.level).filter(Boolean))).sort(),
+    [entries],
+  )
+  const platformCount = useMemo(
+    () => new Set(entries.map(entry => entry.platform).filter(Boolean)).size,
+    [entries],
+  )
+  const visibleEntries = useMemo(() => {
+    const term = query.trim().toLowerCase()
+    return entries
+      .filter(entry => activeLevel === 'all' || entry.level === activeLevel)
+      .filter(entry => activeStage === null || entry.stageNumber === activeStage)
+      .filter(entry => !term || [
+        entry.title, entry.subtitle, entry.moduleName, entry.level, entry.category,
+        entry.platform, entry.binary, entry.tags.join(' '), entry.categories.join(' '),
+      ].join(' ').toLowerCase().includes(term))
+      .sort((a, b) => sortOrder === 'path'
+        ? a.stageNumber - b.stageNumber || a.title.localeCompare(b.title)
+        : a.title.localeCompare(b.title))
+  }, [entries, query, activeLevel, activeStage, sortOrder])
+
+  function resetFilters() {
+    setQuery('')
+    setActiveLevel('all')
+    setActiveStage(null)
+    setSortOrder('path')
+  }
+
   return (
-    <div className="archive-container">
-      <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
-        ← Back
-      </button>
-      <div className="archive-eyebrow">ARCHIVE / LEARNING PATH</div>
-      <h1 className="archive-title">Archive</h1>
-      <p className="archive-subtitle">
-        The shellcode-loader learning path — Stage 01 through 08 — in stage
-        order. Click any row to read the full write-up.
-      </p>
-      <div className="archive-section-title">
-        <span>{entries.length} Entries</span>
-        <span />
-      </div>
-      <div>
-        {entries.map(e => (
-          <EntryRow key={e.slug} entry={e} onClick={() => navigate({ name: 'stage', slug: e.slug })} />
-        ))}
-      </div>
+    <div className="archive-explorer">
+      <section className="archive-explorer-hero" aria-labelledby="archive-explorer-title">
+        <div className="archive-explorer-hero-copy">
+          <button type="button" className="archive-explorer-back" onClick={() => navigate({ name: 'home' })}>
+            <span aria-hidden="true">←</span> HOME
+          </button>
+          <div className="archive-explorer-kicker"><i /> LEARNING PATH <span>/</span> STAGE DIRECTORY</div>
+          <h1 id="archive-explorer-title">Knowledge,<br /><em>unsealed.</em></h1>
+          <p>{stageNumbers.length} stages of loader engineering, injection research and defensive evasion. Follow the path or search the field notes.</p>
+          <div className="archive-explorer-stats" aria-label="Archive overview">
+            <div><strong>{String(stageNumbers.length).padStart(2, '0')}</strong><span>STAGES</span></div>
+            <div><strong>{String(entries.length).padStart(2, '0')}</strong><span>FIELD NOTES</span></div>
+            <div><strong>{String(platformCount).padStart(2, '0')}</strong><span>PLATFORMS</span></div>
+          </div>
+        </div>
+        <div className="archive-explorer-emblem" aria-hidden="true">
+          <div className="archive-explorer-emblem-ring archive-explorer-emblem-ring--outer" />
+          <div className="archive-explorer-emblem-ring archive-explorer-emblem-ring--inner" />
+          <span className="archive-explorer-emblem-cross archive-explorer-emblem-cross--horizontal" />
+          <span className="archive-explorer-emblem-cross archive-explorer-emblem-cross--diagonal" />
+          <img src="/logo.png" alt="" />
+          <span className="archive-explorer-emblem-caption">01 / {String(stageNumbers.length).padStart(2, '0')} <i /> FIELD ARCHIVE</span>
+        </div>
+        <div className="archive-explorer-hero-index"><span>TS</span><i /> PERSONAL KNOWLEDGE ARCHIVE</div>
+      </section>
+
+      <section className="archive-explorer-path" aria-label="Filter by stage">
+        <div className="archive-explorer-section-label"><span>01</span> PATH INDEX</div>
+        <div className="archive-explorer-path-track">
+          <button type="button" className={activeStage === null ? 'is-active' : ''} aria-pressed={activeStage === null} onClick={() => setActiveStage(null)}>
+            <span className="archive-explorer-path-dot archive-explorer-path-dot--all">ALL</span>
+            <span>All stages</span>
+          </button>
+          {stageNumbers.map(number => (
+            <button key={number} type="button" className={activeStage === number ? 'is-active' : ''} aria-pressed={activeStage === number} onClick={() => setActiveStage(activeStage === number ? null : number)}>
+              <span className="archive-explorer-path-dot">{String(number).padStart(2, '0')}</span>
+              <span>Stage {String(number).padStart(2, '0')}</span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="archive-explorer-browser" aria-label="Browse archive entries">
+        <div className="archive-explorer-browser-head">
+          <div>
+            <div className="archive-explorer-section-label"><span>02</span> FIELD NOTES</div>
+            <p><strong>{String(visibleEntries.length).padStart(2, '0')}</strong> records in view</p>
+          </div>
+          <label className="archive-explorer-search">
+            <span className="archive-explorer-search-icon" aria-hidden="true">⌕</span>
+            <input ref={searchRef} type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Search techniques, modules, tags…" aria-label="Search archive entries" />
+            <kbd>/</kbd>
+          </label>
+        </div>
+
+        <div className="archive-explorer-toolbar">
+          <div className="archive-explorer-level-filters" aria-label="Filter by level">
+            <button type="button" className={activeLevel === 'all' ? 'is-active' : ''} aria-pressed={activeLevel === 'all'} onClick={() => setActiveLevel('all')}>ALL LEVELS</button>
+            {levels.map(level => (
+              <button key={level} type="button" className={activeLevel === level ? 'is-active' : ''} aria-pressed={activeLevel === level} onClick={() => setActiveLevel(activeLevel === level ? 'all' : level)}>{level}</button>
+            ))}
+          </div>
+          <label className="archive-explorer-sort">SORT
+            <select value={sortOrder} onChange={event => setSortOrder(event.target.value as 'path' | 'title')} aria-label="Sort archive entries">
+              <option value="path">PATH ORDER</option>
+              <option value="title">TITLE A—Z</option>
+            </select>
+          </label>
+        </div>
+
+        {visibleEntries.length > 0 ? (
+          <div className="archive-explorer-grid">
+            {visibleEntries.map(entry => (
+              <StageExplorerCard key={entry.slug} entry={entry} onClick={() => navigate({ name: 'stage', slug: entry.slug })} />
+            ))}
+          </div>
+        ) : (
+          <div className="archive-explorer-empty">
+            <span>NO MATCHES</span>
+            <p>Nothing in the archive matches those filters.</p>
+            <button type="button" onClick={resetFilters}>Reset archive view <b>↗</b></button>
+          </div>
+        )}
+      </section>
     </div>
+  )
+}
+
+function StageExplorerCard({ entry, onClick }: { entry: ArchiveEntry; onClick: () => void }) {
+  const code = String(entry.stageNumber).padStart(2, '0')
+  const score = entry.vtScore.match(/^\s*\d+\s*\/\s*\d+(?:\s*(?:→|->)\s*\d+\s*\/\s*\d+)*/)?.[0]
+
+  return (
+    <button type="button" className="archive-record" data-index={code} onClick={onClick} aria-label={`${entry.stage}: ${entry.title}. Open the write-up.`}>
+      <span className="archive-record-topline">
+        <span><i /> FIELD NOTE <b>/{code}</b></span>
+        <span className="archive-record-open" aria-hidden="true">↗</span>
+      </span>
+      <span className="archive-record-title">{entry.title}</span>
+      <span className="archive-record-summary">{entry.subtitle}</span>
+      <span className="archive-record-tags">
+        <span className="archive-record-level">{entry.level || 'FIELD NOTE'}</span>
+        {entry.tags.slice(0, 2).map(tag => <span key={tag}>{tag}</span>)}
+      </span>
+      <span className="archive-record-divider" />
+      <span className="archive-record-bottomline">
+        <span className="archive-record-module"><b>{entry.moduleName}</b><i>{entry.category} · {entry.platform}</i></span>
+        <span className="archive-record-data">
+          {score && <span title={entry.vtScore}>VT <b>{score.replace(/\s*->\s*/g, ' → ')}</b></span>}
+          {entry.estimatedTime && entry.estimatedTime !== '—' && <span>{entry.estimatedTime}</span>}
+        </span>
+      </span>
+    </button>
   )
 }
 
