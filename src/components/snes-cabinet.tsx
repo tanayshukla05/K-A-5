@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * SNES CABINET — cabinet 03 of the Games room.
+ * SNES CABINET — cabinet 02 of the Games room.
  *
  * A shelf of pre-installed cartridges: author-released homebrew plus the
  * owner's own cartridges (per-game attribution: public/roms/CREDITS.md).

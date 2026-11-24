@@ -41,7 +41,7 @@ syntax-highlighter bundle.
 ├── content/
 │   └── learning-paths/      # Markdown entries — drop new .md files here
 ├── public/
-│   ├── emulatorjs/          # Self-hosted EmulatorJS runtime (cabinet 03)
+│   ├── emulatorjs/          # Self-hosted EmulatorJS runtime (cabinet 02)
 │   ├── multihero/           # MultiHero WASM web build (cabinet 01)
 │   ├── roms/                # SNES cartridges + CREDITS.md attribution
 │   ├── sounds/              # UI + game sounds (about-click.mp3 = ABOUT menu beat)
@@ -134,13 +134,12 @@ kept in the menu but are intentionally empty for now: they render their
 
 ## Games Room
 
-Three cabinets, all one-click playable — nothing runs until it is clicked:
+Two cabinets, both one-click playable — nothing runs until it is clicked:
 
 | Cabinet | What it is | Runtime |
 | --- | --- | --- |
 | 01 | MultiHero — Web Edition (0.96) | Official WASM build, self-hosted (`public/multihero/`) |
-| 02 | Super Archive Bros. — original side-scrolling platformer (3 courses) | Original canvas engine, built from scratch |
-| 03 | Super Nintendo — 7 pre-installed cartridges | Self-hosted EmulatorJS (`public/emulatorjs/`) |
+| 02 | Super Nintendo — local SNES library | Self-hosted EmulatorJS (`public/emulatorjs/`) |
 
 Cartridge attribution lives at `public/roms/CREDITS.md`; MultiHero port
 license and character notices live at `public/multihero/multihero-web/NOTICE.md`.

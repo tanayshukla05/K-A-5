@@ -17,7 +17,6 @@ import type { ArchiveEntry, ResearchSeries } from '@/lib/types'
 import type { Route } from '@/lib/router'
 import { isCtfEntry, ctfSourceOf, ctfTopicOf, type CtfSource, type CtfTopic } from '@/lib/entry-group'
 import { LINKS, type ArchiveLink } from '@/lib/links'
-import { MarioGame } from '@/components/mario-game'
 import { SnesCabinet } from '@/components/snes-cabinet'
 import { LogoMotion } from '@/components/logo-motion'
 type NavFn = (route: Route) => void
@@ -889,9 +888,7 @@ export function FilesPage({ navigate }: { navigate: NavFn }) {
    GAMES - playable things built for and hosted by the archive.
    Cabinet 01: MultiHero - the freeware fan game's official
    WASM build, self-hosted and embedded same-origin.
-   Cabinet 02: a complete side-scrolling platformer written
-   from scratch (original engine, sprites, and sound - no ROMs).
-   Cabinet 03: a self-hosted Super Nintendo whose shelf of
+   Cabinet 02: a self-hosted Super Nintendo whose shelf of
    cartridges runs in the browser on the self-hosted
    EmulatorJS runtime.
    ============================================================ */
@@ -899,8 +896,6 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
   /* cabinet 01 (MultiHero) stays powered off until the visitor clicks -
      the WASM build only downloads on click (~13 MB) */
   const [heroOn, setHeroOn] = useState(false)
-  /* cabinet 02 stays powered off until the visitor clicks - no auto-start */
-  const [marioOn, setMarioOn] = useState(false)
   return (
     <div className="archive-container games-room">
       <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
@@ -909,8 +904,8 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
       <div className="archive-eyebrow">GAMES</div>
       <h1 className="archive-title">Games</h1>
       <p className="archive-subtitle">
-        Three cabinets, ready to play. Step into MultiHero, take on the five-course
-        Super Archive Bros. campaign, or browse the Super Nintendo library.
+        Two cabinets, ready to play. Step into MultiHero or browse the
+        Super Nintendo library.
       </p>
 
       {/* ============================================================
@@ -974,70 +969,13 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
       </div>
 
       {/* ============================================================
-          CABINET 02 - Super Archive Bros., written from scratch for the
-          archive (original engine, sprites, sound - no ROMs). The INSERT
-          COIN tap boots the game via autoStart.
-          ============================================================ */}
-      <div className="game-cabinet game-cabinet--sarb">
-        <div className="game-cab-head">
-          <span className="game-num">02</span>
-          <span className="game-cab-label">Super Archive Bros.</span>
-          <span className="game-cab-note">original platform adventure · 5 courses · saved high score</span>
-        </div>
-        <div className="game-screen">
-          {marioOn ? (
-            <>
-              <MarioGame autoStart />
-              <div className="game-ui">
-                <button type="button" className="game-btn" onClick={() => setMarioOn(false)}>
-                  EJECT
-                </button>
-              </div>
-            </>
-          ) : (
-            <div className="game-launch game-launch--sarb">
-              <div className="game-sarb-art" aria-hidden="true">
-                <span className="game-sarb-sun">✹</span>
-                <span className="game-sarb-cloud game-sarb-cloud--one" />
-                <span className="game-sarb-cloud game-sarb-cloud--two" />
-                <span className="game-sarb-hill game-sarb-hill--one" />
-                <span className="game-sarb-hill game-sarb-hill--two" />
-                <span className="game-sarb-ground" />
-                <span className="game-sarb-hero">★</span>
-                <span className="game-sarb-brick">?</span>
-              </div>
-              <div className="game-sarb-copy">
-                <p className="game-launch-head">A FIVE-COURSE PIXEL ADVENTURE</p>
-                <p className="game-sarb-description">
-                  Run, leap and stomp your way from bright green hills to the
-                  night course. Find bonus blocks, grab mushrooms and beat your
-                  best score. Original sprites, soundtrack and game engine.
-                </p>
-                <p className="game-sarb-controls">
-                  <span><b>MOVE</b> ← → / A D</span>
-                  <span><b>JUMP</b> Z / SPACE</span>
-                  <span><b>RUN</b> X / SHIFT</span>
-                </p>
-                <button type="button" className="game-launch-btn" onClick={() => setMarioOn(true)}>
-                  ▶&nbsp; START THE ADVENTURE
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-        <div className="game-cab-foot">
-          <span className="game-keys">5 ORIGINAL COURSES · HIGH SCORE SAVED ON THIS DEVICE · Z / SPACE JUMP · X / SHIFT RUN · ENTER PAUSE · M SOUND</span>
-        </div>
-      </div>
-
-      {/* ============================================================
-          CABINET 03 - Super Nintendo. Pre-installed cartridges running on
+          CABINET 02 - Super Nintendo. Pre-installed cartridges running on
           the self-hosted EmulatorJS runtime; per-game attribution at
           public/roms/CREDITS.md.
           ============================================================ */}
       <div className="game-cabinet game-cabinet--snes">
         <div className="game-cab-head">
-          <span className="game-num">03</span>
+          <span className="game-num">02</span>
           <span className="game-cab-label">Super Nintendo</span>
           <span className="game-cab-note">games pre-installed · tap and play · nothing to bring</span>
         </div>

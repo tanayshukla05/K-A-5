@@ -7026,140 +7026,6 @@ a, button, input, textarea, select, label, summary, [role='button'] {
   border-color: oklch(0.88 0 0);
   text-shadow: none;
 }
-/* cabinet 02 — Super Archive Bros. gets its own cartridge sleeve */
-.game-cabinet--sarb {
-  border-color: oklch(0.74 0.15 145 / 0.72);
-  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.07), 0 0 32px oklch(0.48 0.16 145 / 0.08), 6px 6px 0 oklch(0 0 0 / 0.5);
-}
-.game-cabinet--sarb .game-cab-head {
-  background: linear-gradient(90deg, oklch(0.24 0.08 145 / 0.5), transparent 72%);
-}
-.game-cabinet--sarb .game-num {
-  background: oklch(0.72 0.16 145);
-  color: oklch(0.13 0.03 145);
-}
-.game-cabinet--sarb .game-cab-label { text-shadow: 0 0 16px oklch(0.68 0.19 145 / 0.5); }
-.game-cabinet--sarb .game-launch--sarb {
-  grid-template-columns: minmax(180px, 0.8fr) minmax(260px, 1fr);
-  justify-items: stretch;
-  align-items: center;
-  gap: clamp(1.5rem, 5vw, 4rem);
-  max-width: 900px;
-  margin: 0 auto;
-  padding: clamp(1.5rem, 5vw, 3.5rem) clamp(0.5rem, 4vw, 2.5rem);
-  border: 0;
-}
-.game-sarb-art {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  aspect-ratio: 1.15;
-  min-height: 180px;
-  border: 2px solid oklch(0.82 0.12 145 / 0.6);
-  background: linear-gradient(#54b8d2 0 57%, #b9df79 57% 75%, #62a940 75%);
-  box-shadow: 5px 5px 0 oklch(0 0 0 / 0.5), inset 0 0 30px oklch(0.1 0.1 200 / 0.18);
-}
-.game-sarb-sun {
-  position: absolute;
-  top: 12%;
-  right: 13%;
-  color: #fff2a6;
-  font-size: clamp(2rem, 6vw, 4rem);
-  text-shadow: 0 0 22px #ffe68b;
-}
-.game-sarb-cloud {
-  position: absolute;
-  width: 24%;
-  height: 9%;
-  background: #f4f3dd;
-  box-shadow: 12px -8px 0 -2px #f4f3dd, 27px -3px 0 -1px #f4f3dd;
-}
-.game-sarb-cloud--one { top: 28%; left: 12%; }
-.game-sarb-cloud--two { top: 16%; left: 49%; transform: scale(.7); }
-.game-sarb-hill {
-  position: absolute;
-  bottom: 23%;
-  width: 64%;
-  aspect-ratio: 1.35;
-  border: 2px solid oklch(0.3 0.1 135 / 0.55);
-  border-radius: 50% 50% 0 0;
-  background: #6bbf59;
-}
-.game-sarb-hill--one { left: -14%; }
-.game-sarb-hill--two { right: -22%; width: 79%; background: #4da94b; }
-.game-sarb-ground {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 23%;
-  border-top: 5px solid #9b5527;
-  background: repeating-linear-gradient(90deg, #9b5527 0 22px, #824322 22px 25px);
-}
-.game-sarb-hero {
-  position: absolute;
-  z-index: 1;
-  bottom: 19%;
-  left: 34%;
-  color: #f4d441;
-  font-size: clamp(2.5rem, 7vw, 4.5rem);
-  line-height: 1;
-  text-shadow: 3px 3px 0 #b6332b, 6px 6px 0 #17396d;
-  animation: sarb-bob 1.2s ease-in-out infinite alternate;
-}
-.game-sarb-brick {
-  position: absolute;
-  right: 15%;
-  bottom: 42%;
-  display: grid;
-  width: 15%;
-  aspect-ratio: 1;
-  place-items: center;
-  border: 2px solid #87500d;
-  background: #e8a92c;
-  color: #fff5c4;
-  font-family: 'Press Start 2P', monospace;
-  box-shadow: inset 0 0 0 3px #f5c64e;
-}
-.game-sarb-copy { display: grid; justify-items: start; gap: 1rem; }
-.game-cabinet--sarb .game-launch-head { color: oklch(0.82 0.16 145); text-align: left; line-height: 1.8; }
-.game-sarb-description {
-  max-width: 42ch;
-  margin: 0;
-  color: oklch(0.78 0 0);
-  font-family: 'VT323', monospace;
-  font-size: 21px;
-  line-height: 1.25;
-}
-.game-sarb-controls { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0; }
-.game-sarb-controls span {
-  padding: .38rem .5rem;
-  border: 1px solid oklch(0.72 0 0 / .22);
-  color: oklch(0.65 0 0);
-  font: 10px 'Space Mono', monospace;
-}
-.game-sarb-controls b { color: oklch(0.9 0.12 145); }
-.game-cabinet--sarb .game-launch-btn {
-  border-color: oklch(0.76 0.16 145 / .8);
-  background: oklch(0.45 0.12 145 / .2);
-  color: oklch(0.92 0.08 145);
-  text-shadow: 0 0 12px oklch(0.68 0.19 145 / .45);
-}
-.game-cabinet--sarb .game-launch-btn:hover,
-.game-cabinet--sarb .game-launch-btn:focus-visible {
-  border-color: oklch(0.9 0.15 145);
-  background: oklch(0.78 0.15 145);
-  color: oklch(0.13 0.03 145);
-}
-.game-cabinet--sarb .game-cab-foot { border-top: 1px solid oklch(0.72 0.15 145 / .15); }
-@keyframes sarb-bob { to { transform: translateY(-7px) rotate(-4deg); } }
-@media (max-width: 700px) {
-  .game-cabinet--sarb .game-launch--sarb { grid-template-columns: 1fr; gap: 1.5rem; }
-  .game-sarb-art { width: min(100%, 420px); margin: 0 auto; }
-  .game-cabinet--sarb .game-launch-head { font-size: 9px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .game-sarb-hero { animation: none; }
-}
 /* cabinet 01 — the MultiHero WASM build in its own frame (640×480 native) */
 .game-hero-frame {
   display: block;
@@ -7217,7 +7083,7 @@ a, button, input, textarea, select, label, summary, [role='button'] {
 }
 
 /* ============================================================
-   GAMES — cabinet 03: the Super Nintendo. Same chrome, different
+   GAMES — cabinet 02: the Super Nintendo. Same chrome, different
    material: moulded plastic (fine horizontal grain) and a game
    shelf — every cartridge pre-installed, homebrew released free
    by its author (attribution: public/roms/CREDITS.md). Tap a
@@ -7579,7 +7445,7 @@ a, button, input, textarea, select, label, summary, [role='button'] {
   font-size: 16px;
   color: oklch(0.58 0 0);
 }
-/* cabinet 03 keeps its double-rule marquee */
+/* cabinet 02 keeps its double-rule marquee */
 .games-room .game-cabinet--snes .game-cab-head {
   border-bottom-style: double;
   border-bottom-width: 3px;
@@ -7620,7 +7486,7 @@ a, button, input, textarea, select, label, summary, [role='button'] {
   background: oklch(0.78 0.19 145);
   box-shadow: 0 0 10px oklch(0.6 0.19 145 / 0.85), 0 0 0 1px oklch(0 0 0 / 0.8);
 }
-/* cabinet 03 lights up when a cartridge runs */
+/* cabinet 02 lights up when a cartridge runs */
 .games-room .game-cabinet--snes .game-screen:has(canvas)::before {
   background: oklch(0.78 0.19 145);
   box-shadow: 0 0 10px oklch(0.6 0.19 145 / 0.85), 0 0 0 1px oklch(0 0 0 / 0.8);
@@ -7871,7 +7737,7 @@ a, button, input, textarea, select, label, summary, [role='button'] {
     inset 0 0 30px oklch(0 0 0 / 0.75),
     0 0 34px -8px oklch(0.6 0.19 145 / 0.22);
 }
-/* CRT overlay over the live stage — cabinet 03 has none of its own */
+/* CRT overlay over the live stage — cabinet 02 has none of its own */
 .games-room .game-cabinet--snes .snes-stage::after {
   content: '';
   position: absolute;
