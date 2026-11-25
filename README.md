@@ -146,28 +146,37 @@ license and character notices live at `public/multihero/multihero-web/NOTICE.md`
 
 ---
 
-## Deployment (Vercel)
+## Deployment
 
-1. Push the project to a **private** GitHub/GitLab repository (the repo
-   carries the Games room cartridges — see the ROM guard in `.gitignore`).
-2. Import the repo in Vercel. Framework preset: Next.js. Build command and
-   output are picked up automatically from `package.json` / `next.config.ts`.
-3. Set the environment variable (Project → Settings → Environment Variables):
+### Vercel
 
-   ```
-   NEXT_PUBLIC_SITE_URL=https://your-domain.example
-   ```
+1. Keep the Git repository private; it contains the Games room cartridges
+   (see the ROM guard in `.gitignore`).
+2. Import the Git repository into Vercel and leave the detected Next.js
+   build settings at their defaults.
+3. In **Project → Settings → Git**, enable Git Large File Storage so Vercel
+   pulls the media tracked by `.gitattributes`, then redeploy.
+4. Set `NEXT_PUBLIC_SITE_URL` in **Project → Settings → Environment
+   Variables** to the deployed domain. `/sitemap.xml` and `/rss.xml` use it.
 
-   `/sitemap.xml` and `/rss.xml` build their links from it (a placeholder
-   fallback exists for builds without it — see `.env.example`).
-4. Deploy. No database, no extra services — the archive reads Markdown
-   from `content/learning-paths/` at build time (file tracing is already
-   configured in `next.config.ts`).
+Use Vercel's Git integration for this asset-heavy repository. Direct CLI
+uploads are size-limited and may reject the full project. Vercel's Hobby
+plan currently allows 100 MB of source files per CLI deployment; Git
+integration can fetch the required Git LFS objects during checkout.
 
-Alternative — any Node host / VPS: `npm install && npm run build`, then
-`npm start -p 3000` behind your reverse proxy. The multi-line games room
-cartridges and WASM build ship inside `public/`, so they need no extra
-steps on any host.
+### Node.js host or VPS
+
+Use Node.js 20.9 or newer, set `NEXT_PUBLIC_SITE_URL`, and run:
+
+```bash
+npm ci
+npm run build
+npm start
+```
+
+The start script serves the production site on port 3000. Put it behind a
+TLS-enabled reverse proxy. `STATIC_EXPORT=1` is for the Android Capacitor
+package only; use the normal build above for a hosted website.
 
 ---
 
@@ -243,45 +252,6 @@ Set `NEXT_PUBLIC_SITE_URL` (see `.env.example`) to your deployment URL so
 the sitemap and RSS links point at your real domain.
 
 ---
-
-## Deploying to Vercel
-
-The project is standard Next.js 16 (App Router) and deploys as-is.
-
-**Option A — GitHub (recommended):**
-
-1. Install Git, then from the project folder:
-   ```bash
-   git init
-   git add -A
-   git commit -m "Knowledge Archive — initial commit"
-   ```
-2. Create a GitHub repository and push.
-3. On [vercel.com/new](https://vercel.com/new), import the repository.
-   Vercel auto-detects Next.js — leave build settings at their defaults
-   (`npm run build`).
-4. After the first deploy, add the environment variable
-   `NEXT_PUBLIC_SITE_URL = https://<your-project>.vercel.app` (or your
-   custom domain) in Project → Settings → Environment Variables, and
-   redeploy once so `/sitemap.xml` and `/rss.xml` pick it up.
-
-**Option B — Vercel CLI (no Git needed):**
-
-```bash
-npx vercel          # preview deploy
-npx vercel --prod   # production deploy
-```
-
-Notes:
-
-- No database, no API keys, no runtime secrets — deploys with zero
-  configuration.
-- All content is read at build time and statically prerendered; the
-  `content/learning-paths/*.md` files are also explicitly included in the
-  serverless file trace (`outputFileTracingIncludes` in `next.config.ts`)
-  so revalidation always has the Markdown available.
-- `content/`, `public/`, and everything else needed is committed with the
-  repo; nothing outside the project is required at runtime.
 
 ---
 

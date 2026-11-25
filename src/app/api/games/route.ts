@@ -2,7 +2,9 @@ import { readdir, stat } from 'node:fs/promises'
 import path from 'node:path'
 import artworkByRom from '@/lib/rom-artwork.json'
 
-export const dynamic = 'force-dynamic'
+// The ROM list changes only when the site is rebuilt. Generate this JSON at
+// build time so serverless hosts do not need the cartridge directory at runtime.
+export const dynamic = 'force-static'
 
 const ROM_DIRECTORY = path.join(process.cwd(), 'public', 'roms')
 
@@ -32,7 +34,5 @@ export async function GET() {
   )
 
   games.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }))
-  return Response.json(games, {
-    headers: { 'Cache-Control': 'no-store' },
-  })
+  return Response.json(games)
 }

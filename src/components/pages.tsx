@@ -12,7 +12,7 @@
 import {
   useAllEntries, useEntryBySlug, useAllResearch, useResearchBySlug,
 } from '@/components/content-provider'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
 import type { ArchiveEntry, ResearchSeries } from '@/lib/types'
 import type { Route } from '@/lib/router'
 import { isCtfEntry, ctfSourceOf, ctfTopicOf, type CtfSource, type CtfTopic } from '@/lib/entry-group'
@@ -861,25 +861,135 @@ export function CheatsheetsPage({ navigate }: { navigate: NavFn }) {
   )
 }
 
+const MALWARE_TECHNIQUE_GROUPS = [
+  {
+    tactic: 'Reconnaissance', id: 'TA0043',
+    goal: 'Information gathered before an operation begins.',
+    techniques: ['Victim organization research', 'Public information collection', 'Technical footprint mapping'],
+    watch: 'Unexpected scanning, lookalike domains, and unusual collection of public-facing details.',
+  },
+  {
+    tactic: 'Resource Development', id: 'TA0042',
+    goal: 'Resources prepared to support a later operation.',
+    techniques: ['Infrastructure acquisition', 'Staging malware or tools', 'Account and domain preparation'],
+    watch: 'Newly registered domains, suspicious certificates, and infrastructure with short lifetimes.',
+  },
+  {
+    tactic: 'Initial Access', id: 'TA0001',
+    goal: 'A foothold established on a target system or network.',
+    techniques: ['Phishing delivery', 'Trojanized software', 'Drive-by compromise', 'Removable media'],
+    watch: 'Attachment and download provenance, application reputation, and endpoint process ancestry.',
+  },
+  {
+    tactic: 'Execution', id: 'TA0002',
+    goal: 'Malicious instructions run in a target environment.',
+    techniques: ['Command and scripting interpreters', 'Native API execution', 'User execution', 'Shared modules and loaders'],
+    watch: 'Unexpected parent-child processes, rare interpreter use, and unsigned code loaded by trusted apps.',
+  },
+  {
+    tactic: 'Persistence', id: 'TA0003',
+    goal: 'Access maintained across logins, reboots, or interruptions.',
+    techniques: ['Autostart extensibility points', 'Scheduled tasks or jobs', 'System services', 'Event-triggered execution'],
+    watch: 'New autoruns, services, scheduled jobs, and changes to startup configuration.',
+  },
+  {
+    tactic: 'Privilege Escalation', id: 'TA0004',
+    goal: 'Higher permissions obtained to expand access.',
+    techniques: ['Abuse of access tokens', 'Permission or configuration abuse', 'Exploitation for privilege escalation'],
+    watch: 'Unexpected elevation, token changes, vulnerable driver loads, and privileged process creation.',
+  },
+  {
+    tactic: 'Stealth', id: 'TA0005',
+    goal: 'Activity made harder to distinguish from normal system behavior.',
+    techniques: ['Obfuscation or packing', 'Masquerading', 'Process injection', 'Signed binary proxy execution'],
+    watch: 'Unsigned or anomalous modules, mismatched file metadata, and memory execution without normal image loads.',
+  },
+  {
+    tactic: 'Defense Impairment', id: 'TA0112',
+    goal: 'Security controls, logging, or recovery capabilities disrupted.',
+    techniques: ['Impair defenses', 'Clear or alter logs', 'Disable or modify tools', 'Delete or inhibit recovery data'],
+    watch: 'Gaps in telemetry, service tampering, policy changes, and backup deletion events.',
+  },
+  {
+    tactic: 'Credential Access', id: 'TA0006',
+    goal: 'Authentication material sought or captured.',
+    techniques: ['Credential dumping', 'Input capture', 'Password guessing', 'Authentication material in files or stores'],
+    watch: 'Credential-store access by unusual processes, repeated failures, and anomalous authentication patterns.',
+  },
+  {
+    tactic: 'Discovery', id: 'TA0007',
+    goal: 'The environment mapped after access is gained.',
+    techniques: ['System and user discovery', 'Network and service discovery', 'Account and permission discovery', 'Security software discovery'],
+    watch: 'Bursts of inventory commands, directory queries, and host or service enumeration.',
+  },
+  {
+    tactic: 'Lateral Movement', id: 'TA0008',
+    goal: 'Access extended from one system to another.',
+    techniques: ['Remote services', 'Remote execution', 'Internal spearphishing', 'Use of valid accounts'],
+    watch: 'New remote logons, unusual administrative shares, and one host initiating access to many peers.',
+  },
+  {
+    tactic: 'Collection', id: 'TA0009',
+    goal: 'Information gathered and staged for an objective.',
+    techniques: ['Local data collection', 'Screen or audio capture', 'Clipboard data', 'Archive collected data'],
+    watch: 'Unusual access to sensitive files, bulk reads, and new archive creation in temporary locations.',
+  },
+  {
+    tactic: 'Command and Control', id: 'TA0011',
+    goal: 'A compromised system communicates with an operator or controller.',
+    techniques: ['Application-layer protocols', 'Encrypted channels', 'Proxy or relay use', 'Dead drop resolution'],
+    watch: 'Periodic outbound connections, rare destinations, and network flows that do not match the host role.',
+  },
+  {
+    tactic: 'Exfiltration', id: 'TA0010',
+    goal: 'Collected information moved outside the environment.',
+    techniques: ['Transfer over command and control', 'Transfer to cloud storage', 'Transfer over alternate protocols'],
+    watch: 'Unusual outbound volume, off-hours transfers, and sensitive data sent to new destinations.',
+  },
+  {
+    tactic: 'Impact', id: 'TA0040',
+    goal: 'Systems or data disrupted, altered, or destroyed.',
+    techniques: ['Data encryption for impact', 'Data destruction', 'Service interruption', 'Resource hijacking'],
+    watch: 'Rapid file changes, unexpected service stops, recovery failures, and sudden resource spikes.',
+  },
+] as const
+
 /* ============================================================
-   FILE ARCHIVE - intentionally empty section
+   APPS / MALWARE BEHAVIOR ATLAS
    ============================================================ */
 export function FilesPage({ navigate }: { navigate: NavFn }) {
-  // No downloadable files have been published yet - empty state until
-  // real files exist.
   return (
     <div className="archive-container">
       <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
         ← Back
       </button>
-      <div className="archive-eyebrow">FILE ARCHIVE</div>
-      <h1 className="archive-title">File Archive</h1>
+      <div className="archive-eyebrow">RED TEAM / BLUE TEAM FIELD GUIDE</div>
+      <h1 className="archive-title">Malware Technique Atlas</h1>
       <p className="archive-subtitle">
-        Downloadable binaries referenced by the learning path entries. Each
-        entry will document the binary associated with a stage; the write-up
-        page contains hashes, sizes, and analysis context.
+        A behavior-first map for authorized exercises, threat analysis, and detection engineering.
+        Each entry pairs a high-level technique family with signals defenders can investigate.
       </p>
-      <EmptyState message="No files available yet" />
+      <div className="malware-atlas-meta">
+        <span>ENTERPRISE BEHAVIOR MAP</span>
+        <span>{String(MALWARE_TECHNIQUE_GROUPS.length).padStart(2, '0')} TACTIC AREAS</span>
+        <a href="https://attack.mitre.org/matrices/enterprise/" target="_blank" rel="noreferrer">MITRE ATT&amp;CK ↗</a>
+      </div>
+      <div className="malware-atlas">
+        {MALWARE_TECHNIQUE_GROUPS.map((group, index) => (
+          <article className="malware-card" key={group.id}>
+            <div className="malware-card-top">
+              <span className="malware-card-index">{String(index + 1).padStart(2, '0')}</span>
+              <span className="malware-card-id">{group.id}</span>
+            </div>
+            <h2>{group.tactic}</h2>
+            <p className="malware-card-goal">{group.goal}</p>
+            <ul className="malware-techniques">
+              {group.techniques.map((technique) => <li key={technique}>{technique}</li>)}
+            </ul>
+            <div className="malware-watch"><span>DEFENDER LENS</span><p>{group.watch}</p></div>
+          </article>
+        ))}
+      </div>
     </div>
   )
 }
@@ -1007,34 +1117,31 @@ export function GamesPage({ navigate, initialGame }: { navigate: NavFn; initialG
    happen. Each clip is its own card: the pasted footage plays,
    the source note keeps the catalog honest.
    ============================================================ */
-const CLIPS: Array<{ src: string; label: string; note: string }> = [
+const CLIPS: Array<{ src: string; label: string }> = [
   {
     src: '/clip1_0001.mp4',
     label: 'Clip 0001',
-    note: 'Raw gameplay footage — the first clip pasted into the archive root.',
   },
   {
     src: '/clip_0002.mp4',
     label: 'Clip 0002',
-    note: 'Raw gameplay footage — the second clip pasted into the archive root.',
   },
   {
     src: '/clip_0003.mp4.mp4',
     label: 'Clip 0003',
-    note: 'Raw gameplay footage — the third clip pasted into the archive root.',
+  },
+  {
+    src: '/clip_0004.mp4',
+    label: 'Clip 0004',
   },
 ]
 
-const ANHILATION_CLIPS: Array<{ src: string; label: string; note: string }> = [
+const ANHILATION_CLIPS: Array<{ src: string }> = [
   {
     src: '/CA_clip_0001.mp4.mp4',
-    label: 'CA Clip 0001',
-    note: 'Raw gameplay footage — the ANHILATION clip pasted into the archive root.',
   },
   {
     src: '/CA_clip_0002.mp4',
-    label: 'CA Clip 0002',
-    note: 'Raw gameplay footage — the second ANHILATION clip pasted into the archive root.',
   },
 ]
 
@@ -1046,11 +1153,6 @@ export function ClippedPage({ navigate }: { navigate: NavFn }) {
       </button>
       <div className="archive-eyebrow">CLIPS</div>
       <h1 className="archive-title">Clipped</h1>
-      <p className="archive-subtitle">
-        Gameplay videos from the archive - where I will post my gameplay
-        videos. Recorded runs, boss fights, speedruns and cabinet captures
-        as they happen.
-      </p>
       <div className="clip-list">
         {CLIPS.map((clip) => (
           <article key={clip.src} className="clip-card">
@@ -1065,42 +1167,37 @@ export function ClippedPage({ navigate }: { navigate: NavFn }) {
               preload="metadata"
               aria-label={clip.label}
             />
-            <div className="clip-body">
-              <span className="clip-label">{clip.label}</span>
-              <span className="clip-note">{clip.note}</span>
-            </div>
           </article>
         ))}
       </div>
 
       {/* ============================================================
-         ANHILATION — the second menu under CLIPS. Carries its own
-         clip, kept as its own menu rather than merged into the
-         gameplay list.
+         ANHILATION — a nested, collapsible menu under CLIPPED.
+         Its videos stay grouped separately from the general clips.
          ============================================================ */}
       <div className="clip-menu">
-        <span className="clip-menu-name">ANHILATION</span>
-        <div className="clip-list">
-          {ANHILATION_CLIPS.map((clip) => (
-            <article key={clip.src} className="clip-card">
-              <video
-                className="clip-video"
-                src={clip.src}
-                controls
-                playsInline
-                muted
-                loop
-                autoPlay
-                preload="metadata"
-                aria-label={clip.label}
-              />
-              <div className="clip-body">
-                <span className="clip-label">{clip.label}</span>
-                <span className="clip-note">{clip.note}</span>
-              </div>
-            </article>
-          ))}
-        </div>
+        <details className="clip-submenu" open>
+          <summary className="clip-menu-name">
+            <span>CONTROLED ANHILATION</span>
+          </summary>
+          <div className="clip-list">
+            {ANHILATION_CLIPS.map((clip, index) => (
+              <article key={clip.src} className="clip-card">
+                <video
+                  className="clip-video"
+                  src={clip.src}
+                  controls
+                  playsInline
+                  muted
+                  loop
+                  autoPlay
+                  preload="metadata"
+                  aria-label={`CONTROLED ANHILATION video ${index + 1}`}
+                />
+              </article>
+            ))}
+          </div>
+        </details>
       </div>
     </div>
   )
@@ -1114,16 +1211,54 @@ export function ClippedPage({ navigate }: { navigate: NavFn }) {
 function ArtifactLink({ link, index }: { link: ArchiveLink; index: number }) {
   const num = String(index + 1).padStart(2, '0')
   const variant = link.variant ?? 'seal'
+  const siteHost = new URL(link.url).hostname.toLowerCase()
+  const isOnion = siteHost.endsWith('.onion')
+  const hasOwnLogo = variant === 'wetw0rk'
+  const githubOwner = siteHost === 'github.com'
+    ? new URL(link.url).pathname.split('/').filter(Boolean)[0]
+    : undefined
+  const siteLogoPath = githubOwner
+    ? `/link-art/github-owners/${githubOwner}.webp`
+    : `/link-art/logos-finished/${siteHost}.png`
+  const [logoFailed, setLogoFailed] = useState(false)
+  const logoWords = link.label.match(/[a-z0-9]+/gi) ?? [link.label]
+  const logoMonogram = (logoWords.length > 1
+    ? `${logoWords[0][0]}${logoWords[1][0]}`
+    : logoWords[0].slice(0, 2)).toUpperCase()
+  const has3dArt = ['a13xp0p0v', 'maxwell-dulin', 'capt-meelo', 'doar-e', 'hex-rays', 'secret-club', 'zerozero-sec'].includes(variant)
+  const tiltArtwork = (event: ReactPointerEvent<HTMLAnchorElement>) => {
+    if (event.pointerType !== 'mouse') return
+    const rect = event.currentTarget.getBoundingClientRect()
+    const x = (event.clientX - rect.left) / rect.width - 0.5
+    const y = (event.clientY - rect.top) / rect.height - 0.5
+    event.currentTarget.style.setProperty('--link-tilt-x', `${-y * 11}deg`)
+    event.currentTarget.style.setProperty('--link-tilt-y', `${x * 14}deg`)
+  }
+  const resetArtwork = (event: ReactPointerEvent<HTMLAnchorElement>) => {
+    event.currentTarget.style.setProperty('--link-tilt-x', '0deg')
+    event.currentTarget.style.setProperty('--link-tilt-y', '0deg')
+  }
   return (
     <a
       className={`artifact artifact--${variant}`}
       href={link.url}
       target="_blank"
       rel="noopener noreferrer"
+      onPointerMove={has3dArt ? tiltArtwork : undefined}
+      onPointerLeave={has3dArt ? resetArtwork : undefined}
     >
       <span className="artifact-num" aria-hidden="true">{num}</span>
       <span className="artifact-body">
-        <span className="artifact-label">{link.label}</span>
+        <span className="artifact-heading">
+          {!hasOwnLogo && (
+            <span className={`artifact-site-logo${isOnion || logoFailed ? ' artifact-site-logo--monogram' : ''}${githubOwner ? ' artifact-site-logo--owner' : ''}`} aria-hidden="true">
+              {isOnion || logoFailed
+                ? <span>{logoMonogram}</span>
+                : <img src={siteLogoPath} alt="" loading="lazy" decoding="async" onError={() => setLogoFailed(true)} />}
+            </span>
+          )}
+          <span className="artifact-label">{link.label}</span>
+        </span>
         {link.note && <span className="artifact-note">{link.note}</span>}
         <span className="artifact-url">{link.url.replace(/^https?:\/\//, '')}</span>
         {link.variant === 'redacted' && (
@@ -1236,6 +1371,102 @@ function ArtifactLink({ link, index }: { link: ArchiveLink; index: number }) {
           <i className="clickonce-led" />
         </span>
       )}
+      {link.variant === 'corelan' && (
+        <span className="artifact-art artifact-art--corelan" aria-hidden="true">
+          <span className="corelan-console">
+            <span className="corelan-console-head"><i /> DEBUG SESSION <b>CORE / 01</b></span>
+            <span className="corelan-memory">
+              <span><i>STACK</i><b /><b /><b /></span>
+              <span><i>HEAP</i><b /><b /><b /></span>
+              <span><i>IMAGE</i><b /><b /><b /></span>
+            </span>
+            <span className="corelan-console-foot">MEMORY / CONTROL / RESEARCH</span>
+            <i className="corelan-scan" />
+          </span>
+        </span>
+      )}
+      {link.variant === 'wetw0rk' && (
+        <span className="artifact-art artifact-art--wetw0rk" aria-hidden="true">
+          <span className="wetw0rk-art-index">FIELD RECORD / 062</span>
+          <span className="wetw0rk-emblem">
+            <i className="wetw0rk-frame-mark wetw0rk-frame-mark--a" />
+            <i className="wetw0rk-frame-mark wetw0rk-frame-mark--b" />
+            <img src="/link-art/wetw0rk-avatar.webp" alt="" />
+            <i className="wetw0rk-scanline" />
+          </span>
+          <span className="wetw0rk-stamp">
+            <b>M. VALENCIA</b>
+            <i>WINDOWS / X64</i>
+            <i>REPOSITORY INDEX</i>
+          </span>
+        </span>
+      )}
+      {link.variant === 'a13xp0p0v' && (
+        <span className="artifact-art artifact-art--research a13-art" aria-hidden="true">
+          <span className="research-scene a13-scene">
+            <i className="a13-orbit a13-orbit--one" /><i className="a13-orbit a13-orbit--two" />
+            <span className="a13-core"><img src="/link-art/a13xp0p0v.png" alt="" /></span>
+            <span className="a13-caption">KERNEL / 01</span>
+          </span>
+        </span>
+      )}
+      {link.variant === 'maxwell-dulin' && (
+        <span className="artifact-art artifact-art--research maxwell-art" aria-hidden="true">
+          <span className="research-scene maxwell-scene">
+            <span className="maxwell-cube maxwell-cube--one"><i /><i /><i /></span>
+            <span className="maxwell-cube maxwell-cube--two"><i /><i /><i /></span>
+            <span className="maxwell-cube maxwell-cube--three"><i /><i /><i /></span>
+            <img src="/link-art/maxwell-dulin.ico" alt="" />
+            <span className="maxwell-caption">HEAP / 02</span>
+          </span>
+        </span>
+      )}
+      {link.variant === 'capt-meelo' && (
+        <span className="artifact-art artifact-art--research meelo-art" aria-hidden="true">
+          <span className="research-scene meelo-scene">
+            <i className="meelo-ring meelo-ring--outer" /><i className="meelo-ring meelo-ring--inner" />
+            <span className="meelo-sphere"><img src="/link-art/capt-meelo.ico" alt="" /></span>
+            <span className="meelo-crosshair meelo-crosshair--x" /><span className="meelo-crosshair meelo-crosshair--y" />
+            <span className="meelo-caption">PWN / LAB</span>
+          </span>
+        </span>
+      )}
+      {link.variant === 'doar-e' && (
+        <span className="artifact-art artifact-art--research doare-art" aria-hidden="true">
+          <span className="research-scene doare-scene">
+            <span className="doare-book"><i /><i /><i /><b>RE</b></span>
+            <span className="doare-loupe"><i /></span>
+            <span className="doare-caption">TRACE / DECODE</span>
+          </span>
+        </span>
+      )}
+      {link.variant === 'hex-rays' && (
+        <span className="artifact-art artifact-art--research hexrays-art" aria-hidden="true">
+          <span className="research-scene hexrays-scene">
+            <span className="hexrays-prism"><i /><i /><i /><img src="/link-art/hex-rays.png" alt="" /></span>
+            <span className="hexrays-base">IDA / ANALYSIS</span>
+          </span>
+        </span>
+      )}
+      {link.variant === 'secret-club' && (
+        <span className="artifact-art artifact-art--research secretclub-art" aria-hidden="true">
+          <span className="research-scene secretclub-scene">
+            <i className="secretclub-ring secretclub-ring--x" /><i className="secretclub-ring secretclub-ring--y" />
+            <span className="secretclub-core"><img src="/link-art/secret-club.ico" alt="" /></span>
+            <span className="secretclub-caption">RING 0 / FIELD NOTES</span>
+          </span>
+        </span>
+      )}
+      {link.variant === 'zerozero-sec' && (
+        <span className="artifact-art artifact-art--research zerozero-art" aria-hidden="true">
+          <span className="research-scene zerozero-scene">
+            <i className="zerozero-orbit zerozero-orbit--one" /><i className="zerozero-orbit zerozero-orbit--two" />
+            <span className="zerozero-core"><img src="/link-art/0x00sec.png" alt="" /></span>
+            <span className="zerozero-nodes"><i /><i /><i /><i /><i /></span>
+            <span className="zerozero-caption">LOW LEVEL / NETWORK</span>
+          </span>
+        </span>
+      )}
       {link.variant === 'ascii' && (
         <span className="artifact-art artifact-art--ascii" aria-hidden="true">
           <span className="ascii-magic-panel">
@@ -1279,7 +1510,7 @@ function ArtifactLink({ link, index }: { link: ArchiveLink; index: number }) {
           </span>
         </span>
       )}
-      <span className="artifact-go" aria-hidden="true">{link.variant === 'ascii' ? '↗' : '?'}</span>
+      <span className="artifact-go" aria-hidden="true">{link.variant === 'ascii' || link.variant === 'wetw0rk' ? '↗' : '?'}</span>
     </a>
   )
 }
@@ -1294,6 +1525,7 @@ export function LinksPage({ navigate }: { navigate: NavFn }) {
   const isOnion = (l: ArchiveLink) => (/\.onion(\/|$)/i).test(l.url)
   const comLinks = links.filter(l => !isOnion(l))
   const onionLinks = links.filter(isOnion)
+  const directoryLinks = comLinks
   return (
     <div className="archive-container">
       <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
@@ -1301,22 +1533,16 @@ export function LinksPage({ navigate }: { navigate: NavFn }) {
       </button>
       <div className="archive-eyebrow">DIRECTORY / LINKS</div>
       <h1 className="archive-title">Links</h1>
-      <p className="archive-subtitle">
-        Every external link in one directory, split into two drawers - the
-        clearnet (.com) and the Tor hidden services (.onion). Each row is
-        its own artifact: a different material, a different behaviour. All
-        open in a new tab.
-      </p>
 
       <div className="links-drawer">
         <div className="links-drawer-head">
           <span className="links-drawer-tld">.com</span>
-          <span className="links-drawer-note">the clearnet side · {comLinks.length} LINKS</span>
+          <span className="links-drawer-note">the clearnet directory · 01–{String(directoryLinks.length).padStart(2, '0')} LINKS</span>
         </div>
-        {comLinks.length === 0 ? (
+        {directoryLinks.length === 0 ? (
           <EmptyState message="No clearnet links yet" />
         ) : (
-          comLinks.map((l, i) => (
+          directoryLinks.map((l, i) => (
             <ArtifactLink key={l.url} link={l} index={i} />
           ))
         )}

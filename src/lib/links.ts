@@ -43,6 +43,15 @@ export type ArchiveLink = {
     | 'dotnet'
     | 'pic'
     | 'clickonce'
+    | 'corelan'
+    | 'a13xp0p0v'
+    | 'maxwell-dulin'
+    | 'capt-meelo'
+    | 'doar-e'
+    | 'hex-rays'
+    | 'secret-club'
+    | 'zerozero-sec'
+    | 'wetw0rk'
     | 'ascii'
 }
 
@@ -411,5 +420,59 @@ export const LINKS: ArchiveLink[] = [
     url: 'https://www.adroxz.foo/ab-using-clickonce-for-initial-access-and-persistence',
     note: 'adroxz — abusing ClickOnce for initial access and persistence',
     variant: 'clickonce',
+  },
+  {
+    label: 'Corelan Research',
+    url: 'https://www.corelan.be/',
+    note: 'Exploit development · vulnerability research · Windows internals',
+    variant: 'corelan',
+  },
+  {
+    label: 'a13xp0p0v',
+    url: 'https://a13xp0p0v.github.io/',
+    note: 'Linux kernel exploitation',
+    variant: 'a13xp0p0v',
+  },
+  {
+    label: 'Maxwell Dulin',
+    url: 'https://maxwelldulin.com/',
+    note: 'Heap exploitation',
+    variant: 'maxwell-dulin',
+  },
+  {
+    label: 'Capt. Meelo',
+    url: 'https://captmeelo.com/',
+    note: 'Binary exploitation',
+    variant: 'capt-meelo',
+  },
+  {
+    label: 'Diary of a reverse-engineer',
+    url: 'https://doar-e.github.io/',
+    note: 'Reverse engineering',
+    variant: 'doar-e',
+  },
+  {
+    label: 'Hex-Rays',
+    url: 'https://hex-rays.com/blog/',
+    note: 'IDA and binary analysis',
+    variant: 'hex-rays',
+  },
+  {
+    label: 'Secret Club',
+    url: 'https://secret.club/',
+    note: 'Low-level Windows research',
+    variant: 'secret-club',
+  },
+  {
+    label: '0x00sec',
+    url: 'https://0x00sec.org/',
+    note: 'Low-level security research and community',
+    variant: 'zerozero-sec',
+  },
+  {
+    label: 'wetw0rk',
+    url: 'https://github.com/wetw0rk?tab=repositories',
+    note: 'Milton Valencia · Windows exploitation research',
+    variant: 'wetw0rk',
   },
 ]

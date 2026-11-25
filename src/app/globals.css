@@ -6369,17 +6369,128 @@ a, button, input, textarea, select, label, summary, [role='button'] {
   padding-top: 2rem;
 }
 .clip-menu-name {
-  display: block;
-  font-family: 'Share Tech Mono', 'Courier New', monospace;
-  font-size: 12px;
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-  color: oklch(0.82 0 0);
-  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 76px;
+  box-sizing: border-box;
+  padding: 1rem 1.25rem;
+  max-width: 680px;
+  border: 1px solid oklch(0.22 0 0);
+  border-left: 3px solid oklch(0.42 0.12 25);
+  background: oklch(0.065 0 0);
+  box-shadow: inset 0 0 28px oklch(0 0 0 / 0.55);
+  cursor: pointer;
+  list-style: none;
+  color: oklch(0.86 0 0);
+  font: 400 clamp(24px, 4vw, 32px)/1 'Bebas Neue', 'Arial Narrow', sans-serif;
+  letter-spacing: 0.16em;
+  transition: border-color 180ms ease, color 180ms ease;
 }
-.clip-menu .clip-list { margin-top: 0; }
+.clip-menu-name::-webkit-details-marker { display: none; }
+.clip-menu-name::after {
+  content: '+';
+  color: oklch(0.48 0.12 25);
+  font: 18px/1 'Share Tech Mono', monospace;
+}
+.clip-menu-name:hover {
+  border-color: oklch(0.38 0 0);
+  border-top-color: oklch(0.55 0.15 25);
+  color: oklch(0.96 0 0);
+}
+.clip-menu-name:focus-visible {
+  outline: 2px solid oklch(0.55 0.15 25);
+  outline-offset: 4px;
+}
+.clip-submenu[open] > .clip-menu-name::after { content: '−'; }
+.clip-submenu[open] > .clip-menu-name {
+  border-bottom-color: oklch(0.28 0 0);
+  border-top-color: oklch(0.5 0.15 25);
+}
+.clip-submenu > .clip-list {
+  position: relative;
+  margin-top: 0;
+  padding: 1rem;
+  max-width: 680px;
+  border: 1px solid oklch(0.22 0 0);
+  border-top: 0;
+  background: oklch(0.045 0 0);
+}
 @media (max-width: 700px) {
   .clip-menu { margin-top: 2.25rem; padding-top: 1.5rem; }
+  .clip-menu-name { min-height: 68px; padding: 0.85rem; font-size: 25px; }
+  .clip-submenu > .clip-list { padding: 0.75rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .clip-menu-name { transition: none; }
+}
+
+.archive-shell--clipped .archive-brand-text,
+.archive-shell--clipped .archive-footer { display: none; }
+
+/* APPS — dark, defensive malware behavior atlas. */
+.malware-atlas-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem 1.25rem;
+  margin: 2rem 0 1rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid oklch(0.22 0 0);
+  border-bottom: 1px solid oklch(0.22 0 0);
+  color: oklch(0.55 0 0);
+  font: 10px/1.4 'Share Tech Mono', monospace;
+  letter-spacing: 0.13em;
+}
+.malware-atlas-meta a { margin-left: auto; color: oklch(0.68 0.11 25); text-decoration: none; }
+.malware-atlas-meta a:hover { color: oklch(0.84 0.12 25); }
+.malware-atlas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  max-width: 1000px;
+  border: 1px solid oklch(0.18 0 0);
+  background: oklch(0.18 0 0);
+}
+.malware-card {
+  min-width: 0;
+  padding: 1.2rem 1.25rem 1.1rem;
+  background: linear-gradient(145deg, oklch(0.085 0 0), oklch(0.055 0 0) 70%);
+}
+.malware-card-top { display: flex; justify-content: space-between; align-items: center; }
+.malware-card-index { color: oklch(0.55 0.12 25); font: 11px/1 'Share Tech Mono', monospace; letter-spacing: 0.16em; }
+.malware-card-id { color: oklch(0.38 0 0); font: 10px/1 'Share Tech Mono', monospace; }
+.malware-card h2 {
+  margin: 0.8rem 0 0.4rem;
+  color: oklch(0.84 0 0);
+  font: 400 24px/1.05 'Bebas Neue', 'Arial Narrow', sans-serif;
+  letter-spacing: 0.08em;
+}
+.malware-card-goal { min-height: 2.8em; margin: 0; color: oklch(0.55 0 0); font-size: 12px; line-height: 1.5; }
+.malware-techniques {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.9rem 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+.malware-techniques li {
+  padding: 0.32rem 0.45rem;
+  border: 1px solid oklch(0.2 0 0);
+  color: oklch(0.69 0 0);
+  background: oklch(0.065 0 0);
+  font: 10px/1.35 'Share Tech Mono', monospace;
+}
+.malware-watch { padding-top: 0.7rem; border-top: 1px solid oklch(0.19 0 0); }
+.malware-watch > span { color: oklch(0.57 0.12 25); font: 9px/1.3 'Share Tech Mono', monospace; letter-spacing: 0.15em; }
+.malware-watch p { margin: 0.35rem 0 0; color: oklch(0.5 0 0); font-size: 11px; line-height: 1.5; }
+@media (max-width: 700px) {
+  .malware-atlas { grid-template-columns: 1fr; }
+  .malware-card { padding: 1rem; }
+  .malware-card-goal { min-height: 0; }
+  .malware-atlas-meta a { margin-left: 0; }
 }
 
 /* (No body scroll lock here — the new loader manages body.overflow via
@@ -10780,4 +10891,635 @@ a, button, input, textarea, select, label, summary, [role='button'] {
   .ascii-magic-scan { display: none; }
 }
 
+/* COPELAN RESEARCH — a debugger's dark glass memory map. */
+.artifact--corelan {
+  min-height: 112px;
+  padding-right: 220px;
+  border-left: 3px solid oklch(0.58 0.13 32);
+  background: linear-gradient(105deg, oklch(0.12 0.015 35 / 0.6), oklch(0.065 0 0) 58%);
+}
+.artifact--corelan .artifact-body { max-width: 72%; }
+.artifact--corelan .artifact-label {
+  color: oklch(0.9 0.025 55);
+  font-family: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  font-size: 23px;
+  letter-spacing: 0.14em;
+}
+.artifact--corelan .artifact-note { color: oklch(0.58 0.025 50); }
+.artifact--corelan .artifact-url { color: oklch(0.65 0.08 35); }
+.artifact--corelan .artifact-go { color: oklch(0.69 0.14 35); }
+.artifact--corelan::before {
+  position: absolute;
+  content: '';
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent 0 62%, oklch(0.54 0.11 35 / 0.05) 100%);
+}
+.artifact-art--corelan {
+  position: absolute;
+  top: 50%;
+  right: 3.5rem;
+  width: 176px;
+  transform: translateY(-50%);
+}
+.corelan-console {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  overflow: hidden;
+  padding: 9px 10px 7px;
+  border: 1px solid oklch(0.37 0.045 35 / 0.7);
+  background:
+    linear-gradient(135deg, oklch(0.18 0.025 35 / 0.75), oklch(0.07 0.01 35 / 0.94)),
+    oklch(0.07 0 0);
+  box-shadow: inset 0 0 20px oklch(0.36 0.08 35 / 0.1), 0 8px 24px oklch(0 0 0 / 0.4);
+}
+.corelan-console-head, .corelan-console-foot {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: oklch(0.59 0.07 35);
+  font: 6px/1 'Share Tech Mono', monospace;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+.corelan-console-head i {
+  width: 5px;
+  height: 5px;
+  background: oklch(0.67 0.15 35);
+  box-shadow: 0 0 7px oklch(0.67 0.15 35 / 0.45);
+}
+.corelan-console-head b { margin-left: auto; color: oklch(0.39 0.035 35); font-weight: 400; }
+.corelan-memory { display: grid; gap: 3px; }
+.corelan-memory > span { display: grid; grid-template-columns: 37px repeat(3, 1fr); gap: 3px; align-items: center; }
+.corelan-memory i { color: oklch(0.47 0.035 35); font: 5px/1 'Share Tech Mono', monospace; font-style: normal; }
+.corelan-memory b { height: 4px; border: 1px solid oklch(0.33 0.04 35); background: oklch(0.15 0.02 35); }
+.corelan-memory > span:first-child b:nth-child(3) { background: oklch(0.47 0.13 32 / 0.65); border-color: oklch(0.55 0.13 32 / 0.7); }
+.corelan-memory > span:nth-child(2) b:nth-child(2) { background: oklch(0.49 0.08 75 / 0.52); border-color: oklch(0.52 0.08 75 / 0.6); }
+.corelan-memory > span:last-child b:nth-child(4) { background: oklch(0.4 0.03 35 / 0.65); }
+.corelan-console-foot { color: oklch(0.39 0.025 35); font-size: 5px; letter-spacing: 0.08em; }
+.corelan-scan {
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, oklch(0.75 0.13 40 / 0.75), transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .artifact--corelan:hover {
+    border-color: oklch(0.43 0.07 35);
+    box-shadow: inset 0 0 34px oklch(0.35 0.09 35 / 0.09), 0 10px 26px -18px oklch(0.7 0.14 35 / 0.65);
+  }
+  .artifact--corelan:hover .corelan-scan { animation: corelan-scan 1.6s ease-in-out infinite; }
+  .artifact--corelan:hover .artifact-label { color: oklch(0.97 0.02 55); }
+}
+.artifact--corelan:focus-visible { outline-color: oklch(0.68 0.14 35); }
+@keyframes corelan-scan {
+  0% { top: 0; opacity: 0; }
+  15% { opacity: 0.85; }
+  85% { opacity: 0.6; }
+  100% { top: 100%; opacity: 0; }
+}
+@media (max-width: 700px) {
+  .artifact--corelan { min-height: 92px; padding-right: 150px; padding-left: 1rem; }
+  .artifact--corelan .artifact-body { max-width: 68%; }
+  .artifact--corelan .artifact-label { font-size: 17px; }
+  .artifact-art--corelan { right: 2.9rem; width: 125px; }
+  .corelan-console { gap: 6px; padding: 7px 6px 6px; }
+  .corelan-console-head { font-size: 5px; }
+  .corelan-console-foot { font-size: 4px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--corelan { transition: none; }
+  .corelan-scan { display: none; }
+}
+
+/* SEVEN RESEARCH PORTALS — downloaded site marks inside independent
+   looping 3D scenes. Pointer movement tilts each scene in its card. */
+.artifact--a13xp0p0v,
+.artifact--maxwell-dulin,
+.artifact--capt-meelo,
+.artifact--doar-e,
+.artifact--hex-rays,
+.artifact--secret-club,
+.artifact--zerozero-sec {
+  position: relative;
+  min-height: 148px;
+  overflow: hidden;
+  padding-right: 276px;
+  background: linear-gradient(105deg, var(--research-wash), oklch(0.055 0 0) 70%);
+  border: 1px solid var(--research-edge);
+  border-left: 3px solid var(--research-accent);
+  box-shadow: inset 0 0 38px var(--research-shadow), 0 12px 28px oklch(0 0 0 / 0.2);
+  transition: border-color 260ms ease, box-shadow 260ms ease, transform 260ms ease;
+  perspective: 1000px;
+}
+.artifact--a13xp0p0v { --research-accent: oklch(0.72 0.16 150); --research-edge: oklch(0.34 0.08 150 / 0.62); --research-wash: oklch(0.13 0.035 150); --research-shadow: oklch(0.36 0.14 150 / 0.1); }
+.artifact--maxwell-dulin { --research-accent: oklch(0.77 0.13 75); --research-edge: oklch(0.36 0.08 75 / 0.65); --research-wash: oklch(0.14 0.03 75); --research-shadow: oklch(0.38 0.11 75 / 0.1); }
+.artifact--capt-meelo { --research-accent: oklch(0.69 0.14 215); --research-edge: oklch(0.34 0.08 215 / 0.62); --research-wash: oklch(0.12 0.04 225); --research-shadow: oklch(0.35 0.13 215 / 0.1); }
+.artifact--doar-e { --research-accent: oklch(0.7 0.14 315); --research-edge: oklch(0.34 0.08 315 / 0.62); --research-wash: oklch(0.13 0.035 315); --research-shadow: oklch(0.35 0.12 315 / 0.1); }
+.artifact--hex-rays { --research-accent: oklch(0.73 0.14 42); --research-edge: oklch(0.37 0.08 42 / 0.62); --research-wash: oklch(0.14 0.035 42); --research-shadow: oklch(0.38 0.12 42 / 0.1); }
+.artifact--secret-club { --research-accent: oklch(0.7 0.14 195); --research-edge: oklch(0.34 0.08 195 / 0.62); --research-wash: oklch(0.12 0.035 195); --research-shadow: oklch(0.35 0.12 195 / 0.1); }
+.artifact--zerozero-sec { --research-accent: oklch(0.68 0.16 355); --research-edge: oklch(0.35 0.09 355 / 0.62); --research-wash: oklch(0.13 0.035 355); --research-shadow: oklch(0.35 0.13 355 / 0.1); }
+.artifact--a13xp0p0v .artifact-label,
+.artifact--maxwell-dulin .artifact-label,
+.artifact--capt-meelo .artifact-label,
+.artifact--doar-e .artifact-label,
+.artifact--hex-rays .artifact-label,
+.artifact--secret-club .artifact-label,
+.artifact--zerozero-sec .artifact-label {
+  color: oklch(0.93 0.015 75);
+  font-family: 'Orbitron', var(--font-geist-mono), monospace;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 18px var(--research-shadow);
+}
+.artifact--a13xp0p0v .artifact-note,
+.artifact--maxwell-dulin .artifact-note,
+.artifact--capt-meelo .artifact-note,
+.artifact--doar-e .artifact-note,
+.artifact--hex-rays .artifact-note,
+.artifact--secret-club .artifact-note,
+.artifact--zerozero-sec .artifact-note { color: oklch(0.6 0 0); }
+.artifact--a13xp0p0v .artifact-url,
+.artifact--maxwell-dulin .artifact-url,
+.artifact--capt-meelo .artifact-url,
+.artifact--doar-e .artifact-url,
+.artifact--hex-rays .artifact-url,
+.artifact--secret-club .artifact-url,
+.artifact--zerozero-sec .artifact-url { color: var(--research-accent); opacity: 0.74; }
+.artifact--a13xp0p0v .artifact-go,
+.artifact--maxwell-dulin .artifact-go,
+.artifact--capt-meelo .artifact-go,
+.artifact--doar-e .artifact-go,
+.artifact--hex-rays .artifact-go,
+.artifact--secret-club .artifact-go,
+.artifact--zerozero-sec .artifact-go { color: var(--research-accent); }
+.artifact-art--research {
+  top: 50%;
+  right: 3.2rem;
+  width: 220px;
+  height: 118px;
+  perspective: 900px;
+  transform: translateY(-50%);
+}
+.research-scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--link-tilt-x, 0deg)) rotateY(var(--link-tilt-y, 0deg));
+  transition: transform 180ms ease-out;
+}
+.artifact--a13xp0p0v > :is(.artifact-num, .artifact-body, .artifact-go),
+.artifact--maxwell-dulin > :is(.artifact-num, .artifact-body, .artifact-go),
+.artifact--capt-meelo > :is(.artifact-num, .artifact-body, .artifact-go),
+.artifact--doar-e > :is(.artifact-num, .artifact-body, .artifact-go),
+.artifact--hex-rays > :is(.artifact-num, .artifact-body, .artifact-go),
+.artifact--secret-club > :is(.artifact-num, .artifact-body, .artifact-go),
+.artifact--zerozero-sec > :is(.artifact-num, .artifact-body, .artifact-go) { position: relative; z-index: 2; }
+
+/* a13xp0p0v — kernel core enclosed by two precessing orbital planes. */
+.a13-art { filter: drop-shadow(0 0 16px oklch(0.46 0.15 150 / 0.22)); }
+.a13-core, .maxwell-scene > img, .meelo-sphere, .hexrays-prism img, .secretclub-core, .zerozero-core {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  overflow: hidden;
+  border: 1px solid var(--research-accent);
+  background: oklch(0.045 0 0 / 0.96);
+  box-shadow: 0 0 16px var(--research-shadow), inset 0 0 13px var(--research-shadow);
+  transform: translate(-50%, -50%) translateZ(18px);
+}
+.a13-core img, .maxwell-scene > img, .meelo-sphere img, .hexrays-prism img, .secretclub-core img, .zerozero-core img { width: 76%; height: 76%; object-fit: contain; }
+.a13-orbit {
+  position: absolute;
+  top: 43%;
+  left: 50%;
+  width: 116px;
+  height: 63px;
+  border: 1px solid oklch(0.64 0.15 150 / 0.62);
+  border-radius: 50%;
+  transform-style: preserve-3d;
+}
+.a13-orbit--one { animation: a13-orbit-x 8s linear infinite; }
+.a13-orbit--two { width: 85px; height: 104px; border-color: oklch(0.48 0.12 165 / 0.72); animation: a13-orbit-y 11s linear infinite; }
+.a13-caption, .maxwell-caption, .meelo-caption, .doare-caption, .hexrays-base, .secretclub-caption, .zerozero-caption {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  color: var(--research-accent);
+  font: 6px/1 'Share Tech Mono', monospace;
+  letter-spacing: 0.18em;
+  white-space: nowrap;
+  transform: translateX(-50%) translateZ(20px);
+}
+@keyframes a13-orbit-x { to { transform: translate(-50%, -50%) rotateX(66deg) rotateZ(360deg); } }
+@keyframes a13-orbit-y { to { transform: translate(-50%, -50%) rotateY(70deg) rotateZ(-360deg); } }
+
+/* Maxwell Dulin — three heap cells tumble in offset, nonmatching orbits. */
+.maxwell-cube {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  width: 34px;
+  height: 34px;
+  transform-style: preserve-3d;
+  animation: heap-cube-spin 7s linear infinite;
+}
+.maxwell-cube--one { margin: -29px 0 0 -42px; --cube-tint: oklch(0.67 0.14 75); }
+.maxwell-cube--two { margin: 0 0 0 16px; --cube-tint: oklch(0.61 0.1 45); animation-duration: 9s; animation-direction: reverse; }
+.maxwell-cube--three { margin: 13px 0 0 -6px; --cube-tint: oklch(0.78 0.12 95); animation-duration: 12s; }
+.maxwell-cube i { position: absolute; inset: 0; border: 1px solid var(--cube-tint); background: color-mix(in oklch, var(--cube-tint) 16%, oklch(0.055 0 0)); box-shadow: inset 0 0 12px color-mix(in oklch, var(--cube-tint) 28%, transparent); }
+.maxwell-cube i:nth-child(2) { transform: rotateY(90deg) translateZ(16px); }
+.maxwell-cube i:nth-child(3) { transform: rotateX(90deg) translateZ(16px); }
+.maxwell-scene > img { width: 40px; height: 40px; margin: -2px 0 0 3px; border-radius: 50%; transform: translate(-50%, -50%) translateZ(43px); }
+.maxwell-caption { color: oklch(0.75 0.13 75); }
+@keyframes heap-cube-spin { to { transform: rotateX(360deg) rotateY(360deg) rotateZ(180deg); } }
+
+/* Capt. Meelo — an instrument dial with counter-rotating targeting rings. */
+.meelo-ring { position: absolute; top: 42%; left: 50%; border: 1px solid oklch(0.67 0.15 215 / 0.66); border-radius: 50%; transform-style: preserve-3d; }
+.meelo-ring--outer { width: 116px; height: 75px; margin: -37px 0 0 -58px; animation: meelo-ring-a 7s linear infinite; }
+.meelo-ring--inner { width: 78px; height: 108px; margin: -54px 0 0 -39px; border-color: oklch(0.49 0.13 195 / 0.8); animation: meelo-ring-b 9s linear infinite; }
+.meelo-sphere { width: 46px; height: 46px; border-radius: 50%; animation: meelo-core-roll 10s linear infinite; }
+.meelo-crosshair { position: absolute; top: 42%; left: 50%; background: oklch(0.7 0.13 215 / 0.55); }
+.meelo-crosshair--x { width: 138px; height: 1px; transform: translate(-50%, -50%) translateZ(-10px); }
+.meelo-crosshair--y { width: 1px; height: 112px; transform: translate(-50%, -50%) translateZ(-10px); }
+.meelo-caption { color: oklch(0.65 0.14 215); }
+@keyframes meelo-ring-a { to { transform: rotateX(70deg) rotateZ(360deg); } }
+@keyframes meelo-ring-b { to { transform: rotateY(68deg) rotateZ(-360deg); } }
+@keyframes meelo-core-roll { to { transform: translate(-50%, -50%) translateZ(20px) rotateY(360deg); } }
+
+/* Diary of a reverse-engineer — a field notebook with a page-turn loop. */
+.doare-scene { perspective: 700px; }
+.doare-book {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  width: 102px;
+  height: 70px;
+  border: 1px solid oklch(0.53 0.1 315);
+  background: linear-gradient(90deg, oklch(0.16 0.04 315) 0 49%, oklch(0.09 0.015 300) 50% 100%);
+  box-shadow: 0 0 18px oklch(0.42 0.13 315 / 0.18);
+  transform-style: preserve-3d;
+  animation: diary-book-turn 12s linear infinite;
+}
+.doare-book::before { position: absolute; content: ''; top: 0; left: 50%; width: 1px; height: 100%; background: oklch(0.52 0.12 315); }
+.doare-book i { position: absolute; left: 9px; width: 23px; height: 1px; background: oklch(0.65 0.09 315 / 0.68); }
+.doare-book i:nth-child(1) { top: 15px; }
+.doare-book i:nth-child(2) { top: 23px; width: 28px; }
+.doare-book i:nth-child(3) { top: 31px; width: 18px; }
+.doare-book b { position: absolute; right: 10px; top: 18px; color: oklch(0.82 0.1 315); font: 16px/1 'Bebas Neue', sans-serif; }
+.doare-loupe { position: absolute; top: 19px; right: 20px; z-index: 3; width: 31px; height: 31px; border: 2px solid oklch(0.73 0.13 315); border-radius: 50%; background: oklch(0.2 0.04 315 / 0.32); box-shadow: 0 0 12px oklch(0.55 0.12 315 / 0.25); animation: diary-loupe-float 4s ease-in-out infinite; }
+.doare-loupe i { position: absolute; right: -9px; bottom: -5px; width: 11px; height: 2px; background: oklch(0.73 0.13 315); transform: rotate(48deg); }
+.doare-caption { color: oklch(0.69 0.12 315); }
+@keyframes diary-book-turn { to { transform: translateX(-50%) rotateY(360deg) rotateX(360deg); } }
+@keyframes diary-loupe-float { 0%, 100% { transform: translate3d(0, 0, 30px) rotate(0deg); } 50% { transform: translate3d(-8px, 4px, 40px) rotate(24deg); } }
+
+/* Hex-Rays — a faceted IDA prism rotates above a technical plinth. */
+.hexrays-prism { position: absolute; top: 38%; left: 50%; width: 70px; height: 70px; transform-style: preserve-3d; animation: hexrays-prism-turn 10s linear infinite; }
+.hexrays-prism > i { position: absolute; inset: 0; border: 1px solid oklch(0.74 0.14 42 / 0.7); background: linear-gradient(135deg, oklch(0.55 0.11 42 / 0.18), oklch(0.1 0.02 42 / 0.7)); }
+.hexrays-prism > i:nth-child(2) { transform: rotateY(60deg); }
+.hexrays-prism > i:nth-child(3) { transform: rotateY(-60deg); }
+.hexrays-prism img { width: 36px; height: 36px; transform: translate(-50%, -50%) translateZ(37px); }
+.hexrays-base { bottom: 8px; width: 122px; padding: 4px 0; border-top: 1px solid oklch(0.51 0.09 42 / 0.65); border-bottom: 1px solid oklch(0.31 0.055 42 / 0.55); text-align: center; }
+@keyframes hexrays-prism-turn { to { transform: translate(-50%, -50%) rotateX(360deg) rotateY(360deg); } }
+
+/* Secret Club — a Windows-kernel sigil held inside a rotating torus. */
+.secretclub-ring { position: absolute; top: 40%; left: 50%; width: 84px; height: 56px; border: 1px solid oklch(0.63 0.15 195 / 0.68); border-radius: 50%; transform-style: preserve-3d; }
+.secretclub-ring--x { width: 114px; height: 75px; margin: -37px 0 0 -57px; animation: secretclub-spin-x 8s linear infinite; }
+.secretclub-ring--y { width: 80px; height: 112px; margin: -56px 0 0 -40px; border-color: oklch(0.42 0.1 215 / 0.82); animation: secretclub-spin-y 12s linear infinite; }
+.secretclub-core { width: 48px; height: 48px; border: 1px solid oklch(0.74 0.14 195); transform: translate(-50%, -50%) translateZ(28px) rotate(45deg); }
+.secretclub-core img { transform: rotate(-45deg); }
+.secretclub-caption { color: oklch(0.68 0.13 195); }
+@keyframes secretclub-spin-x { to { transform: rotateX(70deg) rotateZ(360deg); } }
+@keyframes secretclub-spin-y { to { transform: rotateY(72deg) rotateZ(-360deg); } }
+
+/* 0x00sec — a rotating black-pink network sphere with moving nodes. */
+.zerozero-orbit { position: absolute; top: 40%; left: 50%; width: 83px; height: 55px; border: 1px solid oklch(0.61 0.17 355 / 0.72); border-radius: 50%; transform-style: preserve-3d; }
+.zerozero-orbit--one { width: 116px; height: 76px; margin: -38px 0 0 -58px; animation: zerozero-orbit-a 6s linear infinite; }
+.zerozero-orbit--two { width: 76px; height: 112px; margin: -56px 0 0 -38px; border-color: oklch(0.45 0.13 320 / 0.7); animation: zerozero-orbit-b 9s linear infinite; }
+.zerozero-core { width: 52px; height: 52px; border-radius: 50%; animation: zerozero-core-turn 12s linear infinite; }
+.zerozero-core img { width: 100%; height: 100%; border-radius: 50%; }
+.zerozero-nodes { position: absolute; inset: 0; transform-style: preserve-3d; animation: zerozero-nodes-turn 7s linear infinite reverse; }
+.zerozero-nodes i { position: absolute; top: 40%; left: 50%; width: 5px; height: 5px; border-radius: 50%; background: oklch(0.85 0.16 355); box-shadow: 0 0 8px oklch(0.8 0.17 355); }
+.zerozero-nodes i:nth-child(1) { transform: translate(-50%, -50%) translate3d(0, -50px, 30px); }
+.zerozero-nodes i:nth-child(2) { transform: translate(-50%, -50%) translate3d(55px, 0, -5px); }
+.zerozero-nodes i:nth-child(3) { transform: translate(-50%, -50%) translate3d(-53px, -5px, 12px); }
+.zerozero-nodes i:nth-child(4) { transform: translate(-50%, -50%) translate3d(12px, 37px, -18px); }
+.zerozero-nodes i:nth-child(5) { transform: translate(-50%, -50%) translate3d(-26px, 39px, -9px); }
+.zerozero-caption { color: oklch(0.67 0.16 355); }
+@keyframes zerozero-orbit-a { to { transform: rotateX(67deg) rotateZ(360deg); } }
+@keyframes zerozero-orbit-b { to { transform: rotateY(72deg) rotateZ(-360deg); } }
+@keyframes zerozero-core-turn { to { transform: translate(-50%, -50%) translateZ(24px) rotateY(360deg); } }
+@keyframes zerozero-nodes-turn { to { transform: rotateY(360deg) rotateZ(360deg); } }
+
+@media (hover: hover) {
+  .artifact--a13xp0p0v:hover,
+  .artifact--maxwell-dulin:hover,
+  .artifact--capt-meelo:hover,
+  .artifact--doar-e:hover,
+  .artifact--hex-rays:hover,
+  .artifact--secret-club:hover,
+  .artifact--zerozero-sec:hover {
+    transform: translateY(-3px) rotateX(0.5deg);
+    border-color: color-mix(in oklch, var(--research-accent) 66%, oklch(0.2 0 0));
+    box-shadow: inset 0 0 42px var(--research-shadow), 0 16px 32px -16px var(--research-accent);
+  }
+  .artifact--a13xp0p0v:hover .research-scene,
+  .artifact--maxwell-dulin:hover .research-scene,
+  .artifact--capt-meelo:hover .research-scene,
+  .artifact--doar-e:hover .research-scene,
+  .artifact--hex-rays:hover .research-scene,
+  .artifact--secret-club:hover .research-scene,
+  .artifact--zerozero-sec:hover .research-scene { transform: translateZ(16px) rotateX(var(--link-tilt-x, 0deg)) rotateY(var(--link-tilt-y, 0deg)); }
+}
+.artifact--a13xp0p0v:focus-visible,
+.artifact--maxwell-dulin:focus-visible,
+.artifact--capt-meelo:focus-visible,
+.artifact--doar-e:focus-visible,
+.artifact--hex-rays:focus-visible,
+.artifact--secret-club:focus-visible,
+.artifact--zerozero-sec:focus-visible { outline-color: var(--research-accent); }
+@media (max-width: 700px) {
+  .artifact--a13xp0p0v,
+  .artifact--maxwell-dulin,
+  .artifact--capt-meelo,
+  .artifact--doar-e,
+  .artifact--hex-rays,
+  .artifact--secret-club,
+  .artifact--zerozero-sec { min-height: 128px; padding-right: 184px; padding-left: 1rem; }
+  .artifact-art--research { right: 2.6rem; width: 148px; height: 104px; }
+  .artifact--a13xp0p0v .artifact-label,
+  .artifact--maxwell-dulin .artifact-label,
+  .artifact--capt-meelo .artifact-label,
+  .artifact--doar-e .artifact-label,
+  .artifact--hex-rays .artifact-label,
+  .artifact--secret-club .artifact-label,
+  .artifact--zerozero-sec .artifact-label { font-size: 12px; }
+  .artifact--a13xp0p0v .artifact-note,
+  .artifact--maxwell-dulin .artifact-note,
+  .artifact--capt-meelo .artifact-note,
+  .artifact--doar-e .artifact-note,
+  .artifact--hex-rays .artifact-note,
+  .artifact--secret-club .artifact-note,
+  .artifact--zerozero-sec .artifact-note { font-size: 9px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact--a13xp0p0v, .artifact--maxwell-dulin, .artifact--capt-meelo,
+  .artifact--doar-e, .artifact--hex-rays, .artifact--secret-club, .artifact--zerozero-sec,
+  .research-scene, .a13-orbit, .maxwell-cube, .meelo-ring, .meelo-sphere,
+  .doare-book, .doare-loupe, .hexrays-prism, .secretclub-ring,
+  .zerozero-orbit, .zerozero-core, .zerozero-nodes { animation: none !important; transition: none !important; }
+}
+
+/* WETW0RK — a single black-paper field file built around the profile's own skull-and-rose mark. */
+.artifact--wetw0rk {
+  position: relative;
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr) 24px;
+  align-items: center;
+  gap: 1rem;
+  min-height: 174px;
+  padding: 1.2rem 1.35rem 1.2rem 205px;
+  overflow: hidden;
+  border: 1px solid oklch(0.36 0.075 20 / 0.82);
+  border-left: 4px solid oklch(0.58 0.19 20);
+  background:
+    linear-gradient(90deg, oklch(0.09 0.025 20 / 0.85), oklch(0.055 0.012 10) 43%, oklch(0.045 0.01 10)),
+    oklch(0.05 0 0);
+  box-shadow: inset 0 0 50px oklch(0.34 0.11 15 / 0.11), 0 15px 42px -30px oklch(0.68 0.17 12 / 0.48);
+  transition: border-color 280ms ease, box-shadow 280ms ease, background 280ms ease;
+}
+.artifact--wetw0rk::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 36%;
+  pointer-events: none;
+  content: 'W';
+  color: oklch(0.76 0.12 18 / 0.035);
+  font: 190px/0.9 'Pirata One', Georgia, serif;
+  text-align: right;
+  padding-right: 8%;
+}
+.artifact--wetw0rk::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 182px;
+  width: 1px;
+  pointer-events: none;
+  content: '';
+  background: linear-gradient(transparent, oklch(0.65 0.19 18 / 0.65) 18%, oklch(0.48 0.16 18 / 0.24) 80%, transparent);
+  box-shadow: 5px 0 24px oklch(0.55 0.2 18 / 0.16);
+}
+.artifact--wetw0rk > :is(.artifact-num, .artifact-body, .artifact-go) { position: relative; z-index: 2; }
+.artifact--wetw0rk .artifact-num {
+  color: oklch(0.76 0.12 17);
+  font: 11px/1 'Share Tech Mono', monospace;
+  letter-spacing: 0.07em;
+}
+.artifact--wetw0rk .artifact-body { padding-right: 104px; }
+.artifact--wetw0rk .artifact-label {
+  color: oklch(0.91 0.025 75);
+  font: 29px/0.98 'Pirata One', Georgia, serif;
+  letter-spacing: 0.05em;
+  text-shadow: 2px 2px 0 oklch(0.18 0.06 14), 0 0 22px oklch(0.61 0.16 15 / 0.2);
+  transition: color 220ms ease, letter-spacing 260ms ease, text-shadow 220ms ease;
+}
+.artifact--wetw0rk .artifact-note {
+  color: oklch(0.69 0.045 15);
+  font: 10px/1.4 'Share Tech Mono', monospace;
+  letter-spacing: 0.045em;
+}
+.artifact--wetw0rk .artifact-url {
+  color: oklch(0.57 0.09 16);
+  font: 9px/1.4 'Share Tech Mono', monospace;
+  letter-spacing: 0.08em;
+}
+.artifact--wetw0rk .artifact-go {
+  color: oklch(0.7 0.15 18);
+  font-size: 18px;
+}
+.artifact-art--wetw0rk {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: none;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(158deg, transparent 0 18px, oklch(0.7 0.1 15 / 0.025) 18px 19px),
+    linear-gradient(90deg, oklch(0.12 0.025 15) 0, oklch(0.075 0.015 15) 184px, transparent 184px);
+}
+.artifact-art--wetw0rk::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 182px;
+  height: 100%;
+  pointer-events: none;
+  content: '';
+  background:
+    linear-gradient(135deg, transparent 0 14%, oklch(0.72 0.12 20 / 0.22) 14% 14.5%, transparent 14.5% 84%, oklch(0.72 0.12 20 / 0.17) 84% 84.5%, transparent 84.5%),
+    radial-gradient(ellipse at 52% 48%, oklch(0.36 0.12 18 / 0.34), transparent 65%);
+}
+.wetw0rk-art-index {
+  position: absolute;
+  left: 17px;
+  bottom: 13px;
+  color: oklch(0.56 0.09 18 / 0.78);
+  font: 7px/1 'Share Tech Mono', monospace;
+  letter-spacing: 0.2em;
+  transform: rotate(-90deg);
+  transform-origin: left center;
+}
+.wetw0rk-emblem {
+  position: absolute;
+  top: 50%;
+  left: 34px;
+  display: grid;
+  place-items: center;
+  width: 126px;
+  height: 132px;
+  overflow: hidden;
+  border: 1px solid oklch(0.54 0.14 18 / 0.72);
+  background:
+    linear-gradient(135deg, oklch(0.08 0 0) 0 47%, oklch(0.19 0.055 15) 47.5% 48%, oklch(0.065 0 0) 49%),
+    oklch(0.04 0 0);
+  box-shadow: 0 0 0 5px oklch(0.06 0 0 / 0.85), 0 0 35px oklch(0.54 0.18 15 / 0.23), inset 0 0 20px oklch(0.54 0.16 16 / 0.11);
+  clip-path: polygon(12% 0, 100% 0, 100% 86%, 88% 100%, 0 100%, 0 14%);
+  transform: translateY(-50%) skewY(-2deg);
+}
+.wetw0rk-emblem img {
+  position: relative;
+  z-index: 1;
+  width: 112px;
+  height: 112px;
+  object-fit: cover;
+  filter: grayscale(0.28) contrast(1.12) brightness(0.82);
+  mix-blend-mode: screen;
+  transform: rotate(-2deg);
+  transition: filter 240ms ease, transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.wetw0rk-frame-mark {
+  position: absolute;
+  z-index: 3;
+  width: 12px;
+  height: 12px;
+  border-color: oklch(0.83 0.1 20 / 0.86);
+  border-style: solid;
+}
+.wetw0rk-frame-mark--a { top: 5px; left: 5px; border-width: 1px 0 0 1px; }
+.wetw0rk-frame-mark--b { right: 5px; bottom: 5px; border-width: 0 1px 1px 0; }
+.wetw0rk-scanline {
+  position: absolute;
+  z-index: 4;
+  top: -24%;
+  left: 0;
+  width: 100%;
+  height: 12%;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, oklch(0.82 0.12 16 / 0.28), transparent);
+  animation: wetw0rk-scan 7.5s ease-in-out infinite;
+}
+.wetw0rk-stamp {
+  position: absolute;
+  top: 50%;
+  right: 27px;
+  display: grid;
+  justify-items: end;
+  gap: 7px;
+  color: oklch(0.53 0.06 15);
+  font: 7px/1 'Share Tech Mono', monospace;
+  letter-spacing: 0.17em;
+  text-align: right;
+  transform: translateY(-50%);
+}
+.wetw0rk-stamp b { padding-bottom: 4px; border-bottom: 1px solid oklch(0.38 0.1 18); color: oklch(0.68 0.11 19); font-weight: 400; }
+.artifact--wetw0rk:hover {
+  border-color: oklch(0.63 0.16 17 / 0.9);
+  box-shadow: inset 0 0 62px oklch(0.4 0.13 14 / 0.18), 0 20px 52px -30px oklch(0.74 0.19 14 / 0.5);
+}
+.artifact--wetw0rk:hover .artifact-label { color: oklch(0.98 0.025 75); letter-spacing: 0.1em; text-shadow: 0 0 23px oklch(0.74 0.16 16 / 0.45); }
+.artifact--wetw0rk:hover .wetw0rk-emblem img { filter: grayscale(0.12) contrast(1.16) brightness(0.96); transform: scale(1.055) rotate(1deg); }
+.artifact--wetw0rk:hover .wetw0rk-emblem { box-shadow: 0 0 0 5px oklch(0.06 0 0 / 0.85), 0 0 44px oklch(0.7 0.2 16 / 0.38), inset 0 0 22px oklch(0.54 0.16 16 / 0.16); }
+.artifact--wetw0rk:focus-visible { outline-color: oklch(0.72 0.16 18); }
+@keyframes wetw0rk-scan {
+  0%, 18% { top: -24%; opacity: 0; }
+  35% { opacity: 0.8; }
+  82%, 100% { top: 112%; opacity: 0; }
+}
+@media (max-width: 700px) {
+  .artifact--wetw0rk { min-height: 150px; grid-template-columns: 23px minmax(0, 1fr) 14px; gap: 0.7rem; padding: 1rem 0.9rem 1rem 132px; }
+  .artifact--wetw0rk::after { left: 115px; }
+  .artifact--wetw0rk::before { right: 7%; font-size: 132px; }
+  .artifact--wetw0rk .artifact-body { padding-right: 0; }
+  .artifact--wetw0rk .artifact-label { font-size: 23px; }
+  .artifact--wetw0rk .artifact-note { font-size: 9px; }
+  .artifact-art--wetw0rk { background: linear-gradient(90deg, oklch(0.12 0.025 15) 0, oklch(0.075 0.015 15) 117px, transparent 117px); }
+  .wetw0rk-art-index { left: 11px; font-size: 6px; }
+  .wetw0rk-emblem { left: 18px; width: 82px; height: 108px; }
+  .wetw0rk-emblem img { width: 78px; height: 78px; }
+  .wetw0rk-stamp { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wetw0rk-scanline { animation: none; display: none; }
+  .artifact--wetw0rk, .artifact--wetw0rk .artifact-label, .wetw0rk-emblem img { transition: none; }
+}
+
+/* Quiet ink treatment for each site's own mark. */
+.artifact-heading {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.64rem;
+}
+.artifact-site-logo {
+  display: grid;
+  width: 76px;
+  height: 76px;
+  flex: 0 0 76px;
+  place-items: center;
+  color: inherit;
+  opacity: 0.86;
+}
+.artifact-site-logo img {
+  display: block;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  filter: grayscale(0.5) saturate(0.68) contrast(1.12) drop-shadow(0 1px 0 oklch(1 0 0 / 0.12)) drop-shadow(0 -1px 0 oklch(0 0 0 / 0.48));
+}
+.artifact-site-logo--owner img {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  object-fit: cover;
+  filter: grayscale(0.62) saturate(0.55) contrast(1.1) drop-shadow(0 1px 0 oklch(1 0 0 / 0.12)) drop-shadow(0 -1px 0 oklch(0 0 0 / 0.48));
+}
+.artifact-site-logo--monogram {
+  color: currentColor;
+  font: 500 19px/1 'Share Tech Mono', monospace;
+  letter-spacing: 0.1em;
+  opacity: 0.72;
+}
+@media (max-width: 520px) {
+  .artifact-site-logo { width: 54px; height: 54px; flex-basis: 54px; }
+  .artifact-site-logo img { width: 44px; height: 44px; }
+  .artifact-site-logo--owner img { width: 40px; height: 40px; }
+  .artifact-heading { gap: 0.48rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact-site-logo { transition: none; }
+}
 
