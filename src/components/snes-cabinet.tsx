@@ -31,9 +31,9 @@ type ShelfGame = {
   artwork: string | null
 }
 
-export function SnesCabinet() {
+export function SnesCabinet({ initialQuery = '' }: { initialQuery?: string }) {
   const [shelf, setShelf] = useState<ShelfGame[]>([])
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState(initialQuery)
   const [catalogError, setCatalogError] = useState<string | null>(null)
   const [game, setGame] = useState<ShelfGame | null>(null)
   const [booted, setBooted] = useState(false)
@@ -67,6 +67,24 @@ export function SnesCabinet() {
       .catch(() => { if (active) setCatalogError('Game catalog failed to load.') })
     return () => { active = false }
   }, [])
+
+  useEffect(() => {
+    if (!initialQuery || query.trim().toLocaleLowerCase() !== initialQuery.trim().toLocaleLowerCase()) return
+    const selected = shelf.find((item) => item.title.toLocaleLowerCase() === initialQuery.trim().toLocaleLowerCase())
+    if (!selected) return
+    const frame = requestAnimationFrame(() => {
+      gameButtonsRef.current.get(selected.id)?.focus({ preventScroll: true })
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [initialQuery, query, shelf])
+
+  const normalizedQuery = query.trim().toLocaleLowerCase()
+  const normalizedInitial = initialQuery.trim().toLocaleLowerCase()
+  const exactInitialGameSelected = Boolean(normalizedInitial && normalizedQuery === normalizedInitial &&
+    shelf.some((item) => item.title.toLocaleLowerCase() === normalizedInitial))
+  const visibleShelf = shelf.filter((item) => exactInitialGameSelected
+    ? item.title.toLocaleLowerCase() === normalizedInitial
+    : item.title.toLocaleLowerCase().includes(normalizedQuery))
 
   /* boot the loader exactly once per mounted container */
   useEffect(() => {
@@ -124,7 +142,7 @@ export function SnesCabinet() {
           {catalogError && <p className="snes-error" role="alert">✕ {catalogError}</p>}
           {!shelf.length && !catalogError && <p className="snes-shelf-note">Loading game library…</p>}
           <ul className="snes-shelf-list">
-            {shelf.filter((g) => g.title.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())).map((g, i) => (
+            {visibleShelf.map((g, i) => (
               <li key={g.id}>
                 <button
                   type="button"
@@ -163,7 +181,7 @@ export function SnesCabinet() {
               </li>
             ))}
           </ul>
-          {shelf.length > 0 && shelf.filter((g) => g.title.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())).length === 0 &&
+          {shelf.length > 0 && visibleShelf.length === 0 &&
             <p className="snes-shelf-note">No games match “{query}”.</p>}
           <p className="snes-shelf-note">
             Select a cartridge to play. Box art, title screens and screenshots from the{' '}

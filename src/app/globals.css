@@ -1401,6 +1401,14 @@ a, button, input, textarea, select, label, summary, [role='button'] {
   text-align: center;
   text-transform: uppercase;
 }
+.search-hint {
+  padding: 0.65rem 1.25rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted-foreground);
+  font: 9px 'Space Mono', monospace;
+  letter-spacing: 0.12em;
+  text-align: right;
+}
 
 /* ============================================================
    TAG / CATEGORY PAGES

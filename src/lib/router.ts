@@ -13,7 +13,7 @@ export type Route =
     | { name: 'research-entry'; slug: string }
     | { name: 'cheatsheets' }
     | { name: 'files' }
-    | { name: 'games' }
+    | { name: 'games'; game?: string }
     | { name: 'clipped' }
     | { name: 'links' }
     | { name: 'notfound' }
@@ -54,7 +54,9 @@ export function parseHash(hash: string): Route {
     if (parts[0] === 'files')
         return { name: 'files' }
     if (parts[0] === 'games')
-        return { name: 'games' }
+        return parts[1]
+            ? { name: 'games', game: safeDecode(parts[1]) }
+            : { name: 'games' }
     if (parts[0] === 'clipped')
         return { name: 'clipped' }
     if (parts[0] === 'links')
@@ -93,7 +95,7 @@ export function routeToHash(route: Route): string {
             return '#/files'
 
         case 'games':
-            return '#/games'
+            return route.game ? `#/games/${encodeURIComponent(route.game)}` : '#/games'
 
         case 'clipped':
             return '#/clipped'

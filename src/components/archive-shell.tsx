@@ -171,7 +171,7 @@ export function ArchiveShell() {
       case 'research-entry': return <ResearchEntryPage slug={route.slug} navigate={navigate} />
       case 'cheatsheets': return <CheatsheetsPage navigate={navigate} />
       case 'files': return <FilesPage navigate={navigate} />
-      case 'games': return <GamesPage navigate={navigate} />
+      case 'games': return <GamesPage navigate={navigate} initialGame={route.game} />
       case 'clipped': return <ClippedPage navigate={navigate} />
       case 'links': return <LinksPage navigate={navigate} />
       case 'notfound': return <NotFoundPage navigate={navigate} />

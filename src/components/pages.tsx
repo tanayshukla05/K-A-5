@@ -892,10 +892,20 @@ export function FilesPage({ navigate }: { navigate: NavFn }) {
    cartridges runs in the browser on the self-hosted
    EmulatorJS runtime.
    ============================================================ */
-export function GamesPage({ navigate }: { navigate: NavFn }) {
+export function GamesPage({ navigate, initialGame }: { navigate: NavFn; initialGame?: string }) {
   /* cabinet 01 (MultiHero) stays powered off until the visitor clicks -
      the WASM build only downloads on click (~13 MB) */
   const [heroOn, setHeroOn] = useState(false)
+  const snesCabinetRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!initialGame) return
+    const frame = requestAnimationFrame(() => {
+      snesCabinetRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+    return () => cancelAnimationFrame(frame)
+  }, [initialGame])
+
   return (
     <div className="archive-container games-room">
       <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
@@ -973,14 +983,14 @@ export function GamesPage({ navigate }: { navigate: NavFn }) {
           the self-hosted EmulatorJS runtime; per-game attribution at
           public/roms/CREDITS.md.
           ============================================================ */}
-      <div className="game-cabinet game-cabinet--snes">
+      <div ref={snesCabinetRef} className="game-cabinet game-cabinet--snes">
         <div className="game-cab-head">
           <span className="game-num">02</span>
           <span className="game-cab-label">Super Nintendo</span>
           <span className="game-cab-note">games pre-installed · tap and play · nothing to bring</span>
         </div>
         <div className="game-screen">
-          <SnesCabinet />
+          <SnesCabinet key={initialGame ?? 'all-games'} initialQuery={initialGame} />
         </div>
         <div className="game-cab-foot">
           <span className="game-keys">SNES LIBRARY · SEARCH ALL INSTALLED CARTRIDGES · SAVE STATES + TOUCH CONTROLS · CREDITS AT /ROMS</span>
@@ -1020,6 +1030,11 @@ const ANHILATION_CLIPS: Array<{ src: string; label: string; note: string }> = [
     src: '/CA_clip_0001.mp4.mp4',
     label: 'CA Clip 0001',
     note: 'Raw gameplay footage — the ANHILATION clip pasted into the archive root.',
+  },
+  {
+    src: '/CA_clip_0002.mp4',
+    label: 'CA Clip 0002',
+    note: 'Raw gameplay footage — the second ANHILATION clip pasted into the archive root.',
   },
 ]
 
