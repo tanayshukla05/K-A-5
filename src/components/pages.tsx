@@ -383,205 +383,14 @@ function EntryRow({ entry, onClick }: { entry: ArchiveEntry; onClick: () => void
 }
 
 /* ============================================================
-   CTF CARD - the Links rule applied to walkthroughs: no two
-   stages share a surface, a silhouette or a behaviour. Every
-   card is a different physical artifact - a vessel, a tape, a
-   fader, a trap, a shell, a flag, a lock - and carries its own
-   art markup. The stage number picks the object; add a new
-   walkthrough and it needs a matching CtfArt case and CSS block.
+   CTF DIRECTORY ROW
+   A shared, compact row keeps entries easy to scan across sources.
    ============================================================ */
-function CtfArt({ code }: { code: string }) {
-  switch (code) {
-    case '01':
-      return (
-        <span className="ctf-art ctf-art--overflow" aria-hidden="true">
-          <i className="ov-vessel" />
-          <i className="ov-liquid" />
-          <i className="ov-drop" />
-        </span>
-      )
-    case '02':
-      return (
-        <span className="ctf-art ctf-art--pipe" aria-hidden="true">
-          <i className="pp-pipe" />
-          <i className="pp-gauge" />
-        </span>
-      )
-    case '03':
-      return (
-        <span className="ctf-art ctf-art--reticle" aria-hidden="true">
-          <i className="rt-ring" />
-          <i className="rt-cross" />
-          <i className="rt-dot" />
-        </span>
-      )
-    case '04':
-      return (
-        <span className="ctf-art ctf-art--tape" aria-hidden="true">
-          <i className="tp-reader" />
-        </span>
-      )
-    case '05':
-      return (
-        <span className="ctf-art ctf-art--fader" aria-hidden="true">
-          <i className="fd-track" />
-          <i className="fd-knob" />
-          <i className="fd-led" />
-        </span>
-      )
-    case '06':
-      return (
-        <span className="ctf-art ctf-art--dial" aria-hidden="true">
-          <i className="dl-face" />
-          <i className="dl-needle" />
-        </span>
-      )
-    case '07':
-      return (
-        <span className="ctf-art ctf-art--ruler" aria-hidden="true">
-          <i className="ru-cursor" />
-        </span>
-      )
-    case '08':
-      return (
-        <span className="ctf-art ctf-art--spool" aria-hidden="true">
-          <i className="sp-flange" />
-          <i className="sp-thread" />
-        </span>
-      )
-    case '09':
-      return (
-        <span className="ctf-art ctf-art--lever" aria-hidden="true">
-          <i className="lv-plate" />
-          <i className="lv-arm" />
-        </span>
-      )
-    case '10':
-      return (
-        <span className="ctf-art ctf-art--stick" aria-hidden="true">
-          <i className="st-base" />
-          <i className="st-stick"><b className="st-ball" /></i>
-        </span>
-      )
-    case '11':
-      return (
-        <span className="ctf-art ctf-art--trap" aria-hidden="true">
-          <i className="tr-board" />
-          <i className="tr-spring" />
-          <i className="tr-arm" />
-          <i className="tr-cheese" />
-        </span>
-      )
-    case '12':
-      return (
-        <span className="ctf-art ctf-art--splice" aria-hidden="true">
-          <i className="sl-left" />
-          <i className="sl-right" />
-          <i className="sl-arc" />
-        </span>
-      )
-    case '13':
-      return (
-        <span className="ctf-art ctf-art--crate" aria-hidden="true">
-          <i className="cr-label cr-label--a" />
-          <i className="cr-label cr-label--b" />
-        </span>
-      )
-    case '14':
-      return (
-        <span className="ctf-art ctf-art--mailbox" aria-hidden="true">
-          <i className="mb-box" />
-          <i className="mb-post" />
-          <i className="mb-flag" />
-        </span>
-      )
-    case '15':
-      return (
-        <span className="ctf-art ctf-art--shell" aria-hidden="true">
-          <i className="sh-hull" />
-          <i className="sh-brass" />
-        </span>
-      )
-    case '16':
-      return (
-        <span className="ctf-art ctf-art--sled" aria-hidden="true">
-          <i className="sd-trail" />
-          <i className="sd-runner" />
-          <i className="sd-deck" />
-        </span>
-      )
-    case '17':
-      return (
-        <span className="ctf-art ctf-art--map" aria-hidden="true">
-          <i className="mp-sheet" />
-          <i className="mp-route" />
-          <i className="mp-pin" />
-        </span>
-      )
-    case '18':
-      return (
-        <span className="ctf-art ctf-art--watch" aria-hidden="true">
-          <i className="wt-crown" />
-          <i className="wt-face" />
-          <i className="wt-hand" />
-          <i className="wt-tag" />
-        </span>
-      )
-    case '19':
-      return (
-        <span className="ctf-art ctf-art--block" aria-hidden="true">
-          <i className="bk-pedal" />
-          <i className="bk-rail" />
-        </span>
-      )
-    case '20':
-      return (
-        <span className="ctf-art ctf-art--relay" aria-hidden="true">
-          <i className="ry-lane ry-lane--a" />
-          <i className="ry-lane ry-lane--b" />
-          <i className="ry-baton" />
-        </span>
-      )
-    case '21':
-      return (
-        <span className="ctf-art ctf-art--pendulum" aria-hidden="true">
-          <i className="pd-rod" />
-          <i className="pd-bob" />
-        </span>
-      )
-    case '22':
-      return (
-        <span className="ctf-art ctf-art--film" aria-hidden="true">
-          <i className="fm-strip" />
-        </span>
-      )
-    case '23':
-      return (
-        <span className="ctf-art ctf-art--flag" aria-hidden="true">
-          <i className="fg-pole" />
-          <i className="fg-cloth" />
-        </span>
-      )
-    case '24':
-      return (
-        <span className="ctf-art ctf-art--lock" aria-hidden="true">
-          <i className="lk-shackle" />
-          <i className="lk-body" />
-          <i className="lk-keyhole" />
-        </span>
-      )
-    default:
-      return null
-  }
-}
-
 function CtfCard({ entry, onClick }: { entry: ArchiveEntry; onClick: () => void }) {
-  const code = String(entry.stageNumber).padStart(2, '0')
   return (
     <button
       type="button"
-      className={`ctf-card ctf-card--v${code}`}
-      data-code={code}
+      className="ctf-card"
       onClick={onClick}
     >
       <span className="ctf-card-stage">{entry.stage}</span>
@@ -590,9 +399,10 @@ function CtfCard({ entry, onClick }: { entry: ArchiveEntry; onClick: () => void 
         <span className="ctf-card-meta">{entry.moduleName} — {entry.level}</span>
       </span>
       <span className={`ctf-card-vt${entry.vtScoreClean ? ' ctf-card-vt--clean' : ''}`}>
-        {entry.vtScore || '-'}
+        <span className="ctf-card-vt-label">VT</span>
+        <span>{entry.vtScore || '—'}</span>
       </span>
-      <CtfArt code={code} />
+      <span className="ctf-card-arrow" aria-hidden="true">↗</span>
     </button>
   )
 }
@@ -634,17 +444,24 @@ export function CtfPage({ navigate, topic = 'binary-exploitation' }: { navigate:
     ? `pwn.college / ${CTF_TOPICS.find(t => t.id === topic)?.label}`
     : CTF_TABS.find(t => t.id === source)?.label
   return (
-    <div className="archive-container">
+    <div className="archive-container ctf-page">
       <button type="button" className="back-link" onClick={() => navigate({ name: 'home' })}>
         ← Back
       </button>
-      <div className="archive-eyebrow">CTF WALKTHROUGHS</div>
-      <h1 className="archive-title">CTF Walkthroughs</h1>
-      <p className="archive-subtitle">
-        Step-by-step walkthroughs of capture-the-flag challenges and binary
-        analysis exercises. Each entry documents the full chain - from initial
-        reconnaissance to final payload.
-      </p>
+      <header className="ctf-hero">
+        <div className="ctf-hero-copy">
+          <div className="archive-eyebrow"><span className="ctf-kicker-mark" /> OFFENSIVE SECURITY / FIELD NOTES</div>
+          <h1 className="archive-title">CTF Walkthroughs</h1>
+          <p className="archive-subtitle">
+            Challenge breakdowns, exploit notes, and lab research. Choose a collection to browse the writeups.
+          </p>
+        </div>
+        <div className="ctf-hero-stat" aria-label={`${counts[source]} walkthroughs in selected source`}>
+          <span>INDEXED</span>
+          <strong>{String(counts[source]).padStart(2, '0')}</strong>
+          <span>WRITEUPS</span>
+        </div>
+      </header>
       <div className="ctf-tabs" role="tablist" aria-label="Walkthrough source">
         {CTF_TABS.map(t => (
           <button
@@ -677,17 +494,26 @@ export function CtfPage({ navigate, topic = 'binary-exploitation' }: { navigate:
           ))}
         </div>
       )}
-      {entries.length === 0 ? (
-        <EmptyState message={`No ${emptyLabel} walkthroughs published yet`} />
-      ) : (
-        <div>
-          {entries.map(e => source === 'pwn-college' ? (
-            <CtfCard key={e.slug} entry={e} onClick={() => navigate({ name: 'stage', slug: e.slug })} />
-          ) : (
-            <EntryRow key={e.slug} entry={e} onClick={() => navigate({ name: 'stage', slug: e.slug })} />
-          ))}
+      <section className="ctf-directory" aria-label={`${emptyLabel} walkthroughs`}>
+        <div className="ctf-directory-head">
+          <h2>{emptyLabel}</h2>
+          <span>{String(entries.length).padStart(2, '0')} RECORDS</span>
         </div>
-      )}
+        {entries.length === 0 ? (
+          <EmptyState message={`No ${emptyLabel} walkthroughs published yet`} />
+        ) : (
+          <>
+            <div className="ctf-column-head" aria-hidden="true">
+              <span>STAGE</span><span>CHALLENGE</span><span>VIRUSTOTAL</span><span />
+            </div>
+            <div className="ctf-entry-list">
+              {entries.map(e => (
+                <CtfCard key={e.slug} entry={e} onClick={() => navigate({ name: 'stage', slug: e.slug })} />
+              ))}
+            </div>
+          </>
+        )}
+      </section>
     </div>
   )
 }
@@ -1171,18 +997,29 @@ export function ClippedPage({ navigate }: { navigate: NavFn }) {
         ))}
       </div>
 
-      {/* ============================================================
-         ANHILATION — a nested, collapsible menu under CLIPPED.
-         Its videos stay grouped separately from the general clips.
-         ============================================================ */}
+      {/* ANHILATION is a separate collection inside the clip archive. */}
       <div className="clip-menu">
         <details className="clip-submenu" open>
           <summary className="clip-menu-name">
-            <span>CONTROLED ANHILATION</span>
+            <span className="clip-menu-index" aria-hidden="true">
+              <small>CA</small>
+              <b>02</b>
+            </span>
+            <span className="clip-menu-title">
+              <span>CONTROLED</span>
+              <em>ANHILATION</em>
+            </span>
+            <span className="clip-menu-total" aria-hidden="true">
+              <b>02</b>
+              <small>REELS</small>
+            </span>
           </summary>
-          <div className="clip-list">
+          <div className="clip-list clip-list--annihilation">
             {ANHILATION_CLIPS.map((clip, index) => (
-              <article key={clip.src} className="clip-card">
+              <article key={clip.src} className="clip-card clip-card--annihilation">
+                <span className="clip-reel-index" aria-hidden="true">
+                  CA–{String(index + 1).padStart(2, '0')}
+                </span>
                 <video
                   className="clip-video"
                   src={clip.src}

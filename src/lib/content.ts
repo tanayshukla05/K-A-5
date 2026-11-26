@@ -432,6 +432,13 @@ function renderMarkdown(
       buf.push(lines[i])
       i++
     }
+    // Ensure progress for a line no block matched (for example a bare
+    // "#hashtag" line that is not an ATX heading). Without this, the
+    // paragraph collector refuses to consume it and the loop never advances.
+    if (buf.length === 0) {
+      buf.push(line)
+      i++
+    }
     const para = inline(buf.join(' '))
     out.push(`<p>${para}</p>`)
     if (!excerpt && para.length > 40 && !para.startsWith('Field') && !para.startsWith('Module Name')) {
